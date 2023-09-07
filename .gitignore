@@ -1,0 +1,6 @@
+exegesis/
+node_modules/
+.env
+testdir/
+smalldir/
+.dbfile.msp

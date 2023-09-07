@@ -1,9 +1,8 @@
-import { count, searchVector, search } from "@orama/orama";
+import { count, searchVector } from "@orama/orama";
 import { Command } from "commander";
 import db from "./db.mjs";
-import OpenAI from "openai";
+import getEmbedding from "./embedding.mjs";
 
-const openai = new OpenAI();
 const program = new Command();
 program.option("-q, --query <query>");
 program.parse();
@@ -12,11 +11,7 @@ const { query } = options;
 console.log("options", options);
 const dbCount = await count(db);
 console.log(`db has ${dbCount} entries`);
-const queryResponse = await openai.embeddings.create({
-  model: "text-embedding-ada-002",
-  input: query,
-});
-const queryEmbedding = queryResponse.data?.[0].embedding;
+const queryEmbedding = await getEmbedding(query);
 
 const results = await searchVector(db, {
   vector: queryEmbedding,

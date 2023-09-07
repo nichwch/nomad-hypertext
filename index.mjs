@@ -1,12 +1,10 @@
 import fs from "fs";
-import OpenAI from "openai";
 import { insert, count } from "@orama/orama";
 import { Command } from "commander";
 import db from "./db.mjs";
-
 import { persistToFile } from "@orama/plugin-data-persistence/server";
+import getEmbedding from "./embedding.mjs";
 
-const openai = new OpenAI();
 const program = new Command();
 program.option("-d, --directory <directory>");
 program.parse();
@@ -26,11 +24,7 @@ const processSegment = async (segment, fileName) => {
       return tag.replace("[[", "").replace("]]", "");
     }) || [];
   // console.log("segment", segment);
-  const embeddingResponse = await openai.embeddings.create({
-    model: "text-embedding-ada-002",
-    input: segment,
-  });
-  const embedding = embeddingResponse.data?.[0].embedding;
+  const embedding = await getEmbedding(segment);
   await insert(db, {
     parent: fileName,
     tags,
