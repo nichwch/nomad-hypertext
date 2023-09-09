@@ -14,11 +14,12 @@ try {
     schema: {
       parent: "string",
       tags: "string[]",
-      embedding: "vector[1536]",
+      embedding: "vector[384]",
       content: "string",
     },
     id: "oramadb",
   });
+  await persistToFile(db, "binary", "./.dbfile.msp");
 } finally {
   const dbCount = await count(db);
   console.log(`db has ${dbCount} entries`);

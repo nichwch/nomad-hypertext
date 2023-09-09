@@ -38,7 +38,9 @@ for (const row of rows) {
       return node?.text || "";
     })
     .join("");
-  console.log(str_content);
+  () => {
+    console.log(str_content);
+  };
   fs.appendFileSync(`${row.note_id}.txt`, `\n${str_content}`);
 }
 
