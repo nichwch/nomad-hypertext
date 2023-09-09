@@ -2,6 +2,7 @@ import { count, create } from "@orama/orama";
 import {
   restoreFromFile,
   persistToFile,
+  // @ts-ignore
 } from "@orama/plugin-data-persistence/server";
 let db;
 

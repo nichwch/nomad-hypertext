@@ -25,13 +25,14 @@ const processSegment = async (segment, fileName) => {
       return tag.replace("[[", "").replace("]]", "");
     }) || [];
   const embedding = await getEmbedding(segment);
-  console.log("processing segment", segment);
-  await insert(db, {
+  const entry = {
     parent: fileName,
     tags,
     embedding,
     content: segment,
-  });
+  };
+  console.log(entry);
+  await insert(db, entry);
 };
 if (directory) process.chdir(directory);
 const files = fs.readdirSync(`./`);

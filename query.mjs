@@ -1,4 +1,4 @@
-import { count, searchVector } from "@orama/orama";
+import { count, search, searchVector } from "@orama/orama";
 import { Command } from "commander";
 import db from "./db.mjs";
 import getEmbedding from "./embedding.mjs";
@@ -12,13 +12,18 @@ console.log("options", options);
 const dbCount = await count(db);
 console.log(`db has ${dbCount} entries`);
 const queryEmbedding = await getEmbedding(query);
-
 const results = await searchVector(db, {
   vector: queryEmbedding,
   property: "embedding",
-  similarity: 0.8,
+  similarity: 0.2,
   limit: 10,
 });
+// const results = await search(db, {
+//   term: "scarcity",
+//   properties: "*",
+// });
+console.dir(results, { depth: null });
+console.log(`${results.hits.length} results for "${query}"`);
 results.hits.forEach((hit) => {
   console.log(`score: ${hit.score}, from ${hit.document?.parent}`);
   console.log("=============================");

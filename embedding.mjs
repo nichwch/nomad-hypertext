@@ -1,6 +1,4 @@
-import OpenAI from "openai";
 import { pipeline, env } from "@xenova/transformers";
-const openai = new OpenAI();
 
 const embeddingFunction = await pipeline(
   "feature-extraction",
@@ -14,5 +12,5 @@ export default async function getEmbedding(str) {
     normalize: true,
   });
   const embedding = embeddingResponse.data;
-  return embedding;
+  return new Float32Array(embedding);
 }
