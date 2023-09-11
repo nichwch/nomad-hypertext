@@ -15,7 +15,7 @@ try {
     schema: {
       parent: "string",
       tags: "string[]",
-      embedding: "vector[384]",
+      embedding: "vector[1536]",
       content: "string",
     },
     id: "oramadb",
