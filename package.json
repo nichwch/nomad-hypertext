@@ -23,6 +23,7 @@
 		"@orama/plugin-data-persistence": "^1.2.2",
 		"@xenova/transformers": "^2.5.4",
 		"commander": "^11.0.0",
-		"openai": "^4.6.0"
+		"openai": "^4.6.0",
+		"pdfjs-dist": "^3.10.111"
 	}
 }
