@@ -1,4 +1,5 @@
 import fs from "fs";
+import OpenAI from "openai";
 import { insert, count } from "@orama/orama";
 import { Command } from "commander";
 import db from "./db.mjs";
@@ -6,6 +7,7 @@ import db from "./db.mjs";
 import { persistToFile } from "@orama/plugin-data-persistence/server";
 import getEmbedding from "./embedding.mjs";
 
+const openai = new OpenAI();
 const program = new Command();
 program.option("-d, --directory <directory>");
 program.parse();
@@ -31,7 +33,6 @@ const processSegment = async (segment, fileName) => {
     embedding,
     content: segment,
   };
-  // console.log(entry);
   await insert(db, entry);
 };
 if (directory) process.chdir(directory);
@@ -41,7 +42,6 @@ const promises = [];
 for (let file of files) {
   const file_text = fs.readFileSync(file, "utf8");
   const segments = file_text?.split("\n") || "";
-  console.log("reading file ", file);
   for (let segment of segments) {
     promises.push(processSegment(segment, file));
   }

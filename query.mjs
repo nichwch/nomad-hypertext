@@ -8,21 +8,15 @@ program.option("-q, --query <query>");
 program.parse();
 const options = program.opts();
 const { query } = options;
-console.log("options", options);
 const dbCount = await count(db);
 console.log(`db has ${dbCount} entries`);
 const queryEmbedding = await getEmbedding(query);
 const results = await searchVector(db, {
   vector: queryEmbedding,
   property: "embedding",
-  similarity: 0.2,
+  similarity: 0.8,
   limit: 10,
 });
-// const results = await search(db, {
-//   term: "scarcity",
-//   properties: "*",
-// });
-console.dir(results, { depth: null });
 console.log(`${results.hits.length} results for "${query}"`);
 results.hits.forEach((hit) => {
   console.log(`score: ${hit.score}, from ${hit.document?.parent}`);

@@ -11,11 +11,18 @@ try {
   console.log("db restored from file");
 } catch {
   console.log("no db file found, creating new db");
+  /* note: changing the embedding function means you have 
+  to change the vector size in the db declaration in db.mjs as well
+  
+  
+  openai size: 1536
+  HF size: 384
+  */
   db = await create({
     schema: {
       parent: "string",
       tags: "string[]",
-      embedding: "vector[1536]",
+      embedding: "vector[384]",
       content: "string",
     },
     id: "oramadb",

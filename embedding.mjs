@@ -2,8 +2,17 @@ import { OpenAI } from "openai";
 import { pipeline, env } from "@xenova/transformers";
 
 /** @param {string} str */
+/* note: changing the embedding function means you have 
+  to change the vector size in the db declaration in db.mjs as well
+  
+  
+  openai size: 1536
+  HF size: 384
+  */
 export default async function getEmbedding(str) {
-  return await getOpenAIEmbedding(str);
+  const embedding = await getHFEmbedding(str);
+  console.log(embedding);
+  return embedding;
 }
 
 const openai = new OpenAI();
@@ -14,7 +23,7 @@ async function getOpenAIEmbedding(str) {
     model: "text-embedding-ada-002",
   });
   const embedding = embeddingResponse?.data?.[0]?.embedding;
-  return new Float32Array(embedding);
+  return embedding;
 }
 
 const embeddingFunction = await pipeline(
@@ -29,5 +38,5 @@ async function getHFEmbedding(str) {
     normalize: true,
   });
   const embedding = embeddingResponse.data;
-  return new Float32Array(embedding);
+  return Array.from(embedding);
 }
