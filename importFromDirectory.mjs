@@ -31,7 +31,7 @@ const processSegment = async (segment, fileName) => {
     embedding,
     content: segment,
   };
-  console.log(entry);
+  // console.log(entry);
   await insert(db, entry);
 };
 if (directory) process.chdir(directory);
