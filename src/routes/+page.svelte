@@ -1,2 +1,14 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="js">
+  // import Editor from "../components/Editor.svelte";
+
+  let count = 0;
+</script>
+
+<h1>Welcome to rhizome</h1>
+<div class="border border-black">style test</div>
+<button
+  on:click={() => {
+    count++;
+  }}>increment {count}</button
+>
+<!-- <Editor /> -->
