@@ -1,6 +1,6 @@
 <script lang="js">
-  // import Editor from "../components/Editor.svelte";
-
+  import Editor from "../components/Editor.svelte";
+  import "../global.css";
   let count = 0;
 </script>
 
@@ -11,4 +11,4 @@
     count++;
   }}>increment {count}</button
 >
-<!-- <Editor /> -->
+<Editor />
