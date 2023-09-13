@@ -5,6 +5,7 @@ testdir/
 smalldir/
 .cache/
 .dbfile.msp
+mediummessage/
 
 # github's node gitignore template
 
