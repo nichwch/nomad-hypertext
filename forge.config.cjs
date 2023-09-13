@@ -1,5 +1,6 @@
 const path = require("path");
-const fs = require("node:fs/promises");
+const fs = require("node:fs");
+const glob = require("glob");
 module.exports = {
   packagerConfig: {
     asar: true,
@@ -29,16 +30,20 @@ module.exports = {
       config: {},
     },
   ],
-  // hooks: {
-  //   packageAfterPrune: async (_config, buildPath) => {
-  //     const gypPath = path.join(
-  //       buildPath,
-  //       "node_modules",
-  //       "../../../../../../../../../../../../../usr/local/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/bin/python3.11",
-  //       "build",
-  //       "node_gyp_bins"
-  //     );
-  //     await fs.rm(gypPath, { recursive: true, force: true });
-  //   },
-  // },
+  hooks: {
+    packageAfterPrune(config, buildPath) {
+      if (process.platform === "darwin") {
+        const dirs = glob.sync(
+          path.join(buildPath, "node_modules/**/node_gyp_bins"),
+          {
+            onlyDirectories: true,
+          }
+        );
+
+        for (const directory of dirs) {
+          fs.rmdirSync(directory, { recursive: true, force: true });
+        }
+      }
+    },
+  },
 };
