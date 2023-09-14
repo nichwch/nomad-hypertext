@@ -1,10 +1,24 @@
 <script>
   import { page } from "$app/stores";
-  import Editor from "../../components/Editor.svelte";
+  import { onDestroy } from "svelte";
   let notesDir = window.localStorage.getItem("notesDir");
-  let contents = "";
-
-  $: if (notesDir) {
+  /** @type {string|null}*/
+  let contents = null;
+  /** @type {string|null}*/
+  let lastFlushedContents = contents;
+  const updateInterval = window.setInterval(() => {
+    console.log(contents, lastFlushedContents);
+    if (notesDir && contents !== lastFlushedContents) {
+      lastFlushedContents = contents;
+      //@ts-ignore
+      window.electronAPI.writeFile(
+        `${notesDir}/${$page.params.noteName}`,
+        contents
+      );
+    }
+  }, 300);
+  onDestroy(() => window.clearInterval(updateInterval));
+  $: if (notesDir && contents === null) {
     //@ts-ignore
     window.electronAPI.readFile(`${notesDir}/${$page.params.noteName}`).then(
       /** @param {string|undefined} res */
@@ -15,4 +29,7 @@
   }
 </script>
 
-<Editor {contents} />
+<textarea
+  class="max-w-md mx-auto bg-transparent w-full h-full p-5 resize-none focus:outline-none"
+  bind:value={contents}
+/>

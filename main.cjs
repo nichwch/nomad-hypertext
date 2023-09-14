@@ -42,6 +42,10 @@ function createWindow() {
     const file = await fs.readFile(path, "utf-8");
     return file;
   });
+
+  ipcMain.handle("write-file", async (event, path, content) => {
+    await fs.writeFile(path, content);
+  });
 }
 
 app.on("ready", createWindow);
