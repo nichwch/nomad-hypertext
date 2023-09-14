@@ -6,6 +6,8 @@
 
   const setNoteDir = () => {
     // call IPC to make electron show dialog
+    //@ts-ignore
+    window.electronAPI.openDirectoryPicker();
   };
   let count = 0;
 </script>

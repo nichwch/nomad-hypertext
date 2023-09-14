@@ -1,5 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electronAPI", {
-  setTitle: (title) => ipcRenderer.send("set-note-directory"),
+  openDirectoryPicker: (title) => ipcRenderer.send("open-directory-picker"),
 });

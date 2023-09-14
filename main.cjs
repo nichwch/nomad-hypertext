@@ -26,7 +26,7 @@ function createWindow() {
     mainWindow = null;
   });
 
-  ipcMain.on("set-note-directory", () => {
+  ipcMain.on("open-directory-picker", () => {
     dialog.showOpenDialog({ properties: ["openDirectory", "multiSelections"] });
   });
 }
