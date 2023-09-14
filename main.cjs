@@ -1,17 +1,20 @@
 // src/electron.js
 
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const path = require("path");
 
+const mode = process.env.NODE_ENV;
 let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+    },
     width: 900,
     height: 680,
   });
 
-  const mode = process.env.NODE_ENV;
   const url =
     mode === "production"
       ? // in production, use the statically build version of our application
@@ -21,6 +24,10 @@ function createWindow() {
   mainWindow.loadURL(url);
   mainWindow.on("closed", () => {
     mainWindow = null;
+  });
+
+  ipcMain.on("set-note-directory", () => {
+    dialog.showOpenDialog({ properties: ["openDirectory", "multiSelections"] });
   });
 }
 
