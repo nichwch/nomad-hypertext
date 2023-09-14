@@ -1,13 +1,12 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const fs = require("node:fs/promises");
-const path = require("path");
 const Store = require("electron-store");
-const store = require("./store.cjs");
-
+const path = require("path");
 const mode = process.env.NODE_ENV;
 let mainWindow;
 
-function createWindow() {
+async function createWindow() {
+  const { default: store } = await import("./store.js");
   Store.initRenderer();
   mainWindow = new BrowserWindow({
     webPreferences: {
@@ -45,17 +44,10 @@ function createWindow() {
   });
 
   ipcMain.handle("setStoreValue", (event, key, value) => {
-    console.dir(key, { depth: null });
-    console.log(value);
     console.log(`setting ${key} to ${value}`);
     //@ts-ignore
-    return store.set(key, value);
-  });
-
-  ipcMain.handle("get-files", async (event, dir) => {
-    const files = await fs.readdir(dir);
-    console.log({ files });
-    return files;
+    // return store.set(key, value);
+    store.set("notesDir", "test succeeded");
   });
 }
 
@@ -68,5 +60,6 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
 app.on("activate", () => {
+  //@ts-ignore
   if (mainWindow === null) createWindow();
 });
