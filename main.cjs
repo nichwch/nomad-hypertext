@@ -1,6 +1,6 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const path = require("path");
-
+const fs = require("node:fs/promises");
 const mode = process.env.NODE_ENV;
 let mainWindow;
 
@@ -31,6 +31,11 @@ function createWindow() {
     if (!canceled) {
       return filePaths[0];
     }
+  });
+
+  ipcMain.handle("read-dir", async (event, path) => {
+    const files = await fs.readdir(path);
+    return files;
   });
 }
 
