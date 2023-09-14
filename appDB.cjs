@@ -1,5 +1,5 @@
 const { create, count, insert, searchVector } = require("@orama/orama");
-const { getEmbedding } = require("./appEmbeddings.cjs");
+const getEmbedding = require("./appEmbeddings.cjs");
 const fs = require("fs");
 const {
   restoreFromFile,

@@ -1,5 +1,4 @@
-import { app } from "electron";
-
+const { app } = require("electron");
 const getEmbedding = async (text) => {
   const embedding = await getHFEmbedding(text);
   console.log(embedding);
@@ -20,4 +19,4 @@ const getHFEmbedding = async (text) => {
   });
   return Array.from(embedding);
 };
-module.exports = { getEmbedding };
+module.exports = getEmbedding;
