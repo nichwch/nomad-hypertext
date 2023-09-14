@@ -28,7 +28,7 @@ const processPage = async (i) => {
     messages: [
       {
         role: "user",
-        content: `The following text  as been scanned from a PDF, and has some mistakes in it. Please correct them. Be sure to correct typos, remove unneccesary newlines, and add new lines where they make sense. Repeat back the same text, but without mistakes. 
+        content: `The following text  as been scanned from a PDF, and has some mistakes in it. Please correct them. Be sure to correct typos, remove unneccesary newlines, and add new lines where they make sense. Repeat back the following text, but without mistakes. Do not repeat the prompt back 
 ${uncorrected_page_text}`,
       },
     ],
