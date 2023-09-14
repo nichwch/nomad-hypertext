@@ -1,5 +1,5 @@
 <script>
-  let contents = "";
+  export let contents = "";
 </script>
 
 <textarea

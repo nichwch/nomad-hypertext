@@ -37,6 +37,11 @@ function createWindow() {
     const files = await fs.readdir(path);
     return files;
   });
+
+  ipcMain.handle("read-file", async (event, path) => {
+    const file = await fs.readFile(path, "utf-8");
+    return file;
+  });
 }
 
 app.on("ready", createWindow);
