@@ -1,8 +1,7 @@
 <script>
-  let noteDir = window.localStorage.getItem("noteDir");
-  if (noteDir !== null) {
-    // call IPC to make electron open the directory
-  }
+  import { invalidateAll } from "$app/navigation";
+  export let data;
+  const { files, notesDir } = data;
 
   const setNoteDir = async () => {
     // call IPC to make electron show dialog
@@ -10,21 +9,25 @@
     //@ts-ignore
     const res = await window.electronAPI.openDirectoryPicker();
     if (res) {
-      noteDir = res;
-      window.localStorage.setItem("noteDir", noteDir);
+      console.log("fileres", res);
+      //@ts-ignore
+      await window.electronAPI.setStoreValue("notesDir", res);
+      invalidateAll();
     }
   };
 </script>
 
 <div class="p-2">
   <div>
-    {#if noteDir === null}
-      <button on:click={setNoteDir}> open folder...</button>
-    {:else}
-      <div>browsing {noteDir}</div>
+    {#if notesDir !== null}
+      <div>browsing {notesDir}</div>
     {/if}
+
+    <button on:click={setNoteDir}> open folder...</button>
   </div>
-  <div><a href="/note1">note 1</a></div>
-  <div><a href="/note2">note 2</a></div>
-  <div><a href="/note3">note 3</a></div>
+  {#if files}
+    {#each files as file}
+      <div><a href="/{file}">{file}</a></div>
+    {/each}
+  {/if}
 </div>

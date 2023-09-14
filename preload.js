@@ -1,5 +1,8 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electronAPI", {
-  openDirectoryPicker: (title) => ipcRenderer.invoke("open-directory-picker"),
+  openDirectoryPicker: () => ipcRenderer.invoke("open-directory-picker"),
+  getStoreValue: (key) => ipcRenderer.invoke("getStoreValue", key),
+  setStoreValue: (key, value) =>
+    ipcRenderer.invoke("setStoreValue", key, value),
 });
