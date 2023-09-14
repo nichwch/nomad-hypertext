@@ -1,5 +1,3 @@
-// src/electron.js
-
 const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const path = require("path");
 
@@ -26,8 +24,13 @@ function createWindow() {
     mainWindow = null;
   });
 
-  ipcMain.on("open-directory-picker", () => {
-    dialog.showOpenDialog({ properties: ["openDirectory", "multiSelections"] });
+  ipcMain.handle("open-directory-picker", async () => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+      properties: ["openDirectory", "multiSelections"],
+    });
+    if (!canceled) {
+      return filePaths[0];
+    }
   });
 }
 
