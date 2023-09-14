@@ -39,7 +39,6 @@
     "@xenova/transformers": "^2.5.4",
     "commander": "^11.0.0",
     "electron-squirrel-startup": "^1.0.0",
-    "electron-store": "^8.1.0",
     "glob": "^10.3.4",
     "openai": "^4.6.0",
     "pdfjs-dist": "^3.10.111"

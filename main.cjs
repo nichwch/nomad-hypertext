@@ -1,14 +1,10 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron");
-const fs = require("node:fs/promises");
 const path = require("path");
-const Store = require("electron-store");
-const store = require("./store.cjs");
 
 const mode = process.env.NODE_ENV;
 let mainWindow;
 
 function createWindow() {
-  Store.initRenderer();
   mainWindow = new BrowserWindow({
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -35,27 +31,6 @@ function createWindow() {
     if (!canceled) {
       return filePaths[0];
     }
-  });
-
-  ipcMain.handle("getStoreValue", (event, key) => {
-    //@ts-ignore
-    const val = store.get(key);
-    console.log(`getting ${key}: ${val}`);
-    return val;
-  });
-
-  ipcMain.handle("setStoreValue", (event, key, value) => {
-    console.dir(key, { depth: null });
-    console.log(value);
-    console.log(`setting ${key} to ${value}`);
-    //@ts-ignore
-    return store.set(key, value);
-  });
-
-  ipcMain.handle("get-files", async (event, dir) => {
-    const files = await fs.readdir(dir);
-    console.log({ files });
-    return files;
   });
 }
 
