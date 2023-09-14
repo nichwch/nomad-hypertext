@@ -18,9 +18,8 @@
 
 <div class="p-2">
   <div>
-    {#if noteDir === null}
-      <button on:click={setNoteDir}> open folder...</button>
-    {:else}
+    <button on:click={setNoteDir}> open folder...</button>
+    {#if noteDir !== null}
       <div>browsing {noteDir}</div>
     {/if}
   </div>
