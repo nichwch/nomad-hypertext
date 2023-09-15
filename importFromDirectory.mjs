@@ -22,18 +22,23 @@ const processSegment = async (segment, fileName) => {
   segment = segment.trim();
   if (segment.length === 0) return;
   /** @typedef {string[]|null} tags */
+  console.log("processing segment:", segment);
   const tags =
     segment.match(/\[\[.*?\]\]/g)?.map((tag) => {
       return tag.replace("[[", "").replace("]]", "");
     }) || [];
-  const embedding = await getEmbedding(segment);
-  const entry = {
-    parent: fileName,
-    tags,
-    embedding,
-    content: segment,
-  };
-  await insert(db, entry);
+  try {
+    const embedding = await getEmbedding(segment);
+    const entry = {
+      parent: fileName,
+      tags,
+      embedding,
+      content: segment,
+    };
+    await insert(db, entry);
+  } catch (e) {
+    console.error(e);
+  }
 };
 if (directory) process.chdir(directory);
 const files = fs.readdirSync(`./`);

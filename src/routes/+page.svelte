@@ -31,6 +31,20 @@
 <div class="p-2">
   <div>
     <button on:click={setNoteDir}> open folder...</button>
+    <button
+      on:click={() => {
+        //@ts-ignore
+        window.electronAPI.indexDirectory(notesDir);
+      }}
+      >index directory
+    </button>
+    <button
+      on:click={() => {
+        //@ts-ignore
+        window.electronAPI.vectorQuery("Hello world");
+      }}
+      >query directory
+    </button>
     {#if notesDir !== null}
       <div>browsing {notesDir}</div>
     {/if}

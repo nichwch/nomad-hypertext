@@ -1,10 +1,11 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const path = require("path");
 const fs = require("node:fs/promises");
+const { indexDirectory, queryDB, initDB } = require("./appDB.cjs");
 const mode = process.env.NODE_ENV;
 let mainWindow;
 
-function createWindow() {
+async function createWindow() {
   mainWindow = new BrowserWindow({
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -12,7 +13,7 @@ function createWindow() {
     width: 900,
     height: 680,
   });
-
+  await initDB();
   const url =
     mode === "production"
       ? // in production, use the statically build version of our application
@@ -45,6 +46,13 @@ function createWindow() {
 
   ipcMain.handle("write-file", async (event, path, content) => {
     await fs.writeFile(path, content);
+  });
+
+  ipcMain.handle("index-directory", async (event, path) => {
+    await indexDirectory(path);
+  });
+  ipcMain.handle("vector-query", async (event, query) => {
+    return await queryDB(query);
   });
 }
 

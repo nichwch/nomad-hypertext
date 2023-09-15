@@ -9,14 +9,16 @@ const getEmbedding = async (text) => {
 const getHFEmbedding = async (text) => {
   const appPath = app.getAppPath();
   let { pipeline, env } = await import("@xenova/transformers");
+  env.cacheDir = `${appPath}/.cache`;
   const embeddingFunction = await pipeline(
     "feature-extraction",
     "Supabase/gte-small"
   );
-  const embedding = await embeddingFunction(text, {
+  const embeddingResponse = await embeddingFunction(text, {
     pooling: "mean",
     normalize: true,
   });
+  const embedding = embeddingResponse.data;
   return Array.from(embedding);
 };
 module.exports = getEmbedding;
