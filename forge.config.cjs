@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const glob = require("glob");
 module.exports = {
   packagerConfig: {
-    asar: true,
+    // asar: true,
   },
   rebuildConfig: {},
   makers: [
@@ -24,12 +24,12 @@ module.exports = {
       config: {},
     },
   ],
-  plugins: [
-    {
-      name: "@electron-forge/plugin-auto-unpack-natives",
-      config: {},
-    },
-  ],
+  // plugins: [
+  //   {
+  //     name: "@electron-forge/plugin-auto-unpack-natives",
+  //     config: {},
+  //   },
+  // ],
   hooks: {
     packageAfterPrune(config, buildPath) {
       if (process.platform === "darwin") {
