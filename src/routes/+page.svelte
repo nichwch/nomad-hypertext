@@ -39,9 +39,10 @@
       >index directory
     </button>
     <button
-      on:click={() => {
+      on:click={async () => {
         //@ts-ignore
-        window.electronAPI.vectorQuery("Hello world");
+        const results = await window.electronAPI.vectorQuery("Hello world");
+        console.log(results);
       }}
       >query directory
     </button>

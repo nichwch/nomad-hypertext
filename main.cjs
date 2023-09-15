@@ -2,8 +2,12 @@ const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const path = require("path");
 const fs = require("node:fs/promises");
 const { indexDirectory, queryDB, initDB } = require("./appDB.cjs");
+const log = require("electron-log");
 const mode = process.env.NODE_ENV;
 let mainWindow;
+
+log.initialize({ preload: true });
+log.errorHandler.startCatching();
 
 async function createWindow() {
   mainWindow = new BrowserWindow({

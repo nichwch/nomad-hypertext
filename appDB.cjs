@@ -7,7 +7,6 @@ const dbPath = `${userDataPath}/.dbfile.msp`;
 let db;
 let restoreFromFile, persistToFile;
 const initDB = async () => {
-  //@ts-ignore
   let _ = await import("@orama/plugin-data-persistence/server");
   restoreFromFile = _.restoreFromFile;
   persistToFile = _.persistToFile;
