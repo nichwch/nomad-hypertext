@@ -13,7 +13,7 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "view-logs": "vim ~/Library/Logs/nomad-hypertext/main.log"
+    "view-logs": "tail -f ~/Library/Logs/nomad-hypertext/main.log"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.4.2",

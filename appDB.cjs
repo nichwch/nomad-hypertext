@@ -36,6 +36,7 @@ const initDB = async () => {
 };
 
 const processSegment = async (segment, fileName) => {
+  log.log("processing segment");
   segment = segment.trim();
   if (segment.length === 0) return;
   /** @typedef {string[]|null} tags */
@@ -44,7 +45,9 @@ const processSegment = async (segment, fileName) => {
       return tag.replace("[[", "").replace("]]", "");
     }) || [];
   try {
+    log.log("attempting to get embedding");
     const embedding = await getEmbedding(segment);
+    log.log("got embedding", embedding);
     const entry = {
       parent: fileName,
       tags,
@@ -58,10 +61,13 @@ const processSegment = async (segment, fileName) => {
 };
 
 const indexDirectory = async (directory) => {
+  log.log("indexing directory...");
   const files = fs.readdirSync(directory);
+  log.log("read directory");
   const promises = [];
   for (let file of files) {
     const file_text = fs.readFileSync(`${directory}/${file}`, "utf8");
+    log.log("read file", file);
     const segments = file_text?.split("\n") || "";
     for (let segment of segments) {
       promises.push(processSegment(segment, file));
