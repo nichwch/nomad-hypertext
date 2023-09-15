@@ -2,6 +2,7 @@ const { create, count, insert, searchVector } = require("@orama/orama");
 const getEmbedding = require("./appEmbeddings.cjs");
 const fs = require("fs");
 const { app } = require("electron");
+const log = require("electron-log");
 const userDataPath = app.getPath("userData");
 const dbPath = `${userDataPath}/.dbfile.msp`;
 let db;
@@ -9,12 +10,14 @@ let restoreFromFile, persistToFile;
 const initDB = async () => {
   let _ = await import("@orama/plugin-data-persistence/server");
   restoreFromFile = _.restoreFromFile;
+
   persistToFile = _.persistToFile;
+  log.info("initializing database...");
   try {
     db = await restoreFromFile("binary", dbPath);
-    console.log("db restored from file");
+    log.log("db restored from file");
   } catch {
-    console.log("no db file found, creating new db");
+    log.log("no db file found, creating new db");
     db = await create({
       schema: {
         parent: "string",
@@ -28,7 +31,7 @@ const initDB = async () => {
   } finally {
     //@ts-ignore
     const dbCount = await count(db);
-    console.log(`db has ${dbCount} entries`);
+    log.log(`db has ${dbCount} entries`);
   }
 };
 
@@ -50,7 +53,7 @@ const processSegment = async (segment, fileName) => {
     };
     await insert(db, entry);
   } catch (e) {
-    console.error(e);
+    log.error(e);
   }
 };
 
@@ -67,25 +70,24 @@ const indexDirectory = async (directory) => {
   try {
     await Promise.all(promises);
   } catch (e) {
-    console.error(e);
+    log.error(e);
   } finally {
     await persistToFile(db, "binary", dbPath);
     const dbCount = await count(db);
-    console.log(`db has ${dbCount} entries`);
+    log.log(`db has ${dbCount} entries`);
   }
 };
 
 /** @param {string} query */
 const queryDB = async (query, similarity = 0.8, limit = 10) => {
   const queryEmbedding = await getEmbedding(query);
-  console.log("queryEmbedding", queryEmbedding);
+  log.log("queryEmbedding", queryEmbedding);
   const results = await searchVector(db, {
     vector: queryEmbedding,
     property: "embedding",
     similarity,
     limit,
   });
-  console.dir({ results }, { depth: null });
   return results;
 };
 module.exports = { db, initDB, indexDirectory, queryDB };
