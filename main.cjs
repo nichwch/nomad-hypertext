@@ -5,14 +5,14 @@ const { indexDirectory, queryDB, initDB } = require("./appDB.cjs");
 const log = require("electron-log");
 const mode = process.env.NODE_ENV;
 let mainWindow;
-
 log.initialize({ preload: true });
 log.errorHandler.startCatching();
+const preloadURL = path.join(__dirname, "preload.js");
 
 async function createWindow() {
   mainWindow = new BrowserWindow({
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: preloadURL,
     },
     width: 900,
     height: 680,
@@ -33,6 +33,7 @@ async function createWindow() {
     const { canceled, filePaths } = await dialog.showOpenDialog({
       properties: ["openDirectory", "multiSelections"],
     });
+    log.log("opening file picker", canceled, filePaths);
     if (!canceled) {
       return filePaths[0];
     }

@@ -31,26 +31,29 @@
 <div class="p-2">
   <div>
     <button on:click={setNoteDir}> open folder...</button>
-    <button
-      on:click={() => {
-        //@ts-ignore
-        window.electronAPI.indexDirectory(notesDir);
-      }}
-      >index directory
-    </button>
-    <button
-      on:click={async () => {
-        //@ts-ignore
-        const results = await window.electronAPI.vectorQuery("Hello world");
-        console.log(results);
-      }}
-      >query directory
-    </button>
     {#if notesDir !== null}
       <div>browsing {notesDir}</div>
+
+      <button
+        on:click={() => {
+          //@ts-ignore
+          window.electronAPI.indexDirectory(notesDir);
+        }}
+        >index directory
+      </button>
+      <button
+        on:click={async () => {
+          //@ts-ignore
+          const results = await window.electronAPI.vectorQuery("Hello world");
+          console.log(results);
+        }}
+        >query directory
+      </button>
     {/if}
   </div>
-  <button on:click={createFile}>new note</button>
+  {#if notesDir !== null}
+    <button on:click={createFile}>new note</button>
+  {/if}
   {#each files as file}
     <div><a href={file}>{file} </a></div>
   {/each}
