@@ -22,8 +22,9 @@
     }
   };
   const createFile = async () => {
+    const todaysDate = new Date().toDateString();
     //@ts-ignore
-    await window.electronAPI.writeFile(`${notesDir}/new.txt`, "");
+    await window.electronAPI.newFile(notesDir);
     refreshFiles();
   };
 </script>

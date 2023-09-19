@@ -1,6 +1,6 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const path = require("path");
-const fs = require("node:fs/promises");
+const fs = require("fs");
 const { indexDirectory, queryDB, initDB } = require("./appDB.cjs");
 const log = require("electron-log");
 const mode = process.env.NODE_ENV;
@@ -40,17 +40,33 @@ async function createWindow() {
   });
 
   ipcMain.handle("read-dir", async (event, path) => {
-    const files = await fs.readdir(path);
+    const files = await fs.promises.readdir(path);
     return files;
   });
 
   ipcMain.handle("read-file", async (event, path) => {
-    const file = await fs.readFile(path, "utf-8");
+    const file = await fs.promises.readFile(path, "utf-8");
     return file;
   });
 
   ipcMain.handle("write-file", async (event, path, content) => {
-    await fs.writeFile(path, content);
+    await fs.promises.writeFile(path, content);
+  });
+
+  // this creates a new file with the date as the default tile
+  ipcMain.handle("new-file", async (event, path) => {
+    const dateString = new Date().toDateString();
+    let dateStringPath = `${path}/${dateString}.txt`;
+    let numRepeats = 0;
+    if (!fs.existsSync(dateStringPath)) {
+      return await fs.promises.writeFile(dateStringPath, "");
+    } else {
+      while (fs.existsSync(dateStringPath)) {
+        numRepeats++;
+        dateStringPath = `${path}/${dateString}-${numRepeats + 1}.txt`;
+      }
+      return await fs.promises.writeFile(dateStringPath, "");
+    }
   });
 
   ipcMain.handle("index-directory", async (event, path) => {
