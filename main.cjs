@@ -18,10 +18,12 @@ async function createWindow() {
     height: 680,
   });
   await initDB();
+  log.log(process.env);
+  log.log("mode", mode);
   const url =
-    mode === "production"
+    mode !== "development"
       ? // in production, use the statically build version of our application
-        `file://${path.join(__dirname, "../public/index.html")}`
+        `file://${path.join(__dirname, "build")}`
       : // in dev, target the host and port of the local rollup web server
         "http://localhost:5173";
   mainWindow.loadURL(url);

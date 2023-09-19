@@ -46,7 +46,7 @@
       <button
         on:click={async () => {
           //@ts-ignore
-          const results = await window.electronAPI.vectorQuery("Hello world");
+          const results = await window.electronAPI.vectorQuery("vector");
           console.log(results);
         }}
         >query directory
