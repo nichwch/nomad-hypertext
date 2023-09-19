@@ -2,12 +2,14 @@
   let notesDir = window.localStorage.getItem("notesDir");
   /** @type {string[]} */
   let files = [];
+  /** @type {boolean}*/
+  let descending = false;
   $: if (notesDir) {
     refreshFiles();
   }
   const refreshFiles = () => {
     //@ts-ignore
-    window.electronAPI.readDir(notesDir).then((res) => {
+    window.electronAPI.readDir(notesDir, descending).then((res) => {
       if (res) files = res;
     });
   };
@@ -54,6 +56,27 @@
   {#if notesDir !== null}
     <button on:click={createFile}>new note</button>
   {/if}
+  <div>
+    <button
+      class:underline={!descending}
+      on:click={() => {
+        descending = false;
+        refreshFiles();
+      }}
+    >
+      newest first</button
+    >
+
+    <button
+      class:underline={descending}
+      on:click={() => {
+        descending = true;
+        refreshFiles();
+      }}
+    >
+      oldest first</button
+    >
+  </div>
   {#each files as file}
     <div><a href={file}>{file} </a></div>
   {/each}

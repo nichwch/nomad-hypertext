@@ -39,9 +39,21 @@ async function createWindow() {
     }
   });
 
-  ipcMain.handle("read-dir", async (event, path) => {
+  ipcMain.handle("read-dir", async (event, path, descending = false) => {
     const files = await fs.promises.readdir(path);
-    return files;
+    const filesWithMetadata = files.map((fileName) => {
+      return {
+        name: fileName,
+        time: fs.statSync(`${path}/${fileName}`).mtime.getTime(),
+      };
+    });
+    const sortedFiles = filesWithMetadata
+      .sort((a, b) => {
+        if (descending) return b.time - a.time;
+        return a.time - b.time;
+      })
+      .map((v) => v.name);
+    return sortedFiles;
   });
 
   ipcMain.handle("read-file", async (event, path) => {
