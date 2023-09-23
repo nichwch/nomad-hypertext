@@ -18,7 +18,6 @@ async function createWindow() {
     height: 680,
   });
   await initDB();
-  log.log(process.env);
   log.log("mode", mode);
   const url =
     mode !== "development"
