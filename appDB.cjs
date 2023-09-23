@@ -91,16 +91,24 @@ const indexDirectory = async (directory) => {
   log.log("read directory", files, filesModifiedSinceLastFetch);
   const promises = [];
   // for modified files, remove all their entries from the DB first
-  for (let file of filesModifiedSinceLastFetch) {
-    const filePath = `${directory}/${file}`;
+  const clearRowsForFiles = async (filePath) => {
+    log.log("filePath being cleared...", filePath);
     const rowsForFile = await search(db, {
       term: filePath,
       properties: ["parent"],
+      exact: true,
     });
     const idsForFile = rowsForFile.hits.map((hit) => hit.id);
-    log.log("deleting following rows", rowsForFile);
+    log.log(rowsForFile.hits.map((hit) => hit.document.parent));
+    log.log("deleting following rows", rowsForFile, idsForFile);
     await removeMultiple(db, idsForFile);
+  };
+  const deletePromises = [];
+  for (let file of filesModifiedSinceLastFetch) {
+    const filePath = `${directory}/${file}`;
+    deletePromises.push(clearRowsForFiles(filePath));
   }
+  await Promise.all(deletePromises);
   // then insert the new entries from the modified files
   for (let file of filesModifiedSinceLastFetch) {
     const filePath = `${directory}/${file}`;
@@ -116,7 +124,9 @@ const indexDirectory = async (directory) => {
   } catch (e) {
     log.error(e);
   } finally {
-    await persistToFile(db, "binary", dbPath);
+    if (filesModifiedSinceLastFetch.length > 0) {
+      await persistToFile(db, "binary", dbPath);
+    }
     fs.writeFileSync(lastFetchedDateFile, new Date().toString());
     const dbCount = await count(db);
     log.log(`db has ${dbCount} entries`);
@@ -135,4 +145,23 @@ const queryDB = async (query, similarity = 0.8, limit = 10) => {
   });
   return results;
 };
-module.exports = { db, initDB, indexDirectory, queryDB };
+
+const clearDB = async () => {
+  log.log("clearing db...");
+  db = await create({
+    schema: {
+      parent: "string",
+      tags: "string[]",
+      embedding: "vector[384]",
+      content: "string",
+    },
+    id: "oramadb",
+  });
+  await persistToFile(db, "binary", dbPath);
+  // reset last fetched date
+  fs.writeFileSync(lastFetchedDateFile, new Date(0).toString());
+  const dbCount = await count(db);
+  log.log(`db has ${dbCount} entries`);
+};
+
+module.exports = { db, initDB, indexDirectory, queryDB, clearDB };

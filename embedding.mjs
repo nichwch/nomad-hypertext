@@ -11,7 +11,6 @@ import { pipeline, env } from "@xenova/transformers";
   */
 export default async function getEmbedding(str) {
   const embedding = await getHFEmbedding(str);
-  console.log(embedding);
   return embedding;
 }
 

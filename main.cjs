@@ -1,7 +1,7 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const { indexDirectory, queryDB, initDB } = require("./appDB.cjs");
+const { indexDirectory, queryDB, initDB, clearDB } = require("./appDB.cjs");
 const log = require("electron-log");
 const mode = process.env.NODE_ENV;
 let mainWindow;
@@ -45,7 +45,7 @@ async function createWindow() {
     const filesWithMetadata = files.map((fileName) => {
       return {
         name: fileName,
-        time: fs.statSync(`${path}/${fileName}`).mtime.getTime(),
+        time: fs.statSync(`${path}/${fileName}`).ctime.getTime(),
       };
     });
     const sortedFiles = filesWithMetadata
@@ -87,6 +87,9 @@ async function createWindow() {
   });
   ipcMain.handle("vector-query", async (event, query) => {
     return await queryDB(query);
+  });
+  ipcMain.handle("clear-db", async (event) => {
+    return await clearDB();
   });
 }
 

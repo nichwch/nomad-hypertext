@@ -10,4 +10,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
     return ipcRenderer.invoke("index-directory", path);
   },
   vectorQuery: (query) => ipcRenderer.invoke("vector-query", query),
+  clearDB: (query) => ipcRenderer.invoke("clear-db", query),
 });

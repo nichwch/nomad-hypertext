@@ -80,4 +80,10 @@
   {#each files as file}
     <div><a href={file}>{file} </a></div>
   {/each}
+  <button
+    on:click={() => {
+      //@ts-ignore
+      window.electronAPI.clearDB();
+    }}>clear DB<button /></button
+  >
 </div>

@@ -35,8 +35,8 @@
   },
   "type": "module",
   "dependencies": {
-    "@orama/orama": "^1.2.2",
-    "@orama/plugin-data-persistence": "^1.2.2",
+    "@orama/orama": "^1.2.6",
+    "@orama/plugin-data-persistence": "^1.2.6",
     "@sveltejs/adapter-static": "^2.0.3",
     "@xenova/transformers": "^2.5.4",
     "commander": "^11.0.0",
