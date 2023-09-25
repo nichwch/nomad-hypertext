@@ -1,5 +1,6 @@
 exegesis/
 node_modules/
+build/
 .env
 testdir/
 smalldir/

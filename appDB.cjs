@@ -93,13 +93,8 @@ const indexDirectory = async (directory) => {
   // for modified files, remove all their entries from the DB first
   const clearRowsForFiles = async (filePath) => {
     log.log("filePath being cleared...", filePath);
-    const rowsForFile = await search(db, {
-      term: filePath,
-      properties: ["parent"],
-      exact: true,
-    });
-    const idsForFile = rowsForFile.hits.map((hit) => hit.id);
-    log.log(rowsForFile.hits.map((hit) => hit.document.parent));
+    const rowsForFile = await searchDBExact("parent", filePath);
+    const idsForFile = rowsForFile.map((hit) => hit.id);
     log.log("deleting following rows", rowsForFile, idsForFile);
     await removeMultiple(db, idsForFile);
   };
@@ -131,6 +126,21 @@ const indexDirectory = async (directory) => {
     const dbCount = await count(db);
     log.log(`db has ${dbCount} entries`);
   }
+};
+
+/** @param {string}  property*/
+/** @param {string}  term*/
+const searchDBExact = async (property, term) => {
+  const results = await search(db, {
+    term,
+    properties: [property],
+    exact: true,
+  });
+  // orama sometimes doesn't return exact results!! even with exact
+  const trueResults = results.hits.filter((result) => {
+    return result.document[property] === term;
+  });
+  return trueResults;
 };
 
 /** @param {string} query */
