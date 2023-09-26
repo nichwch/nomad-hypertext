@@ -30,60 +30,63 @@
   };
 </script>
 
-<div class="p-2">
-  <div>
-    <button on:click={setNoteDir}> open folder...</button>
+<div class="flex flex-col">
+  <div class="w-full border-b border-b-gray-800">
     {#if notesDir !== null}
-      <div>browsing {notesDir}</div>
-
-      <button
-        on:click={() => {
-          //@ts-ignore
-          window.electronAPI.indexDirectory(notesDir);
-        }}
-        >index directory
-      </button>
-      <button
-        on:click={async () => {
-          //@ts-ignore
-          const results = await window.electronAPI.vectorQuery("vector");
-          console.log(results);
-        }}
-        >query directory
-      </button>
+      <div class="border-b border-b-gray-800 px-2">browsing {notesDir}</div>
+      <div class="px-2">
+        <button on:click={setNoteDir}> open folder...</button>
+        {#if notesDir !== null}
+          <button on:click={createFile}>new note</button>
+        {/if}
+        <button
+          on:click={() => {
+            //@ts-ignore
+            window.electronAPI.indexDirectory(notesDir);
+          }}
+          >index directory
+        </button>
+        <button
+          on:click={async () => {
+            //@ts-ignore
+            const results = await window.electronAPI.vectorQuery("vector");
+            console.log(results);
+          }}
+          >query directory
+          <button
+            on:click={() => {
+              //@ts-ignore
+              window.electronAPI.clearDB();
+            }}>clear DB<button /></button
+          >
+        </button>
+      </div>
     {/if}
   </div>
-  {#if notesDir !== null}
-    <button on:click={createFile}>new note</button>
-  {/if}
-  <div>
-    <button
-      class:underline={!descending}
-      on:click={() => {
-        descending = false;
-        refreshFiles();
-      }}
-    >
-      newest first</button
-    >
+  <div class="p-2">
+    <div>
+      <button
+        class:underline={!descending}
+        on:click={() => {
+          descending = false;
+          refreshFiles();
+        }}
+      >
+        newest first</button
+      >
 
-    <button
-      class:underline={descending}
-      on:click={() => {
-        descending = true;
-        refreshFiles();
-      }}
-    >
-      oldest first</button
-    >
+      <button
+        class:underline={descending}
+        on:click={() => {
+          descending = true;
+          refreshFiles();
+        }}
+      >
+        oldest first</button
+      >
+    </div>
+    {#each files as file}
+      <div><a href={file}>{file} </a></div>
+    {/each}
   </div>
-  {#each files as file}
-    <div><a href={file}>{file} </a></div>
-  {/each}
-  <button
-    on:click={() => {
-      //@ts-ignore
-      window.electronAPI.clearDB();
-    }}>clear DB<button /></button
-  >
 </div>
