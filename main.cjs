@@ -43,17 +43,17 @@ async function createWindow() {
   ipcMain.handle("read-dir", async (event, path, descending = false) => {
     const files = await fs.promises.readdir(path);
     const filesWithMetadata = files.map((fileName) => {
+      const stats = fs.statSync(`${path}/${fileName}`);
       return {
         name: fileName,
-        time: fs.statSync(`${path}/${fileName}`).ctime.getTime(),
+        createdTime: stats.ctime,
+        modifiedTime: stats.mtime,
       };
     });
-    const sortedFiles = filesWithMetadata
-      .sort((a, b) => {
-        if (descending) return b.time - a.time;
-        return a.time - b.time;
-      })
-      .map((v) => v.name);
+    const sortedFiles = filesWithMetadata.sort((a, b) => {
+      if (descending) return b.createdTime.getTime() - a.createdTime.getTime();
+      return a.createdTime.getTime() - b.createdTime.getTime();
+    });
     return sortedFiles;
   });
 
