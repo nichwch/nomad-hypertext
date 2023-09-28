@@ -7,7 +7,6 @@
   /** @type {string|null}*/
   let lastFlushedContents = contents;
   const updateInterval = window.setInterval(() => {
-    console.log(contents, lastFlushedContents);
     if (notesDir && contents !== lastFlushedContents) {
       lastFlushedContents = contents;
       //@ts-ignore

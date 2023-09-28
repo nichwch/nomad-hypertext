@@ -46,13 +46,13 @@ async function createWindow() {
       const stats = fs.statSync(`${path}/${fileName}`);
       return {
         name: fileName,
-        createdTime: stats.ctime,
+        createdTime: stats.birthtime,
         modifiedTime: stats.mtime,
       };
     });
     const sortedFiles = filesWithMetadata.sort((a, b) => {
       if (descending) return b.createdTime.getTime() - a.createdTime.getTime();
-      return a.createdTime.getTime() - b.createdTime.getTime();
+      return a.createdTime.getTime() + b.createdTime.getTime();
     });
     return sortedFiles;
   });
