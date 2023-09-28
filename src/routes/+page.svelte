@@ -68,7 +68,7 @@
       <button
         class:underline={!descending}
         on:click={() => {
-          descending = false;
+          descending = true;
           refreshFiles();
         }}
       >
@@ -78,7 +78,7 @@
       <button
         class:underline={descending}
         on:click={() => {
-          descending = true;
+          descending = false;
           refreshFiles();
         }}
       >
