@@ -87,7 +87,11 @@
     </div>
     {#each files as file}
       <div>
-        <a href={file.name}>{file.name}, created {file.createdTime} </a>
+        <a href={file.name}>
+          <span> {file.name}</span><span class="float-right text-gray-700"
+            >created {new Date(file.createdTime).toLocaleString()}</span
+          >
+        </a>
       </div>
     {/each}
   </div>
