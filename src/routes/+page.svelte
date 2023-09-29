@@ -3,7 +3,7 @@
   /** @type {{name:string, createdTime:string, modifiedTime:string}[]} */
   let files = [];
   /** @type {boolean}*/
-  let descending = false;
+  let descending = true;
   $: if (notesDir) {
     refreshFiles();
   }
@@ -66,7 +66,7 @@
   <div class="p-2">
     <div>
       <button
-        class:underline={!descending}
+        class:underline={descending}
         on:click={() => {
           descending = true;
           refreshFiles();
@@ -76,7 +76,7 @@
       >
 
       <button
-        class:underline={descending}
+        class:underline={!descending}
         on:click={() => {
           descending = false;
           refreshFiles();

@@ -52,7 +52,7 @@ async function createWindow() {
     });
     const sortedFiles = filesWithMetadata.sort((a, b) => {
       if (descending) return b.createdTime.getTime() - a.createdTime.getTime();
-      return a.createdTime.getTime() + b.createdTime.getTime();
+      return a.createdTime.getTime() - b.createdTime.getTime();
     });
     return sortedFiles;
   });
