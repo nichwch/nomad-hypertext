@@ -36,30 +36,33 @@
       <div class="border-b border-b-gray-800 px-2">browsing {notesDir}</div>
       <div class="px-2">
         <button on:click={setNoteDir}> open folder...</button>
-        {#if notesDir !== null}
-          <button on:click={createFile}>new note</button>
-        {/if}
-        <button
-          on:click={() => {
-            //@ts-ignore
-            window.electronAPI.indexDirectory(notesDir);
-          }}
-          >index directory
-        </button>
-        <button
-          on:click={async () => {
-            //@ts-ignore
-            const results = await window.electronAPI.vectorQuery("vector");
-            console.log(results);
-          }}
-          >query directory
+        <div class="float-right">
+          {#if notesDir !== null}
+            <button on:click={createFile}>new note</button>
+          {/if}
           <button
             on:click={() => {
               //@ts-ignore
-              window.electronAPI.clearDB();
-            }}>clear DB<button /></button
-          >
-        </button>
+              window.electronAPI.indexDirectory(notesDir);
+            }}
+            >index directory
+          </button>
+
+          <button
+            on:click={async () => {
+              //@ts-ignore
+              const results = await window.electronAPI.vectorQuery("vector");
+              console.log(results);
+            }}
+            >query directory
+            <button
+              on:click={() => {
+                //@ts-ignore
+                window.electronAPI.clearDB();
+              }}>clear DB<button /></button
+            >
+          </button>
+        </div>
       </div>
     {/if}
   </div>
