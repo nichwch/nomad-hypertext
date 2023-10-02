@@ -1,6 +1,6 @@
 <script>
   let notesDir = window.localStorage.getItem("notesDir");
-  /** @type {{name:string, createdTime:string, modifiedTime:string}[]} */
+  /** @type {{name:string, path:string, createdTime:string, modifiedTime:string}[]} */
   let files = [];
   /** @type {boolean}*/
   let descending = true;
@@ -83,7 +83,7 @@
     </div>
     {#each files as file}
       <div>
-        <a href={file.name}>
+        <a href={file.path}>
           <span> {file.name}</span><span class="float-right text-gray-700"
             >created {new Date(file.createdTime).toLocaleString()}</span
           >

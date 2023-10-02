@@ -10,16 +10,13 @@
     if (notesDir && contents !== lastFlushedContents) {
       lastFlushedContents = contents;
       //@ts-ignore
-      window.electronAPI.writeFile(
-        `${notesDir}/${$page.params.noteName}`,
-        contents
-      );
+      window.electronAPI.writeFile(`/${$page.params.noteName}`, contents);
     }
   }, 300);
   onDestroy(() => window.clearInterval(updateInterval));
   $: if (notesDir && contents === null) {
     //@ts-ignore
-    window.electronAPI.readFile(`${notesDir}/${$page.params.noteName}`).then(
+    window.electronAPI.readFile(`/${$page.params.noteName}`).then(
       /** @param {string|undefined} res */
       (res) => {
         if (res) contents = res;

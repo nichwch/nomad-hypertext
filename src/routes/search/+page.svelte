@@ -12,18 +12,27 @@
 </script>
 
 <div>
-  <a href="/">back</a>
-  <input type="text" bind:value={searchQuery} />
-  {#if searchQuery && searchQuery.length > 0}
-    {#each searchResults as result}
-      <div>
-        <h1>
-          From: <a href={`/${result.document.parent}`}
-            >{result.document.parent}</a
-          >
-        </h1>
-        <p>{result.document.content}</p>
-      </div>
-    {/each}
-  {/if}
+  <div class="px-2 border-b border-b-gray-800">
+    <a href="/">back</a>
+  </div>
+  <input
+    class="w-full p-2 bg-transparent border-b border-b-gray-800 placeholder-gray-600"
+    type="text"
+    placeholder="search your notes..."
+    bind:value={searchQuery}
+  />
+  <div>
+    {#if searchQuery && searchQuery.length > 0}
+      {#each searchResults as result}
+        <div class="p-2 border-b border-b-gray-600">
+          <h1 class="text-sm">
+            From: <a class="underline" href={`/${result.document.parent}`}
+              >{result.document.parent}</a
+            >
+          </h1>
+          <p>{result.document.content}</p>
+        </div>
+      {/each}
+    {/if}
+  </div>
 </div>

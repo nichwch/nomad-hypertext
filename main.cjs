@@ -43,9 +43,11 @@ async function createWindow() {
   ipcMain.handle("read-dir", async (event, path, descending = false) => {
     const files = await fs.promises.readdir(path);
     const filesWithMetadata = files.map((fileName) => {
-      const stats = fs.statSync(`${path}/${fileName}`);
+      const filePath = `${path}/${fileName}`;
+      const stats = fs.statSync(filePath);
       return {
         name: fileName,
+        path: filePath,
         createdTime: stats.birthtime,
         modifiedTime: stats.mtime,
       };
