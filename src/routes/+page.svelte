@@ -40,6 +40,7 @@
           {#if notesDir !== null}
             <button on:click={createFile}>new note</button>
           {/if}
+          <a href="/search">search</a>
           <button
             on:click={() => {
               //@ts-ignore
@@ -47,20 +48,12 @@
             }}
             >index directory
           </button>
-
           <button
-            on:click={async () => {
+            on:click={() => {
               //@ts-ignore
-              const results = await window.electronAPI.vectorQuery("vector");
-              console.log(results);
+              window.electronAPI.clearDB();
             }}
-            >query directory
-            <button
-              on:click={() => {
-                //@ts-ignore
-                window.electronAPI.clearDB();
-              }}>clear DB<button /></button
-            >
+            >clear DB<button />
           </button>
         </div>
       </div>
