@@ -26,7 +26,7 @@
       {#each searchResults as result}
         <div class="p-2 border-b border-b-gray-600">
           <h1 class="text-sm">
-            From: <a class="underline" href={`/${result.document.parent}`}
+            From: <a class="underline" href={result.document.parent}
               >{result.document.parent}</a
             >
           </h1>
