@@ -45,11 +45,13 @@ async function createWindow() {
     const filesWithMetadata = files.map((fileName) => {
       const filePath = `${path}/${fileName}`;
       const stats = fs.statSync(filePath);
+      const isDir = stats.isDirectory();
       return {
         name: fileName,
         path: filePath,
         createdTime: stats.birthtime,
         modifiedTime: stats.mtime,
+        isDir,
       };
     });
     const sortedFiles = filesWithMetadata.sort((a, b) => {

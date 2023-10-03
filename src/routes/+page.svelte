@@ -1,6 +1,6 @@
 <script>
   let notesDir = window.localStorage.getItem("notesDir");
-  /** @type {{name:string, path:string, createdTime:string, modifiedTime:string}[]} */
+  /** @type {{name:string, path:string, createdTime:string,isDir:boolean, modifiedTime:string}[]} */
   let files = [];
   /** @type {boolean}*/
   let descending = true;
@@ -82,13 +82,25 @@
       >
     </div>
     {#each files as file}
-      <div>
-        <a href={file.path}>
-          <span> {file.name}</span><span class="float-right text-gray-700"
-            >created {new Date(file.createdTime).toLocaleString()}</span
-          >
-        </a>
-      </div>
+      {#if file.isDir}
+        <button
+          on:click={() => {
+            notesDir = file.path;
+            window.localStorage.setItem("notesDir", notesDir);
+            refreshFiles();
+          }}
+        >
+          {file.name}
+        </button>
+      {:else}
+        <div>
+          <a href={file.path}>
+            <span> {file.name}</span><span class="float-right text-gray-700"
+              >created {new Date(file.createdTime).toLocaleString()}</span
+            >
+          </a>
+        </div>
+      {/if}
     {/each}
   </div>
 </div>
