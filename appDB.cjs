@@ -70,6 +70,21 @@ const processSegment = async (segment, fileName) => {
   }
 };
 
+const indexFile = async (filePath) => {
+  log.log("filePath being cleared...", filePath);
+  const rowsForFile = await searchDBExact("parent", filePath);
+  const idsForFile = rowsForFile.map((hit) => hit.id);
+  log.log("deleting following rows", rowsForFile, idsForFile);
+  await removeMultiple(db, idsForFile);
+  const file_text = fs.readFileSync(filePath, "utf8");
+  log.log("read file", filePath);
+  const segments = file_text?.split("\n") || "";
+  const promises = [];
+  for (let segment of segments) {
+    promises.push(processSegment(segment, filePath));
+  }
+  await Promise.all(promises);
+};
 const indexDirectory = async (directory) => {
   log.log("indexing directory...");
   /** @type {Date} */
@@ -90,29 +105,11 @@ const indexDirectory = async (directory) => {
   });
   log.log("read directory", files, filesModifiedSinceLastFetch);
   const promises = [];
-  // for modified files, remove all their entries from the DB first
-  const clearRowsForFiles = async (filePath) => {
-    log.log("filePath being cleared...", filePath);
-    const rowsForFile = await searchDBExact("parent", filePath);
-    const idsForFile = rowsForFile.map((hit) => hit.id);
-    log.log("deleting following rows", rowsForFile, idsForFile);
-    await removeMultiple(db, idsForFile);
-  };
-  const deletePromises = [];
-  for (let file of filesModifiedSinceLastFetch) {
-    const filePath = `${directory}/${file}`;
-    deletePromises.push(clearRowsForFiles(filePath));
-  }
-  await Promise.all(deletePromises);
+
   // then insert the new entries from the modified files
   for (let file of filesModifiedSinceLastFetch) {
     const filePath = `${directory}/${file}`;
-    const file_text = fs.readFileSync(filePath, "utf8");
-    log.log("read file", file);
-    const segments = file_text?.split("\n") || "";
-    for (let segment of segments) {
-      promises.push(processSegment(segment, filePath));
-    }
+    promises.push(indexFile(filePath));
   }
   try {
     await Promise.all(promises);
