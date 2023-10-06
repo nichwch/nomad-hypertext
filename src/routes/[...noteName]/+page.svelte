@@ -12,8 +12,25 @@
       //@ts-ignore
       window.electronAPI.writeFile(`/${$page.params.noteName}`, contents);
     }
-  }, 300);
-  onDestroy(() => window.clearInterval(updateInterval));
+  }, 100);
+
+  let currentlyIndexing = false;
+  /** @type {string|null}*/
+  let lastIndexedContents = contents;
+  const reindexInterval = window.setInterval(async () => {
+    if (notesDir && contents !== lastIndexedContents && !currentlyIndexing) {
+      lastIndexedContents = contents;
+      currentlyIndexing = true;
+      //@ts-ignore
+      await window.electronAPI.reindexFile(`/${$page.params.noteName}`);
+      currentlyIndexing = false;
+    }
+  }, 500);
+  $: console.log({ currentlyIndexing });
+  onDestroy(() => {
+    window.clearInterval(updateInterval);
+    window.clearInterval(reindexInterval);
+  });
   $: if (notesDir && contents === null) {
     //@ts-ignore
     window.electronAPI.readFile(`/${$page.params.noteName}`).then(

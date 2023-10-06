@@ -1,7 +1,13 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
-const { indexDirectory, queryDB, initDB, clearDB } = require("./appDB.cjs");
+const {
+  indexDirectory,
+  queryDB,
+  initDB,
+  clearDB,
+  indexFile,
+} = require("./appDB.cjs");
 const log = require("electron-log");
 const mode = process.env.NODE_ENV;
 let mainWindow;
@@ -88,6 +94,9 @@ async function createWindow() {
 
   ipcMain.handle("index-directory", async (event, path) => {
     await indexDirectory(path);
+  });
+  ipcMain.handle("reindex-file", async (event, path) => {
+    await indexFile(path);
   });
   ipcMain.handle("vector-query", async (event, query) => {
     return await queryDB(query);

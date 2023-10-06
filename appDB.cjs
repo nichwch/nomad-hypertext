@@ -171,4 +171,4 @@ const clearDB = async () => {
   log.log(`db has ${dbCount} entries`);
 };
 
-module.exports = { db, initDB, indexDirectory, queryDB, clearDB };
+module.exports = { db, initDB, indexDirectory, indexFile, queryDB, clearDB };
