@@ -48,7 +48,15 @@ async function createWindow() {
 
   ipcMain.handle("read-dir", async (event, path, descending = false) => {
     const files = await fs.promises.readdir(path);
-    const filesWithMetadata = files.map((fileName) => {
+    const textFilesAndFolders = files.filter((fileName) => {
+      const filePath = `${path}/${fileName}`;
+      if (fileName.startsWith(".")) return false;
+      let extension = fileName.split(".").pop();
+      const stats = fs.statSync(filePath);
+      const isDir = stats.isDirectory();
+      if (extension === "txt" || extension === "md" || isDir) return true;
+    });
+    const filesWithMetadata = textFilesAndFolders.map((fileName) => {
       const filePath = `${path}/${fileName}`;
       const stats = fs.statSync(filePath);
       const isDir = stats.isDirectory();
