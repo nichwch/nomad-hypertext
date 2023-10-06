@@ -112,6 +112,7 @@
     {#each files as file}
       {#if file.isDir}
         <button
+          class="block"
           on:click={() => {
             $currentDir = file.path;
             refreshFiles();
