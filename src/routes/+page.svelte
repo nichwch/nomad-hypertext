@@ -40,7 +40,7 @@
   };
 </script>
 
-<div class="flex flex-col">
+<div class="flex flex-col h-full">
   <div class="w-full border-b border-b-gray-800">
     {#if $currentDir !== null}
       <div class="border-b border-b-gray-800 px-2">
@@ -87,7 +87,7 @@
       </div>
     {/if}
   </div>
-  <div class="p-2">
+  <div class="p-2 overflow-y-scroll">
     <div>
       <button
         class:underline={descending}
