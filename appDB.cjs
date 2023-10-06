@@ -8,6 +8,7 @@ const {
 } = require("@orama/orama");
 const getEmbedding = require("./appEmbeddings.cjs");
 const fs = require("fs");
+const path = require("path");
 const { app } = require("electron");
 const log = require("electron-log");
 
@@ -85,6 +86,24 @@ const indexFile = async (filePath) => {
   }
   await Promise.all(promises);
 };
+// /** @param {string} dirPath  */
+/** @param {string[]} files  */
+/** @returns {string[]}  */
+const getAllFiles = (dirPath, files = []) => {
+  const entries = fs.readdirSync(dirPath);
+
+  for (const entry of entries) {
+    const fullPath = path.join(dirPath, entry);
+    if (fs.statSync(fullPath).isDirectory()) {
+      getAllFiles(fullPath, files);
+    } else {
+      files.push(fullPath);
+    }
+  }
+
+  return files;
+};
+
 const indexDirectory = async (directory) => {
   log.log("indexing directory...");
   /** @type {Date} */
@@ -96,11 +115,9 @@ const indexDirectory = async (directory) => {
     lastFetchedDate = new Date(0);
   }
   log.log("last fetched date:", lastFetchedDate);
-  const files = fs.readdirSync(directory);
+  const files = getAllFiles(directory);
   const filesModifiedSinceLastFetch = files.filter((file) => {
-    const lastModifiedTime = fs
-      .statSync(`${directory}/${file}`)
-      .mtime.getTime();
+    const lastModifiedTime = fs.statSync(file).mtime.getTime();
     return lastModifiedTime > lastFetchedDate.getTime();
   });
   log.log("read directory", files, filesModifiedSinceLastFetch);
@@ -108,8 +125,7 @@ const indexDirectory = async (directory) => {
 
   // then insert the new entries from the modified files
   for (let file of filesModifiedSinceLastFetch) {
-    const filePath = `${directory}/${file}`;
-    promises.push(indexFile(filePath));
+    promises.push(indexFile(file));
   }
   try {
     await Promise.all(promises);
