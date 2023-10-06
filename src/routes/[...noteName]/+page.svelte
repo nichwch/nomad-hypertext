@@ -26,7 +26,6 @@
       currentlyIndexing = false;
     }
   }, 500);
-  $: console.log({ currentlyIndexing });
   onDestroy(() => {
     window.clearInterval(updateInterval);
     window.clearInterval(reindexInterval);
