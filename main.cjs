@@ -103,8 +103,8 @@ async function createWindow() {
   ipcMain.handle("index-directory", async (event, path) => {
     await indexDirectory(path);
   });
-  ipcMain.handle("reindex-file", async (event, path) => {
-    await indexFile(path);
+  ipcMain.handle("reindex-file", async (event, path, content) => {
+    await indexFile(path, content);
   });
   ipcMain.handle("vector-query", async (event, query) => {
     return await queryDB(query);

@@ -70,16 +70,20 @@ const processSegment = async (segment, fileName) => {
     log.error(e);
   }
 };
-
-const indexFile = async (filePath) => {
+const accessAndIndexFile = async (filePath) => {
+  const file = await fs.readFileSync(filePath, "utf8");
+  await indexFile(filePath, file);
+};
+const indexFile = async (filePath, fileContents) => {
   log.log("filePath being cleared...", filePath);
   const rowsForFile = await searchDBExact("parent", filePath);
   const idsForFile = rowsForFile.map((hit) => hit.id);
+  // this does not need to happen synchronously before new insertions!
+  // we already have the IDs to delete
   log.log("deleting following rows", rowsForFile, idsForFile);
   await removeMultiple(db, idsForFile);
-  const file_text = fs.readFileSync(filePath, "utf8");
-  log.log("read file", filePath);
-  const segments = file_text?.split("\n") || "";
+  const segments = fileContents?.split("\n") || "";
+  log.log("indexing following contents...", segments, fileContents);
   const promises = [];
   for (let segment of segments) {
     promises.push(processSegment(segment, filePath));
@@ -125,7 +129,7 @@ const indexDirectory = async (directory) => {
 
   // then insert the new entries from the modified files
   for (let file of filesModifiedSinceLastFetch) {
-    promises.push(indexFile(file));
+    promises.push(accessAndIndexFile(file));
   }
   try {
     await Promise.all(promises);

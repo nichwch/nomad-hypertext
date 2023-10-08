@@ -27,10 +27,13 @@
       !currentlyIndexing
     ) {
       console.log("REINDEXING");
-      lastIndexedContents = contents;
       currentlyIndexing = true;
       //@ts-ignore
-      await window.electronAPI.reindexFile(`/${$page.params.noteName}`);
+      await window.electronAPI.reindexFile(
+        `/${$page.params.noteName}`,
+        contents
+      );
+      lastIndexedContents = contents;
       currentlyIndexing = false;
     }
   }, 1000);
