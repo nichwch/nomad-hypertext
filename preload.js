@@ -9,8 +9,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   indexDirectory: (path) => {
     return ipcRenderer.invoke("index-directory", path);
   },
-  reindexFile: (path, contents) =>
-    ipcRenderer.invoke("reindex-file", path, contents),
+  reindexFile: (path, deletedContent, newContent) =>
+    ipcRenderer.invoke("reindex-file", path, deletedContent, newContent),
 
   vectorQuery: (query) => ipcRenderer.invoke("vector-query", query),
   clearDB: (query) => ipcRenderer.invoke("clear-db", query),

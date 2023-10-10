@@ -6,7 +6,7 @@ const {
   queryDB,
   initDB,
   clearDB,
-  indexFile,
+  reindexFile,
 } = require("./appDB.cjs");
 const log = require("electron-log");
 const mode = process.env.NODE_ENV;
@@ -103,9 +103,12 @@ async function createWindow() {
   ipcMain.handle("index-directory", async (event, path) => {
     await indexDirectory(path);
   });
-  ipcMain.handle("reindex-file", async (event, path, content) => {
-    await indexFile(path, content);
-  });
+  ipcMain.handle(
+    "reindex-file",
+    async (event, path, deletedContent, newContent) => {
+      await reindexFile(path, deletedContent, newContent);
+    }
+  );
   ipcMain.handle("vector-query", async (event, query) => {
     return await queryDB(query);
   });

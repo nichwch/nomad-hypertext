@@ -74,6 +74,28 @@ const accessAndIndexFile = async (filePath) => {
   const file = await fs.readFileSync(filePath, "utf8");
   await indexFile(filePath, file);
 };
+
+const reindexFile = async (
+  /** @type {string} */ filePath,
+  /** @type {string[]} */ deletedContent,
+  /** @type {string[]} */ newContent
+) => {
+  log.log("reindexing ", filePath);
+  const deletedContentSet = new Set(deletedContent);
+  const rowsForFile = await searchDBExact("parent", filePath);
+  const rowsToDelete = rowsForFile.filter((row) => {
+    if (deletedContentSet.has(row.document.content)) return true;
+    return false;
+  });
+  const idsToDelete = rowsToDelete.map((hit) => hit.id);
+  await removeMultiple(db, idsToDelete);
+  log.log("indexing following contents...", newContent);
+  const promises = [];
+  for (let segment of newContent) {
+    promises.push(processSegment(segment, filePath));
+  }
+  await Promise.all(promises);
+};
 const indexFile = async (filePath, fileContents) => {
   log.log("filePath being cleared...", filePath);
   const rowsForFile = await searchDBExact("parent", filePath);
@@ -191,4 +213,12 @@ const clearDB = async () => {
   log.log(`db has ${dbCount} entries`);
 };
 
-module.exports = { db, initDB, indexDirectory, indexFile, queryDB, clearDB };
+module.exports = {
+  db,
+  initDB,
+  indexDirectory,
+  indexFile,
+  reindexFile,
+  queryDB,
+  clearDB,
+};

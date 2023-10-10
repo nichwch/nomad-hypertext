@@ -1,7 +1,7 @@
 <script>
   // @ts-nocheck
-
   import { page } from "$app/stores";
+  import { diffParagraphs } from "$lib";
   import { onDestroy } from "svelte";
   let notesDir = window.localStorage.getItem("notesDir");
   /** @type {string|null}*/
@@ -19,6 +19,7 @@
   let currentlyIndexing = false;
   /** @type {string|null}*/
   let lastIndexedContents;
+  $: segments = contents?.split("\n") || [];
   const reindexInterval = window.setInterval(async () => {
     if (
       notesDir &&
@@ -26,12 +27,17 @@
       contents !== lastIndexedContents &&
       !currentlyIndexing
     ) {
-      console.log("REINDEXING");
+      const { deleted, created } = diffParagraphs(
+        lastIndexedContents,
+        contents
+      );
+      console.log("REINDEXING", deleted, created);
       currentlyIndexing = true;
       //@ts-ignore
       await window.electronAPI.reindexFile(
         `/${$page.params.noteName}`,
-        contents
+        deleted,
+        created
       );
       lastIndexedContents = contents;
       currentlyIndexing = false;
@@ -54,9 +60,6 @@
       }
     );
   }
-  $: segments = contents?.split("\n") || [];
-  $: console.log({ contents, segments });
-  $: console.log(JSON.stringify(contents));
 </script>
 
 <div
