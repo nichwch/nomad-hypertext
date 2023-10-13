@@ -3,6 +3,7 @@
   import { page } from "$app/stores";
   import { diffParagraphs } from "$lib";
   import { onDestroy } from "svelte";
+  import Overlay from "../../Overlay.svelte";
   let notesDir = window.localStorage.getItem("notesDir");
   /** @type {string|null}*/
   let contents = null;
@@ -67,15 +68,7 @@
 >
   <div class="max-w-md mx-auto relative top-0 h-full whitespace-pre-wrap">
     <div class="p-5 absolute top-0 left-0 right-0 bottom-0 w-full h-full">
-      {#each segments as segment}
-        {#if segment.length > 0}
-          <div class="block text-green-900 opacity-50 bg-green-500">
-            {segment}
-          </div>
-        {:else}
-          <br />
-        {/if}
-      {/each}
+      <Overlay {segments} />
     </div>
     <div
       contenteditable="plaintext-only"
