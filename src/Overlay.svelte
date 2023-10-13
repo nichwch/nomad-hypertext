@@ -5,9 +5,11 @@
 
 {#each segments as segment}
   {#if segment.length > 0}
-    <div class="relative block text-green-900 opacity-50 bg-green-500">
+    <div class="relative block">
       {segment}
-      <div class="absolute top-0 left-full pl-3">test</div>
+      <div class="absolute opacity-50 top-0 left-full pl-3 hover:text-red-800">
+        test
+      </div>
     </div>
   {:else}
     <br />
