@@ -47,9 +47,11 @@ const initDB = async () => {
 };
 
 const processSegment = async (segment, fileName) => {
-  log.log("processing segment");
   segment = segment.trim();
   if (segment.length === 0) return;
+  segmentCount++;
+  const thisSegment = segmentCount;
+  log.log("processing segment", segmentCount);
   /** @typedef {string[]|null} tags */
   const tags =
     segment.match(/\[\[.*?\]\]/g)?.map((tag) => {
@@ -66,6 +68,8 @@ const processSegment = async (segment, fileName) => {
       content: segment,
     };
     await insert(db, entry);
+    log.log(`inserted segment ${thisSegment} successfully
+s    `);
   } catch (e) {
     log.error(e);
   }
@@ -96,6 +100,9 @@ const reindexFile = async (
   }
   await Promise.all(promises);
 };
+
+let segmentCount = 0;
+
 const indexFile = async (filePath, fileContents) => {
   log.log("filePath being cleared...", filePath);
   const rowsForFile = await searchDBExact("parent", filePath);
@@ -103,7 +110,7 @@ const indexFile = async (filePath, fileContents) => {
   // this does not need to happen synchronously before new insertions!
   // we already have the IDs to delete
   log.log("deleting following rows", rowsForFile, idsForFile);
-  await removeMultiple(db, idsForFile);
+  removeMultiple(db, idsForFile);
   const segments = fileContents?.split("\n") || "";
   log.log("indexing following contents...", segments, fileContents);
   const promises = [];
@@ -132,6 +139,8 @@ const getAllFiles = (dirPath, files = []) => {
 
 const indexDirectory = async (directory) => {
   log.log("indexing directory...");
+  const { default: pLimit } = await import("p-limit");
+  console.log("plimit", pLimit);
   /** @type {Date} */
   let lastFetchedDate;
   try {
@@ -150,8 +159,11 @@ const indexDirectory = async (directory) => {
   const promises = [];
 
   // then insert the new entries from the modified files
+  // batch these 4 files at a time
+  // doing it completely parallel crashes everything
+  const limit = pLimit(5);
   for (let file of filesModifiedSinceLastFetch) {
-    promises.push(accessAndIndexFile(file));
+    promises.push(limit(() => accessAndIndexFile(file)));
   }
   try {
     await Promise.all(promises);
