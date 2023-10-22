@@ -1,10 +1,10 @@
 <script>
   /** @type {string[]} */
   export let segments = [];
-  const searchSegment = async (/** @type {string} */ segment) => {
+  const searchSegment = async (segment) => {
     const searchResults =
       //@ts-ignore
-      (await window.electronAPI.vectorQuery(searchQuery))?.hits || [];
+      (await window.electronAPI.vectorQuery(segment))?.hits || [];
     console.log(searchResults);
   };
 </script>
