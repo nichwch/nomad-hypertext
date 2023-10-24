@@ -1,8 +1,13 @@
 <script>
   /** @type {string[]} */
   export let segments = [];
+
   /**
-   * @type {(arg0: string[]) => void}
+   * @type {number}
+   */
+  export let focusedIndex;
+  /**
+   * @type {(arg0: string[], arg1:number) => void}
    */
   export let setSearchResults;
   const searchSegment = async (segment) => {
@@ -16,16 +21,22 @@
   };
 </script>
 
-{#each segments as segment}
+{#each segments as segment, index}
   {#if segment.length > 0}
-    <div class="relative block">
+    <div
+      class={focusedIndex === index
+        ? "relative block bg-red-800/[0.4]"
+        : "relative block"}
+    >
       {segment}
       <button
         on:click={async () => {
           const results = await searchSegment(segment);
-          setSearchResults(results);
+          setSearchResults(results, index);
         }}
         class="absolute opacity-50 top-0 left-full pl-3 hover:text-red-800"
+        class:text-red-800={focusedIndex === index}
+        class:opacity-100={focusedIndex === index}
       >
         search
       </button>

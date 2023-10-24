@@ -9,6 +9,8 @@
   let contents = null;
   let searchResults = null;
   let showingSidebar = false;
+  /** @type {number|null}*/
+  let focusedIndex = null;
   /** @type {string|null}*/
   let lastFlushedContents;
   const updateInterval = window.setInterval(() => {
@@ -71,9 +73,11 @@
       <div class="w-full p-5 absolute top-0 left-0 right-0 bottom-0 h-full">
         <Overlay
           {segments}
-          setSearchResults={(results) => {
+          {focusedIndex}
+          setSearchResults={(results, index) => {
             showingSidebar = true;
             searchResults = results;
+            focusedIndex = index;
           }}
         />
       </div>
@@ -84,7 +88,9 @@
       />
     </div>
   </div>
-  {#if showingSidebar}<div class="w-2/6 flex flex-col border-l border-l-black">
+  {#if showingSidebar}<div
+      class="w-2/6 flex flex-col border-l border-l-black h-full"
+    >
       <div class="border-b border-b-black p-2">
         <span>search results</span>
         <button

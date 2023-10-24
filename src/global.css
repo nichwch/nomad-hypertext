@@ -5,3 +5,7 @@
 body {
   height: 100vh;
 }
+
+::selection {
+  background: rgb(153 27 27 / 0.4);
+}
