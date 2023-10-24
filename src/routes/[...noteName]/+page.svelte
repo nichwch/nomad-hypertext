@@ -7,6 +7,8 @@
   let notesDir = window.localStorage.getItem("notesDir");
   /** @type {string|null}*/
   let contents = null;
+  let searchResults = null;
+  let showingSidebar = false;
   /** @type {string|null}*/
   let lastFlushedContents;
   const updateInterval = window.setInterval(() => {
@@ -63,17 +65,47 @@
   }
 </script>
 
-<div
-  class="overflow-y-auto bg-transparent w-full h-full resize-none focus:outline-none"
->
-  <div class="max-w-md mx-auto relative top-0 h-full whitespace-pre-wrap">
-    <div class="p-5 absolute top-0 left-0 right-0 bottom-0 w-full h-full">
-      <Overlay {segments} />
+<div class="flex bg-transparent w-full h-full resize-none focus:outline-none">
+  <div class="w-full overflow-y-auto top-0 h-full whitespace-pre-wrap">
+    <div class="w-5/12 mx-auto h-full relative">
+      <div class="w-full p-5 absolute top-0 left-0 right-0 bottom-0 h-full">
+        <Overlay
+          {segments}
+          setSearchResults={(results) => {
+            showingSidebar = true;
+            searchResults = results;
+          }}
+        />
+      </div>
+      <div
+        contenteditable="plaintext-only"
+        class="w-full inline-block bg-transparent p-5 absolute top-0 left-0 right-0 bottom-0 h-full resize-none focus:outline-none"
+        bind:innerText={contents}
+      />
     </div>
-    <div
-      contenteditable="plaintext-only"
-      class="inline-block bg-transparent p-5 absolute top-0 left-0 right-0 bottom-0 w-full h-full resize-none focus:outline-none"
-      bind:innerText={contents}
-    />
   </div>
+  {#if showingSidebar}<div class="w-2/6 flex flex-col border-l border-l-black">
+      <div class="border-b border-b-black p-2">
+        <span>search results</span>
+        <button
+          class="float-right"
+          on:click={() => {
+            showingSidebar = !showingSidebar;
+          }}>hide</button
+        >
+      </div>
+      <div class="overflow-y-auto p-2">
+        {#each searchResults as result}
+          <div class=" border-b border-b-gray-600">
+            <h1 class="text-sm">
+              From: <a class="underline" href={result.document.parent}
+                >{result.document.parent}</a
+              >
+            </h1>
+            <p>{result.document.content}</p>
+          </div>
+        {/each}
+      </div>
+    </div>
+  {/if}
 </div>
