@@ -15,7 +15,7 @@
   onDestroy(() => window.removeEventListener("keypress", commandKListener));
 </script>
 
-<div class=" bg-orange-200 h-full flex flex-col">
+<div class=" bg-orange-200 h-screen flex flex-col">
   <slot />
   <div class="w-full py-1 px-2 border-t border-t-gray-700">
     <button
@@ -24,10 +24,10 @@
       }}>search (command k)</button
     >
   </div>
-  <SearchModal
-    {showingModal}
-    on:modalClose={() => {
-      showingModal = false;
-    }}
-  />
 </div>
+<SearchModal
+  {showingModal}
+  on:modalClose={() => {
+    showingModal = false;
+  }}
+/>
