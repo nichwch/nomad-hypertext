@@ -1,6 +1,7 @@
 <script>
   import { currentDir } from "../currentDirStore";
   let notesDir = window.localStorage.getItem("notesDir");
+  let showingModal = false;
   const setNoteDir = async () => {
     // call IPC to make electron show dialog
     /** @type {string|undefined}  */
@@ -53,9 +54,11 @@
         </p>
         <button
           class="bg-orange-300 border border-gray-500 px-2"
-          on:click={() => {
+          on:click={async () => {
+            showingModal = true;
             //@ts-ignore
-            window.electronAPI.indexDirectory($currentDir);
+            await window.electronAPI.indexDirectory($currentDir);
+            showingModal = false;
           }}
           >reindex notes
         </button>
@@ -81,3 +84,17 @@
     </div>
   </div>
 </div>
+{#if showingModal}
+  <div class="absolute top-0 left-0 bg-slate-500 opacity-50 w-full h-full" />
+  <dialog
+    class="absolute top-0 left-0 w-[36rem] h-4/6 bg-orange-200 mt-12 flex flex-col border border-gray-800"
+  >
+    <div class="p-5">
+      <p>Indexing notes...</p>
+      <p>
+        This may take a while. If the app is unresponsive for a while, go ahead
+        and restart it and try again.
+      </p>
+    </div>
+  </dialog>
+{/if}

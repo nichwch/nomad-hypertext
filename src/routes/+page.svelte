@@ -40,7 +40,7 @@
   };
 </script>
 
-<div class="flex flex-col h-full">
+<div class="flex flex-col h-full overflow-y-auto">
   <div class="w-full border-b border-b-gray-800">
     {#if $currentDir !== null}
       <div class="border-b border-b-gray-800 px-2">

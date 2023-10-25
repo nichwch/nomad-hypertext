@@ -67,7 +67,9 @@
   }
 </script>
 
-<div class="flex bg-transparent w-full h-full resize-none focus:outline-none">
+<div
+  class="flex bg-transparent w-full flex-grow resize-none focus:outline-none overflow-y-hidden"
+>
   <div class="w-full overflow-y-auto top-0 h-full whitespace-pre-wrap">
     <div class=" w-[36rem] mx-auto h-full relative">
       <div
@@ -91,7 +93,7 @@
     </div>
   </div>
   {#if showingSidebar}<div
-      class="w-2/6 flex flex-col border-l border-l-black h-full"
+      class="w-2/6 flex flex-col border-l h-full border-l-black overflow-y-hidden"
     >
       <div class="border-b border-b-black p-2">
         <span>search results</span>
