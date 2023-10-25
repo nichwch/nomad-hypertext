@@ -63,26 +63,12 @@
         {/each}
       </div>
       <div class="px-2">
-        <button on:click={setNoteDir}> open folder...</button>
+        {#if $currentDir !== null}
+          <button on:click={createFile}>new note</button>
+        {/if}
         <div class="float-right">
-          {#if $currentDir !== null}
-            <button on:click={createFile}>new note</button>
-          {/if}
           <a href="/search">search</a>
-          <button
-            on:click={() => {
-              //@ts-ignore
-              window.electronAPI.indexDirectory($currentDir);
-            }}
-            >index directory
-          </button>
-          <button
-            on:click={() => {
-              //@ts-ignore
-              window.electronAPI.clearDB();
-            }}
-            >clear DB<button />
-          </button>
+          <a href="/settings">settings</a>
         </div>
       </div>
     {/if}
