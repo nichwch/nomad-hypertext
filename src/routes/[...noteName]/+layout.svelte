@@ -9,5 +9,7 @@
       editing {$page.params.noteName}
     </span>
   </div>
-  <slot />
+  {#key $page.params.noteName}
+    <slot />
+  {/key}
 </div>
