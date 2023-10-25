@@ -67,13 +67,12 @@
           <button on:click={createFile}>new note</button>
         {/if}
         <div class="float-right">
-          <a href="/search">search</a>
           <a href="/settings">settings</a>
         </div>
       </div>
     {/if}
   </div>
-  <div class="p-2 overflow-y-scroll">
+  <div class="p-2 overflow-y-auto">
     <div>
       <button
         class:underline={descending}

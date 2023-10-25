@@ -10,7 +10,4 @@
     </span>
   </div>
   <slot />
-  <div class="w-full py-1 px-2 border-t border-t-gray-700">
-    bottom bar content
-  </div>
 </div>
