@@ -69,7 +69,7 @@
 
 <div class="flex bg-transparent w-full h-full resize-none focus:outline-none">
   <div class="w-full overflow-y-auto top-0 h-full whitespace-pre-wrap">
-    <div class="w-5/12 mx-auto h-full relative">
+    <div class=" w-[36rem] mx-auto h-full relative">
       <div
         class="w-full inline-block p-5 absolute top-0 left-0 right-0 bottom-0 h-full"
       >
@@ -99,6 +99,7 @@
           class="float-right"
           on:click={() => {
             showingSidebar = !showingSidebar;
+            focusedIndex = null;
           }}>hide</button
         >
       </div>
