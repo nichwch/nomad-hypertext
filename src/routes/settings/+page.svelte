@@ -24,10 +24,14 @@
     <div class="w-[36rem] mx-auto py-10">
       <div>
         <h1 class="text-2xl">Notes folder</h1>
-        <p>
+        <p class="mt-2">
           Your notes folder are where all your notes are created and stored. It
           is also where the semantic search index will be created. Notes inside
           of your notes folder can be searched, notes outside cannot.
+        </p>
+        <p class="mt-2">
+          If you change your notes folder, you will need to clear and recreate
+          your index. See the following sections for more information.
         </p>
         <p class="mt-2">Your current notes folder is: {notesDir}</p>
         <button class="mt-2 settings-button" on:click={setNoteDir}
