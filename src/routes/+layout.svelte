@@ -19,9 +19,10 @@
   <slot />
   <div class="w-full py-1 px-2 border-t border-t-gray-700">
     <button
+      class="settings-button"
       on:click={() => {
         showingModal = true;
-      }}>search (command k)</button
+      }}>search (⌘ k)</button
     >
   </div>
 </div>

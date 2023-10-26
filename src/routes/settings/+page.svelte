@@ -30,9 +30,8 @@
           of your notes folder can be searched, notes outside cannot.
         </p>
         <p class="mt-2">Your current notes folder is: {notesDir}</p>
-        <button
-          class="mt-2 bg-orange-300 border border-gray-500 px-2"
-          on:click={setNoteDir}>change notes folder</button
+        <button class="mt-2 settings-button" on:click={setNoteDir}
+          >change notes folder</button
         >
       </div>
 
@@ -53,7 +52,7 @@
           be unresponsive while reindexing.
         </p>
         <button
-          class="bg-orange-300 border border-gray-500 px-2"
+          class="mt-2 settings-button"
           on:click={async () => {
             showingModal = true;
             //@ts-ignore
@@ -73,7 +72,7 @@
           your note index and reindex it to make sure the links are accurate.
         </p>
         <button
-          class="mt-2 bg-orange-300 border border-gray-500 px-2"
+          class="mt-2 settings-button"
           on:click={() => {
             //@ts-ignore
             window.electronAPI.clearDB();

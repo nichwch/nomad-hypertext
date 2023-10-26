@@ -9,3 +9,9 @@ body {
 ::selection {
   background: rgb(153 27 27 / 0.4);
 }
+
+@layer components {
+  .settings-button {
+    @apply bg-orange-300 border border-gray-500 px-1 hover:bg-orange-400 transition-colors;
+  }
+}

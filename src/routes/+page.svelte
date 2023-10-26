@@ -61,14 +61,16 @@
             }}>{notesDirSection}/</button
           >
         {/each}
-        <button on:click={openInFinder}> [open in finder]</button>
+        <button on:click={openInFinder} class="underline text-blue-500">
+          [open in finder]</button
+        >
       </div>
       <div class="px-2">
         {#if $currentDir !== null}
-          <button on:click={createFile}>new note</button>
+          <button on:click={createFile} class="underline">new note</button>
         {/if}
         <div class="float-right">
-          <a href="/settings">settings</a>
+          <a href="/settings" class="underline">settings</a>
         </div>
       </div>
     {/if}
