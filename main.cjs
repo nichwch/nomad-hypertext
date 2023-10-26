@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog, ipcMain } = require("electron");
+const { app, BrowserWindow, dialog, ipcMain, shell } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const {
@@ -114,6 +114,9 @@ async function createWindow() {
   });
   ipcMain.handle("clear-db", async (event) => {
     return await clearDB();
+  });
+  ipcMain.handle("finder-dir", async (event, path) => {
+    shell.showItemInFolder(path);
   });
 }
 

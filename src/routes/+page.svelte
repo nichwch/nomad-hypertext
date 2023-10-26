@@ -1,6 +1,5 @@
 <script>
   import { currentDir } from "./currentDirStore";
-
   let notesDir = window.localStorage.getItem("notesDir");
   if ($currentDir === null && notesDir !== null) $currentDir = notesDir;
   /** @type {{name:string, path:string, createdTime:string,isDir:boolean, modifiedTime:string}[]} */
@@ -33,6 +32,7 @@
       window.localStorage.setItem("notesDir", notesDir);
     }
   };
+  const openInFinder = () => window.electronAPI.finderDir($currentDir);
   const createFile = async () => {
     //@ts-ignore
     await window.electronAPI.newFile($currentDir);
@@ -61,6 +61,7 @@
             }}>{notesDirSection}/</button
           >
         {/each}
+        <button on:click={openInFinder}> [open in finder]</button>
       </div>
       <div class="px-2">
         {#if $currentDir !== null}
