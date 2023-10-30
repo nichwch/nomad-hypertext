@@ -7,7 +7,6 @@
   const commandKListener = (
     /** @type {{ metaKey: any; key: string; }} */ event
   ) => {
-    console.log({ event });
     if (event.metaKey && event.key === "k") showingModal = !showingModal;
     else if (event.key === "Escape") showingModal = false;
   };

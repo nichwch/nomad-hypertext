@@ -68,8 +68,7 @@ const processSegment = async (segment, fileName) => {
       content: segment,
     };
     await insert(db, entry);
-    log.log(`inserted segment ${thisSegment} successfully
-s    `);
+    log.log(`inserted segment ${thisSegment} successfully`);
   } catch (e) {
     log.error(e);
   }
@@ -92,6 +91,7 @@ const reindexFile = async (
     return false;
   });
   const idsToDelete = rowsToDelete.map((hit) => hit.id);
+  console.log("idsToDelete", idsToDelete);
   await removeMultiple(db, idsToDelete);
   log.log("indexing following contents...", newContent);
   const promises = [];
