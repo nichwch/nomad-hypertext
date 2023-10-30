@@ -140,7 +140,6 @@ const getAllFiles = (dirPath, files = []) => {
 const indexDirectory = async (directory) => {
   log.log("indexing directory...");
   const { default: pLimit } = await import("p-limit");
-  console.log("plimit", pLimit);
   /** @type {Date} */
   let lastFetchedDate;
   try {
@@ -152,6 +151,9 @@ const indexDirectory = async (directory) => {
   log.log("last fetched date:", lastFetchedDate);
   const files = getAllFiles(directory);
   const filesModifiedSinceLastFetch = files.filter((file) => {
+    const extension = file.split(".").pop();
+    if (extension?.[0] === ".") return false;
+    if (extension !== "txt" && extension !== "md") return false;
     const lastModifiedTime = fs.statSync(file).mtime.getTime();
     return lastModifiedTime > lastFetchedDate.getTime();
   });
