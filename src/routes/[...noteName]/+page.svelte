@@ -73,7 +73,7 @@
   <div class="w-full overflow-y-auto top-0 h-full">
     <div class=" w-[36rem] mx-auto h-full relative">
       <div
-        class="w-full inline-block p-5 pb-10 absolute top-0 left-0 right-0 bottom-0 h-full whitespace-pre-wrap"
+        class="w-full inline-block p-5 pb-10 absolute top-0 left-0 right-0 bottom-0 h-full whitespace-pre-line break-after-right"
       >
         <Overlay
           {segments}
@@ -87,7 +87,7 @@
       </div>
       <div
         contenteditable="plaintext-only"
-        class="w-full inline-block bg-transparent p-5 pb-10 absolute top-0 left-0 right-0 bottom-0 h-full resize-none focus:outline-none whitespace-pre-wrap"
+        class="w-full inline-block bg-transparent p-5 pb-10 absolute top-0 left-0 right-0 bottom-0 h-full resize-none focus:outline-none whitespace-pre-line break-after-right"
         bind:innerText={contents}
       />
     </div>
