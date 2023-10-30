@@ -9,48 +9,48 @@
   let contents = null;
   let searchResults = null;
   let showingSidebar = false;
+
   /** @type {number|null}*/
   let focusedIndex = null;
   /** @type {string|null}*/
   let lastFlushedContents;
-  const updateInterval = window.setInterval(() => {
-    if (notesDir && contents !== null && contents !== lastFlushedContents) {
-      lastFlushedContents = contents;
-      //@ts-ignore
-      window.electronAPI.writeFile(`/${$page.params.noteName}`, contents);
-    }
-  }, 100);
-
-  let currentlyIndexing = false;
-  /** @type {string|null}*/
-  let lastIndexedContents;
+  let currentlyUpdating = false;
   $: segments = contents?.split("\n") || [];
-  const reindexInterval = window.setInterval(async () => {
+  const updateInterval = window.setInterval(async () => {
     if (
       notesDir &&
       contents !== null &&
-      contents !== lastIndexedContents &&
-      !currentlyIndexing
+      contents !== lastFlushedContents &&
+      !currentlyUpdating
     ) {
+      currentlyUpdating = true;
       const { deleted, created } = diffParagraphs(
-        lastIndexedContents,
+        lastFlushedContents,
         contents
       );
       console.log("REINDEXING", deleted, created);
-      currentlyIndexing = true;
+      lastFlushedContents = contents;
+      /*
+      We may want the following to be an atomic transaction, so it may make sense 
+      to unify these two into one single method on the main process
+      */
       //@ts-ignore
-      await window.electronAPI.reindexFile(
-        `/${$page.params.noteName}`,
-        deleted,
-        created
-      );
-      lastIndexedContents = contents;
-      currentlyIndexing = false;
+      await Promise.all([
+        window.electronAPI.writeFile(`/${$page.params.noteName}`, contents),
+
+        window.electronAPI.reindexFile(
+          `/${$page.params.noteName}`,
+          deleted,
+          created
+        ),
+      ]);
+      lastFlushedContents = contents;
+      currentlyUpdating = false;
     }
-  }, 1000);
+  }, 500);
+
   onDestroy(() => {
     window.clearInterval(updateInterval);
-    window.clearInterval(reindexInterval);
   });
   $: if (notesDir && contents === null) {
     //@ts-ignore
@@ -59,7 +59,6 @@
       (res) => {
         if (res) {
           contents = res;
-          lastIndexedContents = res;
           lastFlushedContents = res;
         }
       }

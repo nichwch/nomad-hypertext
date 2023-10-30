@@ -152,7 +152,9 @@ const indexDirectory = async (directory) => {
   const files = getAllFiles(directory);
   const filesModifiedSinceLastFetch = files.filter((file) => {
     const extension = file.split(".").pop();
+    // don't index hidden files
     if (extension?.[0] === ".") return false;
+    // don't index txt or md files
     if (extension !== "txt" && extension !== "md") return false;
     const lastModifiedTime = fs.statSync(file).mtime.getTime();
     return lastModifiedTime > lastFetchedDate.getTime();
