@@ -58,9 +58,9 @@ const processSegment = async (segment, fileName) => {
       return tag.replace("[[", "").replace("]]", "");
     }) || [];
   try {
-    log.log("attempting to get embedding");
+    // log.log("attempting to get embedding");
     const embedding = await getEmbedding(segment);
-    log.log("got embedding", embedding);
+    // log.log("got embedding", embedding);
     const entry = {
       parent: fileName,
       tags,
@@ -90,6 +90,8 @@ const reindexFile = async (
     if (deletedContentSet.has(row.document.content)) return true;
     return false;
   });
+  console.log("deleting...", rowsToDelete);
+  console.log("creating...", newContent);
   const idsToDelete = rowsToDelete.map((hit) => hit.id);
   console.log("idsToDelete", idsToDelete);
   await removeMultiple(db, idsToDelete);
@@ -201,7 +203,6 @@ const searchDBExact = async (property, term) => {
 /** @param {string} query */
 const queryDB = async (query, similarity = 0.7, limit = 10) => {
   const queryEmbedding = await getEmbedding(query);
-  log.log("queryEmbedding", queryEmbedding);
   const results = await searchVector(db, {
     vector: queryEmbedding,
     property: "embedding",

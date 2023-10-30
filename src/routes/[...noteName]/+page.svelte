@@ -25,7 +25,7 @@
     ) {
       currentlyUpdating = true;
       const { deleted, created } = diffParagraphs(
-        lastFlushedContents,
+        lastFlushedContents || "",
         contents
       );
       console.log("REINDEXING", deleted, created);
