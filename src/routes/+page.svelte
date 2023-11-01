@@ -1,5 +1,8 @@
 <script>
   import { currentDir } from "./currentDirStore";
+  /**
+   * @type {string | null}
+   */
   let notesDir = null;
   //@ts-ignore
   window.electronAPI.getNoteDir().then((res) => (notesDir = res));
