@@ -9,6 +9,11 @@ const {
   reindexFile,
 } = require("./appDB.cjs");
 const log = require("electron-log");
+const {
+  GET_SETTINGS_FILE,
+  NOTE_DIR_FILE,
+  SET_SETTINGS_FILE,
+} = require("./settings.cjs");
 const mode = process.env.NODE_ENV;
 let mainWindow;
 log.initialize({ preload: true });
@@ -117,6 +122,12 @@ async function createWindow() {
   });
   ipcMain.handle("finder-dir", async (event, path) => {
     shell.showItemInFolder(path);
+  });
+  ipcMain.handle("get-note-dir", (event) => {
+    return GET_SETTINGS_FILE(NOTE_DIR_FILE);
+  });
+  ipcMain.handle("set-note-dir", (event, path) => {
+    SET_SETTINGS_FILE(NOTE_DIR_FILE, path);
   });
 }
 

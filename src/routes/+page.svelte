@@ -1,7 +1,10 @@
 <script>
   import { currentDir } from "./currentDirStore";
-  let notesDir = window.localStorage.getItem("notesDir");
+  let notesDir = null;
+  //@ts-ignore
+  window.electronAPI.getNoteDir().then((res) => (notesDir = res));
   if ($currentDir === null && notesDir !== null) $currentDir = notesDir;
+  console.log({ notesDir, $currentDir });
   /** @type {{name:string, path:string, createdTime:string,isDir:boolean, modifiedTime:string}[]} */
   let files = [];
   /** @type {boolean}*/
@@ -29,9 +32,11 @@
     if (res) {
       notesDir = res;
       $currentDir = notesDir;
-      window.localStorage.setItem("notesDir", notesDir);
+      //@ts-ignore
+      window.electronAPI.setNoteDir(notesDir);
     }
   };
+  //@ts-ignore
   const openInFinder = () => window.electronAPI.finderDir($currentDir);
   const createFile = async () => {
     //@ts-ignore
@@ -42,8 +47,8 @@
 
 <div class="flex flex-col h-full overflow-y-auto">
   <div class="w-full border-b border-b-gray-800">
-    {#if $currentDir !== null}
-      <div class="border-b border-b-gray-800 px-2">
+    <div class="border-b border-b-gray-800 px-2">
+      {#if $currentDir !== null}
         browsing
         <button
           class="hover:underline"
@@ -64,16 +69,16 @@
         <button on:click={openInFinder} class="underline text-blue-500">
           [open in finder]</button
         >
+      {/if}
+    </div>
+    <div class="px-2">
+      {#if $currentDir !== null}
+        <button on:click={createFile} class="underline">new note</button>
+      {/if}
+      <div class="float-right">
+        <a href="/settings" class="underline">settings</a>
       </div>
-      <div class="px-2">
-        {#if $currentDir !== null}
-          <button on:click={createFile} class="underline">new note</button>
-        {/if}
-        <div class="float-right">
-          <a href="/settings" class="underline">settings</a>
-        </div>
-      </div>
-    {/if}
+    </div>
   </div>
   <div class="p-2 overflow-y-auto">
     <div>

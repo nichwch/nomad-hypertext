@@ -11,10 +11,14 @@ const fs = require("fs");
 const path = require("path");
 const { app } = require("electron");
 const log = require("electron-log");
+const {
+  GET_SETTINGS_FILE,
+  LAST_FETCHED_DATE_FILE,
+  SET_SETTINGS_FILE,
+} = require("./settings.cjs");
 
 const userDataPath = app.getPath("userData");
 const dbPath = `${userDataPath}/.dbfile.msp`;
-const lastFetchedDateFile = `${userDataPath}/.lastFetchedDate.txt`;
 let db;
 let restoreFromFile, persistToFile;
 const initDB = async () => {
@@ -145,7 +149,7 @@ const indexDirectory = async (directory) => {
   /** @type {Date} */
   let lastFetchedDate;
   try {
-    const lastFetchedDateText = fs.readFileSync(lastFetchedDateFile, "utf8");
+    const lastFetchedDateText = GET_SETTINGS_FILE(LAST_FETCHED_DATE_FILE);
     lastFetchedDate = new Date(lastFetchedDateText);
   } catch {
     lastFetchedDate = new Date(0);
@@ -161,7 +165,6 @@ const indexDirectory = async (directory) => {
     const lastModifiedTime = fs.statSync(file).mtime.getTime();
     return lastModifiedTime > lastFetchedDate.getTime();
   });
-  log.log("read directory", files, filesModifiedSinceLastFetch);
   const promises = [];
 
   // then insert the new entries from the modified files
@@ -179,7 +182,7 @@ const indexDirectory = async (directory) => {
     if (filesModifiedSinceLastFetch.length > 0) {
       await persistToFile(db, "binary", dbPath);
     }
-    fs.writeFileSync(lastFetchedDateFile, new Date().toString());
+    SET_SETTINGS_FILE(LAST_FETCHED_DATE_FILE, new Date().toString());
     const dbCount = await count(db);
     log.log(`db has ${dbCount} entries`);
   }
@@ -225,7 +228,7 @@ const clearDB = async () => {
   });
   await persistToFile(db, "binary", dbPath);
   // reset last fetched date
-  fs.writeFileSync(lastFetchedDateFile, new Date(0).toString());
+  SET_SETTINGS_FILE(LAST_FETCHED_DATE_FILE, new Date(0).toString());
   const dbCount = await count(db);
   log.log(`db has ${dbCount} entries`);
 };

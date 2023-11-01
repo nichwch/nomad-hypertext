@@ -4,7 +4,7 @@
   import { diffParagraphs } from "$lib";
   import { onDestroy } from "svelte";
   import Overlay from "../../Overlay.svelte";
-  let notesDir = window.localStorage.getItem("notesDir");
+  let notesDir = window.electronAPI.getNoteDir();
   /** @type {string|null}*/
   let contents = null;
   let searchResults = null;

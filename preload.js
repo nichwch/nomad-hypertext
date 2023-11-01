@@ -15,4 +15,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   vectorQuery: (query) => ipcRenderer.invoke("vector-query", query),
   clearDB: (query) => ipcRenderer.invoke("clear-db", query),
   finderDir: (path) => ipcRenderer.invoke("finder-dir", path),
+  getNoteDir: () => ipcRenderer.invoke("get-note-dir"),
+  setNoteDir: (path) => ipcRenderer.invoke("set-note-dir", path),
 });

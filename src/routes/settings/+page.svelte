@@ -1,6 +1,7 @@
 <script>
   import { currentDir } from "../currentDirStore";
-  let notesDir = window.localStorage.getItem("notesDir");
+  //@ts-ignore
+  let notesDir = window.electronAPI.getNoteDir();
   let showingModal = false;
   const setNoteDir = async () => {
     // call IPC to make electron show dialog
@@ -10,7 +11,8 @@
     if (res) {
       notesDir = res;
       $currentDir = notesDir;
-      window.localStorage.setItem("notesDir", notesDir);
+      //@ts-ignore
+      window.electronAPI.setNoteDir(notesDir);
     }
   };
 </script>
