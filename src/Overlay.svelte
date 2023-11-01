@@ -25,8 +25,8 @@
   {#if segment.length > 0}
     <div
       class={focusedIndex === index
-        ? "relative block bg-red-800/[0.4]  whitespace-pre-wrap"
-        : "relative block whitespace-pre-wrap"}
+        ? "relative block bg-red-800/[0.4]  whitespace-pre-wrap "
+        : "relative block whitespace-pre-wrap hover:bg-orange-300"}
     >
       {segment}
       <button
