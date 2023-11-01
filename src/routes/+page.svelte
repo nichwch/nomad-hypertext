@@ -5,8 +5,12 @@
    */
   let notesDir = null;
   //@ts-ignore
-  window.electronAPI.getNoteDir().then((res) => (notesDir = res));
-  if ($currentDir === null && notesDir !== null) $currentDir = notesDir;
+  window.electronAPI.getNoteDir().then((res) => {
+    if (res) {
+      notesDir = res;
+      $currentDir = notesDir;
+    }
+  });
   console.log({ notesDir, $currentDir });
   /** @type {{name:string, path:string, createdTime:string,isDir:boolean, modifiedTime:string}[]} */
   let files = [];
