@@ -23,20 +23,27 @@
       contents !== lastFlushedContents &&
       !currentlyUpdating
     ) {
+      /*
+contents will change as this is running because the user is still typing, so 
+we copy it into a separate variable
+*/
+      const contentsAtStart = contents;
       currentlyUpdating = true;
       const { deleted, created } = diffParagraphs(
         lastFlushedContents || "",
-        contents
+        contentsAtStart
       );
       console.log("REINDEXING", deleted, created);
-      lastFlushedContents = contents;
       /*
       We may want the following to be an atomic transaction, so it may make sense 
       to unify these two into one single method on the main process
       */
       //@ts-ignore
       await Promise.all([
-        window.electronAPI.writeFile(`/${$page.params.noteName}`, contents),
+        window.electronAPI.writeFile(
+          `/${$page.params.noteName}`,
+          contentAtStart
+        ),
 
         window.electronAPI.reindexFile(
           `/${$page.params.noteName}`,
@@ -44,7 +51,7 @@
           created
         ),
       ]);
-      lastFlushedContents = contents;
+      lastFlushedContents = contentsAtStart;
       currentlyUpdating = false;
     }
   }, 500);
