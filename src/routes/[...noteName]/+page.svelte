@@ -113,7 +113,7 @@ we copy it into a separate variable
       </div>
       <div class="overflow-y-auto p-2">
         {#each searchResults as result}
-          <div class=" border-b border-b-gray-600">
+          <div class=" border-b border-b-gray-600 py-10">
             <h1 class="text-sm">
               From: <a class="underline" href={result.document.parent}
                 >{result.document.parent}</a
