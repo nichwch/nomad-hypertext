@@ -1,4 +1,7 @@
 <script>
+  import { tooltip } from "@svelte-put/tooltip";
+  import { computePosition } from "@floating-ui/dom";
+  import { cTooltip } from "$lib/tooltip";
   /** @type {string[]} */
   export let segments = [];
 
@@ -34,11 +37,16 @@
           const results = await searchSegment(segment);
           setSearchResults(results, index);
         }}
-        class="absolute opacity-50 top-0 left-full pl-3 hover:text-red-800"
+        class="absolute top-0 left-full pl-3 hover:text-red-800"
         class:text-red-800={focusedIndex === index}
         class:opacity-100={focusedIndex === index}
       >
-        search
+        <div
+          class="relative text-3xl"
+          use:cTooltip={{ content: "show related" }}
+        >
+          ~
+        </div>
       </button>
     </div>
   {:else}
