@@ -44,7 +44,6 @@
     "commander": "^11.0.0",
     "electron-log": "^5.0.0-beta.29",
     "electron-squirrel-startup": "^1.0.0",
-    "faiss-node": "^0.5.1",
     "glob": "^10.3.4",
     "openai": "^4.6.0",
     "p-limit": "^4.0.0",
