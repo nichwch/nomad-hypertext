@@ -9,13 +9,17 @@ export const diffParagraphs = (
   const oldContentSet = new Set(oldSegments);
   const newContentSet = new Set(newSegments);
   /** @type {string[]} */
-  const deleted = oldSegments.filter((segment) => {
-    return !newContentSet.has(segment);
-  });
+  const deleted = oldSegments
+    .filter((segment) => {
+      return !newContentSet.has(segment);
+    })
+    .map((segment) => segment.trim());
   /** @type {string[]} */
-  const created = newSegments.filter((segment) => {
-    return !oldContentSet.has(segment);
-  });
+  const created = newSegments
+    .filter((segment) => {
+      return !oldContentSet.has(segment);
+    })
+    .map((segment) => segment.trim());
 
   return { deleted, created };
 };

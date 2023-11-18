@@ -17,17 +17,17 @@
   let currentlyUpdating = false;
   $: segments = contents?.split("\n") || [];
   const updateInterval = window.setInterval(async () => {
-    if (
-      notesDir &&
-      contents !== null &&
-      contents !== lastFlushedContents &&
-      !currentlyUpdating
-    ) {
-      /*
+    /*
 contents will change as this is running because the user is still typing, so 
 we copy it into a separate variable
 */
-      const contentsAtStart = contents;
+    const contentsAtStart = contents;
+    if (
+      notesDir &&
+      contentsAtStart !== null &&
+      contentsAtStart !== lastFlushedContents &&
+      !currentlyUpdating
+    ) {
       currentlyUpdating = true;
       const { deleted, created } = diffParagraphs(
         lastFlushedContents || "",
@@ -42,7 +42,7 @@ we copy it into a separate variable
       await Promise.all([
         window.electronAPI.writeFile(
           `/${$page.params.noteName}`,
-          contentAtStart
+          contentsAtStart
         ),
 
         window.electronAPI.reindexFile(

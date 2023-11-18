@@ -19,7 +19,7 @@
       (await window.electronAPI.vectorQuery(segment))?.hits || [];
     // ignore exact matches
     return searchResults.filter((result) => {
-      return result.document.content !== segment;
+      return result.document.content?.trim() !== segment?.trim();
     });
   };
 </script>

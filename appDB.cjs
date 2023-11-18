@@ -87,11 +87,10 @@ const reindexFile = async (
   /** @type {string[]} */ deletedContent,
   /** @type {string[]} */ newContent
 ) => {
-  log.log("reindexing ", filePath);
-  const deletedContentSet = new Set(deletedContent);
+  log.log("reindexing ", filePath, newContent, deletedContent);
   const rowsForFile = await searchDBExact("parent", filePath);
   const rowsToDelete = rowsForFile.filter((row) => {
-    if (deletedContentSet.has(row.document.content)) return true;
+    if (deletedContent.includes(row.document.content)) return true;
     return false;
   });
   console.log("deleting...", rowsToDelete);
@@ -150,6 +149,7 @@ const indexDirectory = async (directory) => {
   let lastFetchedDate;
   try {
     const lastFetchedDateText = GET_SETTINGS_FILE(LAST_FETCHED_DATE_FILE);
+    // @ts-ignore
     lastFetchedDate = new Date(lastFetchedDateText);
   } catch {
     lastFetchedDate = new Date(0);
