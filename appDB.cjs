@@ -109,6 +109,8 @@ const reindexFile = async (
     promises.push(processSegment(segment, filePath));
   }
   await Promise.all(promises);
+  await persistToFile(db, "binary", dbPath);
+  SET_SETTINGS_FILE(LAST_FETCHED_DATE_FILE, new Date().toString());
 };
 
 let segmentCount = 0;
