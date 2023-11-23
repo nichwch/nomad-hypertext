@@ -14,6 +14,10 @@ body {
   .settings-button {
     @apply bg-orange-300 border border-gray-500 px-1 hover:bg-orange-400 transition-colors;
   }
+
+  .link {
+    @apply text-blue-800 hover:text-blue-900 visited:text-purple-800 underline;
+  }
 }
 
 .c-tooltip {

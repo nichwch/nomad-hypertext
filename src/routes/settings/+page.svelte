@@ -82,6 +82,11 @@
           >clear index<button />
         </button>
       </div>
+      <div class="mt-5">
+        <h1 class="text-2xl">
+          <a class="link" href="/about">About Nomad Hypertext</a>
+        </h1>
+      </div>
     </div>
   </div>
 </div>
