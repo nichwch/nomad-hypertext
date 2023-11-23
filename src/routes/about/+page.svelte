@@ -1,3 +1,7 @@
+<script>
+  import DraggableCard from "../../DraggableCard.svelte";
+</script>
+
 <div class="p-10">
   <!-- <h1 class="text-5xl">nomad <span class="text-red-800">hypertext</span></h1> -->
   <div class="text-xs font-extrabold">
@@ -13,4 +17,14 @@
 </pre>
   </div>
   <h1 class="text-5xl mt-3 text-red-800">超文本</h1>
+
+  <DraggableCard posX={60} posY={60}>
+    <div>Made by Nicholas Chen</div>
+  </DraggableCard>
+  <DraggableCard posX={80} posY={80}>
+    <div>Made by Nicholas Chen</div>
+  </DraggableCard>
+  <DraggableCard posX={100} posY={100}>
+    <div>Made by Nicholas Chen</div>
+  </DraggableCard>
 </div>
