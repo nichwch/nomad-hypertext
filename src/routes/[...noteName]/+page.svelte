@@ -92,6 +92,11 @@ we copy it into a separate variable
           }}
         />
       </div>
+      {#if contents === null || contents.length === 0}
+        <div class="absolute top-0 p-5 italic text-gray-800">
+          An empty note, but for how long?
+        </div>
+      {/if}
       <div
         contenteditable="plaintext-only"
         class="w-full inline-block bg-transparent p-5 pb-10 absolute top-0 left-0 right-0 bottom-0 h-full resize-none focus:outline-none whitespace-pre-line break-after-right"
