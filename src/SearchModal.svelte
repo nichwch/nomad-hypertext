@@ -4,6 +4,8 @@
   export let showingModal = false;
   /** @type {string|null}*/
   let searchQuery = null;
+
+  /** @type {any[]} */
   let searchResults = [];
   const dispatch = createEventDispatcher();
   const fetchResults = async () => {
@@ -38,7 +40,7 @@
                 class="underline"
                 href={result.document.parent}
                 on:click={() => dispatch("modalClose")}
-                >{result.document.parent}</a
+                >{result.document.parent?.split("/").pop()}</a
               >
             </h1>
             <p>{result.document.content}</p>

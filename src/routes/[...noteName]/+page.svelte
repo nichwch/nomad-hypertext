@@ -117,7 +117,7 @@ we copy it into a separate variable
           <div class=" border-b border-b-gray-600 py-10">
             <h1 class="text-sm">
               From: <a class="underline" href={result.document.parent}
-                >{result.document.parent}</a
+                >{result.document.parent?.split("/").pop()}</a
               >
             </h1>
             <p>{result.document.content}</p>
