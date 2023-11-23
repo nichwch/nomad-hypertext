@@ -18,10 +18,6 @@
 </script>
 
 <div class="flex-grow flex flex-col overflow-y-auto">
-  <div class="border-b border-b-gray-800 px-2">
-    <a href="/">back</a>
-    <h1 class="float-right">settings</h1>
-  </div>
   <div class="overflow-y-auto">
     <div class="w-[36rem] mx-auto py-10">
       <div>
