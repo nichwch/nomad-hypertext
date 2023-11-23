@@ -73,7 +73,6 @@
       <div class="w-full border-b border-b-gray-800">
         <div class="border-b border-b-gray-800 px-2">
           {#if $currentDir !== null}
-            browsing
             <button
               class="hover:underline"
               on:click={() => (($currentDir = notesDir), refreshFiles())}
