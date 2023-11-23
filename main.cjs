@@ -7,6 +7,7 @@ const {
   initDB,
   clearDB,
   reindexFile,
+  printAllDocuments,
 } = require("./appDB.cjs");
 const log = require("electron-log");
 const {
@@ -128,6 +129,10 @@ async function createWindow() {
   });
   ipcMain.handle("set-note-dir", (event, path) => {
     SET_SETTINGS_FILE(NOTE_DIR_FILE, path);
+  });
+
+  ipcMain.handle("debug-print-all", (event) => {
+    printAllDocuments();
   });
 }
 

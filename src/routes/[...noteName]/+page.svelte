@@ -76,6 +76,7 @@ we copy it into a separate variable
 <div
   class="flex bg-transparent w-full flex-grow resize-none focus:outline-none overflow-y-hidden"
 >
+  <!-- <button on:click={() => window.electronAPI.debugPrintAll()}>print ALL</button> -->
   <div class="w-full overflow-y-auto top-0 h-full">
     <div class=" w-[36rem] mx-auto h-full relative">
       <div

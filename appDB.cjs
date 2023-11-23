@@ -81,18 +81,23 @@ const accessAndIndexFile = async (filePath) => {
   const file = await fs.readFileSync(filePath, "utf8");
   await indexFile(filePath, file);
 };
-
+/** Deletes all indices for a given note, then creates new indices for it
+ * @returns {void}
+ */
 const reindexFile = async (
   /** @type {string} */ filePath,
   /** @type {string[]} */ deletedContent,
   /** @type {string[]} */ newContent
 ) => {
   log.log("reindexing ", filePath, newContent, deletedContent);
+  log.log("newContent", newContent);
+  log.log("deletedContent", deletedContent);
   const rowsForFile = await searchDBExact("parent", filePath);
   const rowsToDelete = rowsForFile.filter((row) => {
     if (deletedContent.includes(row.document.content)) return true;
     return false;
   });
+  console.log("rowsForFile", rowsForFile);
   console.log("deleting...", rowsToDelete);
   console.log("creating...", newContent);
   const idsToDelete = rowsToDelete.map((hit) => hit.id);
@@ -195,11 +200,16 @@ const searchDBExact = async (property, term) => {
     term,
     properties: [property],
     exact: true,
+    limit: 9999,
   });
+  log.log("blurry results");
+  log.log(results.hits.map((res) => res.document[property]));
   // orama sometimes doesn't return exact results!! even with exact
   const trueResults = results.hits.filter((result) => {
     return result.document[property] === term;
   });
+  log.log("true results");
+  log.log(trueResults);
   return trueResults;
 };
 
@@ -233,6 +243,18 @@ const clearDB = async () => {
   log.log(`db has ${dbCount} entries`);
 };
 
+const printAllDocuments = async () => {
+  log.log("printing all docs...");
+  const results = await search(db, { limit: 100000 });
+  console.dir(
+    results.hits.map((res) => ({
+      parent: res.document.parent,
+      content: res.document.content,
+    })),
+    { depth: null, maxArrayLength: Infinity }
+  );
+};
+
 module.exports = {
   db,
   initDB,
@@ -241,4 +263,6 @@ module.exports = {
   reindexFile,
   queryDB,
   clearDB,
+
+  printAllDocuments,
 };
