@@ -93,7 +93,7 @@ we copy it into a separate variable
         />
       </div>
       {#if contents === null || contents.length === 0}
-        <div class="absolute top-0 p-5 italic text-gray-800">
+        <div class="absolute top-0 p-5 italic text-gray-600">
           An empty note, but for how long?
         </div>
       {/if}
