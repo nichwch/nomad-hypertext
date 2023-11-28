@@ -22,7 +22,20 @@
     <div>Made by Nicholas Chen</div>
   </DraggableCard>
   <DraggableCard posX={80} posY={80}>
-    <div>Made by Nicholas Chen</div>
+    <div>
+      <h1>Thanks to:</h1>
+      <p>The Recurse Center, for reigniting my love of programming.</p>
+      <p>
+        Gordon Brander, for inspiring me with his essay, "Links are all you
+        need"
+      </p>
+      <p>
+        Linus Lee, for inspiring me with his essay, "Hyperlink maximalism", and
+        his incredible prototype, Notation
+      </p>
+      <p>Leo Shimonaka, for Unix-pilling me</p>
+      <p>Everyone who used exegesis and supported me over the years.</p>
+    </div>
   </DraggableCard>
   <DraggableCard posX={100} posY={100}>
     <div>Made by Nicholas Chen</div>
