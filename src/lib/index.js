@@ -5,7 +5,11 @@ export const diffParagraphs = (
   /** @type {string} */ newContent
 ) => {
   const oldSegments = Array.from(new Set(oldContent.split("\n")));
-  const newSegments = Array.from(new Set(newContent.split("\n")));
+  const newSegments = Array.from(new Set(newContent.split("\n"))).filter(
+    // filter out commented out blocks
+    (segment) => !segment.startsWith("//")
+  );
+
   const oldContentSet = new Set(oldSegments);
   const newContentSet = new Set(newSegments);
   /** @type {string[]} */
