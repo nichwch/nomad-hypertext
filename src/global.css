@@ -35,7 +35,7 @@ body {
   opacity: 0;
   background-color: theme("colors.orange.300");
   color: black;
-  border-radius: theme("borderRadius.DEFAULT");
+  border: 1px solid black;
   font-size: theme("fontSize.sm");
 
   transition: opacity 150ms ease-in-out;

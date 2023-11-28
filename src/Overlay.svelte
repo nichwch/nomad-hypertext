@@ -26,24 +26,12 @@
   {#if segment.length > 0}
     <div
       class={focusedIndex === index
-        ? "relative block bg-red-800/[0.4]  whitespace-pre-wrap "
-        : "relative block whitespace-pre-wrap hover:bg-orange-300"}
-      class:text-green-400={segment.startsWith("//")}
+        ? "relative block text-red-800  whitespace-pre-wrap "
+        : "relative block whitespace-pre-wrap hover:text-red-800"}
+      class:text-green-800={segment.startsWith("//")}
     >
       {segment}
-      {#if segment.startsWith("//")}
-        <div class="absolute top-0 left-full pl-3 hover:text-red-800">
-          <div
-            class="relative"
-            use:cTooltip={{
-              content:
-                "this paragraph is commented out and will not show up in the index",
-            }}
-          >
-            *
-          </div>
-        </div>
-      {:else}
+      {#if !segment.startsWith("//") && segment?.trim()?.length > 0}
         <button
           on:click={async () => {
             const results = await searchSegment(segment);
@@ -53,7 +41,7 @@
           class:text-red-800={focusedIndex === index}
           class:opacity-100={focusedIndex === index}
         >
-          <div class="relative" use:cTooltip={{ content: "show related" }}>
+          <div class="relative p-2" use:cTooltip={{ content: "show related" }}>
             #
           </div>
         </button>

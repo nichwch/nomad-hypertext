@@ -99,7 +99,7 @@ we copy it into a separate variable
       {/if}
       <div
         contenteditable="plaintext-only"
-        class="w-full inline-block bg-transparent p-5 pb-10 absolute top-0 left-0 right-0 bottom-0 h-full resize-none focus:outline-none whitespace-pre-line break-after-right"
+        class="w-full inline-block text-transparent caret-black bg-transparent p-5 pb-10 absolute top-0 left-0 right-0 bottom-0 h-full resize-none focus:outline-none whitespace-pre-line break-after-right"
         bind:innerText={contents}
       />
     </div>
