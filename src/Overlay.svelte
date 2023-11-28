@@ -25,9 +25,10 @@
 {#each segments as segment, index}
   {#if segment.length > 0}
     <div
-      class={focusedIndex === index
-        ? "relative block text-red-800  whitespace-pre-wrap "
+      class={focusedIndex === index || segment.startsWith("//")
+        ? "relative block  whitespace-pre-wrap "
         : "relative block whitespace-pre-wrap hover:text-red-800"}
+      class:text-red-800={focusedIndex === index}
       class:text-green-800={segment.startsWith("//")}
     >
       {segment}

@@ -24,11 +24,7 @@
 <div
   style:left={posX}
   style:top={posY}
-  class="absolute w-96 border border-black p-5 cursor-pointer select-none bg-orange-300"
-  on:mousedown={dragStart}
-  on:mousemove={draggingCard}
-  on:mouseup={dragEnd}
-  on:mouseleave={dragEnd}
+  class="absolute w-96 border border-black p-5 select-none bg-orange-300"
   role="presentation"
 >
   <slot />

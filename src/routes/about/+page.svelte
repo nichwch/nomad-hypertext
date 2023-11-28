@@ -18,7 +18,7 @@
   </div>
   <h1 class="text-5xl mt-3 text-red-800">超文本</h1>
 
-  <DraggableCard posX={60} posY={60}>
+  <DraggableCard posX={30} posY={30}>
     <div>Made by Nicholas Chen</div>
   </DraggableCard>
   <DraggableCard posX={80} posY={80}>
@@ -37,7 +37,7 @@
       <p>Everyone who used exegesis and supported me over the years.</p>
     </div>
   </DraggableCard>
-  <DraggableCard posX={100} posY={100}>
+  <DraggableCard posX={200} posY={200}>
     <div>Made by Nicholas Chen</div>
   </DraggableCard>
 </div>
