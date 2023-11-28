@@ -89,9 +89,6 @@
                 }}>{notesDirSection}/</button
               >
             {/each}
-            <button on:click={openInFinder} class="underline text-blue-500">
-              [open in finder]</button
-            >
           {/if}
         </div>
         <div class="px-2">
@@ -158,6 +155,12 @@
       on:click={() => {
         showingModal = true;
       }}>search (⌘ k)</button
+    >
+    <button
+      on:click={openInFinder}
+      class="settings-button text-blue-500 bg-blue-200 hover:bg-blue-300"
+    >
+      open in finder</button
     >
   </div>
 </div>
