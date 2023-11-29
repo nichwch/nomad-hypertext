@@ -6,6 +6,7 @@
   import { currentDir } from "./currentDirStore";
   import FolderEntry from "./FolderEntry.svelte";
   import { page } from "$app/stores";
+  import { afterNavigate } from "$app/navigation";
   /**
    * @type {string | null}
    */
@@ -28,7 +29,7 @@
     refreshFiles();
   }
 
-  $: {
+  afterNavigate(() => {
     const currentNotePathSegments = $page.params.noteName.split("/");
     currentNotePathSegments.pop();
     const folderOfCurrentNote = "/" + currentNotePathSegments.join("/");
@@ -36,7 +37,7 @@
     expandedFolders.add(folderOfCurrentNote);
     // update svelte state
     expandedFolders = expandedFolders;
-  }
+  });
 
   // recursively fetch child notes
   const fetchFilesForFolderNode = (
