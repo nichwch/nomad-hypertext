@@ -5,6 +5,7 @@
 
   import { currentDir } from "./currentDirStore";
   import FolderEntry from "./FolderEntry.svelte";
+  import { page } from "$app/stores";
   /**
    * @type {string | null}
    */
@@ -25,6 +26,16 @@
   let descending = true;
   $: if ($currentDir) {
     refreshFiles();
+  }
+
+  $: {
+    const currentNotePathSegments = $page.params.noteName.split("/");
+    currentNotePathSegments.pop();
+    const folderOfCurrentNote = "/" + currentNotePathSegments.join("/");
+    console.log({ folderOfCurrentNote });
+    expandedFolders.add(folderOfCurrentNote);
+    // update svelte state
+    expandedFolders = expandedFolders;
   }
 
   // recursively fetch child notes
@@ -111,7 +122,12 @@
         </div>
       </div>
       <div class="p-2 overflow-y-auto">
-        <FolderEntry {files} {expandedFolders} />
+        <FolderEntry
+          {files}
+          {expandedFolders}
+          setExpandedFolders={(/** @type {Set<string>} */ newFolders) =>
+            (expandedFolders = newFolders)}
+        />
       </div>
     </div>
     <slot />

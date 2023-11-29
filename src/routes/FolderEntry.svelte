@@ -6,35 +6,34 @@
   export let files;
   /** @type Set<string> */
   export let expandedFolders;
+  /**  @type {(str: Set<string>) => void} */
+  export let setExpandedFolders;
   export let layersDeep = 0;
-  $: console.log($page.params.noteName, files);
 </script>
 
 <div style:padding-left="{layersDeep}em">
   {#each files as file}
-    {@const isOpen =
-      expandedFolders.has(file.path) ||
-      $page.params.noteName.includes(file.path.substring(1))}
+    <!-- {@const isOpen = expandedFolders.has(file.path)} -->
     {#if file.isDir}
       <button
         class="block"
-        class:font-bold={isOpen}
+        class:font-bold={expandedFolders.has(file.path)}
         on:click={() => {
-          console.log(file.path, expandedFolders);
           if (expandedFolders.has(file.path)) expandedFolders.delete(file.path);
           else expandedFolders.add(file.path);
           // trigger svelte update
-          expandedFolders = expandedFolders;
+          setExpandedFolders(expandedFolders);
         }}
       >
-        {isOpen ? "v" : ">"}
+        {expandedFolders.has(file.path) ? "v" : ">"}
         {file.name}
       </button>
-      {#if isOpen}
+      {#if expandedFolders.has(file.path)}
         <svelte:self
           files={file.children}
           {expandedFolders}
           layersDeep={layersDeep + 1}
+          {setExpandedFolders}
         />
       {/if}
     {:else}
