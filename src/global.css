@@ -7,7 +7,7 @@ body {
 }
 
 ::selection {
-  background: rgb(153 27 27 / 0.4);
+  background: theme("colors.crimsonHighlight");
 }
 
 @layer components {

@@ -4,6 +4,7 @@
   import "../global.css";
 
   import { currentDir } from "./currentDirStore";
+  import FolderEntry from "./FolderEntry.svelte";
   /**
    * @type {string | null}
    */
@@ -16,25 +17,45 @@
     }
   });
   console.log({ notesDir, $currentDir });
-  /** @type {{name:string, path:string, createdTime:string,isDir:boolean, modifiedTime:string}[]} */
+  /** @typedef {{name:string, path:string, createdTime:string,isDir:boolean, modifiedTime:string, children?:FileNode[]}} FileNode */
+  /** @type {FileNode[]} */
   let files = [];
+  let expandedFolders = new Set();
   /** @type {boolean}*/
   let descending = true;
-  $: notesDirSections =
-    $currentDir
-      ?.replace(notesDir || "", "")
-      .trim()
-      ?.split("/")
-      .slice(1) || [];
   $: if ($currentDir) {
     refreshFiles();
   }
+
+  // recursively fetch child notes
+  const fetchFilesForFolderNode = (
+    /** @type FileNode */ fileNode,
+    /** @type boolean */ descending
+  ) => {
+    // @ts-ignore
+    window.electronAPI
+      .readDir(fileNode.path, descending)
+      .then((/** @type FileNode[] */ res) => {
+        fileNode.children = res;
+        // trigger svelte state update
+        files = files;
+        fileNode.children.forEach((/** @type FileNode */ child) => {
+          if (child.isDir) fetchFilesForFolderNode(child);
+        });
+      });
+  };
   const refreshFiles = () => {
     //@ts-ignore
     window.electronAPI.readDir($currentDir, descending).then((res) => {
-      if (res) files = res;
+      if (res) {
+        files = res;
+        files.forEach((/** @type FileNode */ child) => {
+          if (child.isDir) fetchFilesForFolderNode(child);
+        });
+      }
     });
   };
+
   //@ts-ignore
   const openInFinder = () => window.electronAPI.finderDir($currentDir);
   const createFile = async () => {
@@ -42,6 +63,8 @@
     await window.electronAPI.newFile($currentDir);
     refreshFiles();
   };
+
+  // some code for the modal
   let showingModal = false;
   const commandKListener = (
     /** @type {{ metaKey: any; key: string; }} */ event
@@ -88,28 +111,7 @@
         </div>
       </div>
       <div class="p-2 overflow-y-auto">
-        {#each files as file}
-          {#if file.isDir}
-            <button
-              class="block"
-              on:click={() => {
-                $currentDir = file.path;
-                refreshFiles();
-              }}
-            >
-              {file.name}
-            </button>
-          {:else}
-            <div>
-              <a href={file.path}>
-                <span> {file.name}</span>
-                <!-- <span class="float-right text-gray-700"
-                  >created {new Date(file.createdTime).toLocaleString()}</span
-                > -->
-              </a>
-            </div>
-          {/if}
-        {/each}
+        <FolderEntry {files} {expandedFolders} />
       </div>
     </div>
     <slot />
