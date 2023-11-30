@@ -1,5 +1,5 @@
 <script>
-  import { onDestroy } from "svelte";
+  import { onDestroy, tick } from "svelte";
   import SearchModal from "../SearchModal.svelte";
   import "../global.css";
 
@@ -29,14 +29,38 @@
     refreshFiles();
   }
 
-  afterNavigate(() => {
-    const currentNotePathSegments = $page.params.noteName.split("/");
-    currentNotePathSegments.pop();
-    const folderOfCurrentNote = "/" + currentNotePathSegments.join("/");
-    console.log({ folderOfCurrentNote });
-    expandedFolders.add(folderOfCurrentNote);
+  const getAllParentFolders = (/** @type string */ path) => {
+    if (!notesDir) return [];
+    path = "/" + path;
+    path = path.replace(notesDir + "/", "");
+    const currentNotePathSegmentsWithoutBase = path.split("/");
+    // get rid of the file name
+    currentNotePathSegmentsWithoutBase.pop();
+    const allParentFolders = [];
+    for (let i = 1; i < currentNotePathSegmentsWithoutBase.length + 1; i++) {
+      const parentPath =
+        notesDir +
+        "/" +
+        currentNotePathSegmentsWithoutBase.slice(0, i).join("/");
+      allParentFolders.push(parentPath);
+    }
+    return allParentFolders;
+  };
+
+  const expandFoldersForCurrentNote = async () => {
+    const parentFolders = getAllParentFolders($page.params.noteName);
+    parentFolders.forEach((folder) => expandedFolders.add(folder));
     // update svelte state
+    console.log({ expandedFolders });
     expandedFolders = expandedFolders;
+    await tick();
+    // scroll the sidebar entry into view
+    const el = document.getElementById(`nav-/${$page.params.noteName}`);
+    el?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  afterNavigate(() => {
+    if (notesDir) expandFoldersForCurrentNote();
   });
 
   // recursively fetch child notes
