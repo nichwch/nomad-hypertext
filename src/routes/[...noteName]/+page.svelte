@@ -1,12 +1,16 @@
 <script>
-  // @ts-nocheck
-  import { page } from "$app/stores";
   import { diffParagraphs } from "$lib";
-  import { onDestroy } from "svelte";
+  import { onDestroy, tick } from "svelte";
   import Overlay from "../../Overlay.svelte";
+  import { page } from "$app/stores";
+  import { afterNavigate } from "$app/navigation";
+  // @ts-ignore
   let notesDir = window.electronAPI.getNoteDir();
   /** @type {string|null}*/
   let contents = null;
+  /**
+   * @type {any[] | null}
+   */
   let searchResults = null;
   let showingSidebar = false;
 
@@ -40,11 +44,13 @@ we copy it into a separate variable
       */
       //@ts-ignore
       await Promise.all([
+        // @ts-ignore
         window.electronAPI.writeFile(
           `/${$page.params.noteName}`,
           contentsAtStart
         ),
 
+        // @ts-ignore
         window.electronAPI.reindexFile(
           `/${$page.params.noteName}`,
           deleted,
@@ -55,6 +61,46 @@ we copy it into a separate variable
       currentlyUpdating = false;
     }
   }, 500);
+  const scrollToAndSelectBlock = async () => {
+    const searchedText = $page.url.searchParams?.get("search");
+    if (!searchedText) return;
+    const indexOfText = contents?.split("\n")?.indexOf(searchedText);
+    if (indexOfText === undefined || indexOfText === null) return;
+    console.log("scrollToBlock");
+    console.log(contents, indexOfText);
+    /*
+    In Overlay.svelte, each block has its id as `editor-block-${indexOfText}`
+    We tick to wait for update to trickle down to Overlay
+
+    NB:This function has to be in this component because we want to run it after fetching the file 
+    from the electron API.   
+    */
+    await tick();
+    const blockToScrollAndHighlight = document.getElementById(
+      `editor-block-${indexOfText}`
+    );
+    console.log("blockToScrollscrollToBlockTo", blockToScrollAndHighlight);
+    const selection = window.getSelection();
+    const range = document.createRange();
+    // @ts-ignore
+    range.selectNodeContents(blockToScrollAndHighlight);
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+    blockToScrollAndHighlight?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  };
+
+  /*
+  We call scrollToAndSelect after update in case we navigate to the same page and don't trigger
+  a file load.
+
+  However, calling scrollToAndSelect in afterNavigate doesn't cover the file loading case, because
+  file loading takes place an indetermminate amount of time after afterNavigate triggers. This means
+  the file contents may be outdated when it runs, which means the desired block might not get focused.
+  */
+  afterNavigate(scrollToAndSelectBlock);
 
   onDestroy(() => {
     window.clearInterval(updateInterval);
@@ -67,6 +113,7 @@ we copy it into a separate variable
         if (res) {
           contents = res;
           lastFlushedContents = res;
+          scrollToAndSelectBlock();
         }
       }
     );
@@ -118,10 +165,13 @@ we copy it into a separate variable
         >
       </div>
       <div class="overflow-y-auto p-2">
-        {#each searchResults as result}
-          <div class=" border-b border-b-gray-600 py-10">
+        {#each searchResults || [] as result}
+          <div class=" border-b border-b-gray-600 py-10" id={result.id}>
             <h1 class="text-sm">
-              From: <a class="underline" href={result.document.parent}
+              From: <a
+                class="underline"
+                href={result.document.parent +
+                  `?search=${encodeURIComponent(result.document.content)}`}
                 >{result.document.parent?.split("/").pop()}</a
               >
             </h1>
