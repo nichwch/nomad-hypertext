@@ -38,7 +38,8 @@
             <h1 class="text-sm">
               From: <a
                 class="underline"
-                href={result.document.parent}
+                href={result.document.parent +
+                  `?search=${encodeURIComponent(result.document.content)}`}
                 on:click={() => dispatch("modalClose")}
                 >{result.document.parent?.split("/").pop()}</a
               >
