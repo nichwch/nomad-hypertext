@@ -110,51 +110,70 @@
   };
   window.addEventListener("keydown", commandKListener);
   onDestroy(() => window.removeEventListener("keypress", commandKListener));
+
+  let showingSidebar = true;
 </script>
 
 <div class=" bg-orange-200 h-screen flex flex-col">
   <div class="flex flex-row flex-grow h-[1px]">
-    <div
-      class="flex flex-col overflow-y-auto border-r border-r-black w-96 basis-96"
-    >
-      <div class="w-full border-b border-b-gray-800">
-        <div class="px-2">
-          {#if $currentDir !== null}
-            <button on:click={createFile} class="underline">new note</button>
-          {/if}
-          <button
-            class:underline={descending}
-            on:click={() => {
-              descending = true;
-              refreshFiles();
-            }}
-          >
-            new first</button
-          >
+    {#if showingSidebar}
+      <div
+        class="flex flex-col overflow-y-auto border-r border-r-black w-96 basis-96"
+      >
+        <div class="w-full border-b border-b-gray-800">
+          <div class="px-2">
+            {#if $currentDir !== null}
+              <button on:click={createFile} class="underline">new note</button>
+            {/if}
+            <button
+              class:underline={descending}
+              on:click={() => {
+                descending = true;
+                refreshFiles();
+              }}
+            >
+              new first</button
+            >
 
-          <button
-            class:underline={!descending}
-            on:click={() => {
-              descending = false;
-              refreshFiles();
-            }}
-          >
-            old first</button
-          >
-          <div class="float-right">
-            <a href="/settings" class="underline">settings</a>
+            <button
+              class:underline={!descending}
+              on:click={() => {
+                descending = false;
+                refreshFiles();
+              }}
+            >
+              old first</button
+            >
+            <div class="float-right">
+              <a href="/settings" class="underline">settings</a>
+              <button
+                class="hover:text-red-800"
+                on:click={() => {
+                  showingSidebar = false;
+                }}>[-]</button
+              >
+            </div>
           </div>
         </div>
+        <div class="p-2 overflow-y-auto">
+          <FolderEntry
+            {files}
+            {expandedFolders}
+            setExpandedFolders={(/** @type {Set<string>} */ newFolders) =>
+              (expandedFolders = newFolders)}
+          />
+        </div>
       </div>
-      <div class="p-2 overflow-y-auto">
-        <FolderEntry
-          {files}
-          {expandedFolders}
-          setExpandedFolders={(/** @type {Set<string>} */ newFolders) =>
-            (expandedFolders = newFolders)}
-        />
+    {:else}
+      <div>
+        <button
+          class="pl-2 pt-1 hover:text-red-800"
+          on:click={() => {
+            showingSidebar = true;
+          }}>[+]</button
+        >
       </div>
-    </div>
+    {/if}
     <slot />
   </div>
 
