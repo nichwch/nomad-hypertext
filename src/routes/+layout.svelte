@@ -124,11 +124,7 @@
         <div class="w-full border-b border-b-gray-800">
           <div class="px-2">
             {#if $currentDir !== null}
-              <button
-                on:click={createFile}
-                class="small-button text-green-700 bg-green-200 hover:bg-green-300 my-1"
-                >new note</button
-              >
+              <button on:click={createFile} class="underline">new note</button>
             {/if}
             <button
               class:underline={descending}

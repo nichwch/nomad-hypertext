@@ -64,7 +64,13 @@ we copy it into a separate variable
   const scrollToAndSelectBlock = async () => {
     const searchedText = $page.url.searchParams?.get("search");
     if (!searchedText) return;
-    const indexOfText = contents?.split("\n")?.indexOf(searchedText);
+    const indexOfText = contents
+      ?.split("\n")
+      // need to trim because db entries are trimmed
+      .map((row) => {
+        return row.trim();
+      })
+      ?.indexOf(searchedText);
     if (indexOfText === undefined || indexOfText === null) return;
     console.log("scrollToBlock");
     console.log(contents, indexOfText);
