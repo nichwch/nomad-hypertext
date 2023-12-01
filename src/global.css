@@ -14,6 +14,9 @@ body {
   .settings-button {
     @apply bg-orange-300 border border-gray-500 px-1 hover:bg-orange-400 transition-colors;
   }
+  .small-button {
+    @apply bg-orange-300 border border-gray-500 px-1 hover:bg-orange-400 transition-colors text-sm;
+  }
 
   .link {
     @apply text-blue-800 hover:text-blue-900 visited:text-purple-800 underline;
@@ -29,8 +32,8 @@ body {
 
   /* Avoid layout interference */
   width: max-content;
-  padding: theme("spacing.1");
-  margin-left: theme("spacing.3");
+  padding-left: theme("spacing.1");
+  padding-right: theme("spacing.1");
 
   opacity: 0;
   background-color: theme("colors.orange.300");

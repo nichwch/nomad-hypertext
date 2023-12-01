@@ -112,6 +112,7 @@
   onDestroy(() => window.removeEventListener("keypress", commandKListener));
 
   let showingSidebar = true;
+  let showingFilters = false;
 </script>
 
 <div class=" bg-orange-200 h-screen flex flex-col">
@@ -123,7 +124,11 @@
         <div class="w-full border-b border-b-gray-800">
           <div class="px-2">
             {#if $currentDir !== null}
-              <button on:click={createFile} class="underline">new note</button>
+              <button
+                on:click={createFile}
+                class="small-button text-green-700 bg-green-200 hover:bg-green-300 my-1"
+                >new note</button
+              >
             {/if}
             <button
               class:underline={descending}
@@ -179,14 +184,14 @@
 
   <div class="w-full py-1 px-2 border-t border-t-gray-700">
     <button
-      class="settings-button"
+      class="small-button"
       on:click={() => {
         showingModal = true;
       }}>search (⌘ k)</button
     >
     <button
       on:click={openInFinder}
-      class="settings-button text-blue-500 bg-blue-200 hover:bg-blue-300"
+      class="small-button text-blue-500 bg-blue-200 hover:bg-blue-300"
     >
       open in finder</button
     >
