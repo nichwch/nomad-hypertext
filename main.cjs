@@ -115,8 +115,8 @@ async function createWindow() {
       await reindexFile(path, deletedContent, newContent);
     }
   );
-  ipcMain.handle("vector-query", async (event, query) => {
-    return await queryDB(query);
+  ipcMain.handle("vector-query", async (event, query, threshold) => {
+    return await queryDB(query, threshold);
   });
   ipcMain.handle("clear-db", async (event) => {
     return await clearDB();

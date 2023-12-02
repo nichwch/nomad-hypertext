@@ -12,13 +12,33 @@
    * @type {any[] | null}
    */
   let searchResults = null;
-  let showingSidebar = false;
+  let showingSidebar = true;
+  let showingFilters = true;
+  let threshold = 70;
+
+  const searchSegment = async (segment, index) => {
+    const queryResult =
+      //@ts-ignore
+      (await window.electronAPI.vectorQuery(segment, threshold / 100))?.hits ||
+      [];
+    // ignore exact matches
+    // @ts-ignore
+    console.log("searching with threshold...", threshold);
+    const results = queryResult.filter((result) => {
+      return result.document.content?.trim() !== segment?.trim();
+    });
+    searchResults = results;
+    showingSidebar = true;
+    focusedIndex = index;
+  };
+  $: console.log(searchResults);
 
   /** @type {number|null}*/
   let focusedIndex = null;
   /** @type {string|null}*/
   let lastFlushedContents;
   let currentlyUpdating = false;
+
   $: segments = contents?.split("\n") || [];
   const updateInterval = window.setInterval(async () => {
     /*
@@ -107,6 +127,7 @@ we copy it into a separate variable
   the file contents may be outdated when it runs, which means the desired block might not get focused.
   */
   afterNavigate(scrollToAndSelectBlock);
+  afterNavigate(() => (showingSidebar = false));
 
   onDestroy(() => {
     window.clearInterval(updateInterval);
@@ -135,15 +156,7 @@ we copy it into a separate variable
       <div
         class="w-full inline-block p-5 pb-10 absolute top-0 left-0 right-0 bottom-0 h-full whitespace-pre-line break-after-right"
       >
-        <Overlay
-          {segments}
-          {focusedIndex}
-          setSearchResults={(results, index) => {
-            showingSidebar = true;
-            searchResults = results;
-            focusedIndex = index;
-          }}
-        />
+        <Overlay {segments} {focusedIndex} {searchSegment} />
       </div>
       {#if contents === null || contents.length === 0}
         <div class="absolute top-0 p-5 italic text-gray-600">
@@ -160,15 +173,50 @@ we copy it into a separate variable
   {#if showingSidebar}<div
       class="w-2/6 flex flex-col border-l h-full border-l-black overflow-y-hidden"
     >
-      <div class="border-b border-b-black p-2">
-        <span>search results</span>
-        <button
-          class="float-right"
-          on:click={() => {
-            showingSidebar = !showingSidebar;
-            focusedIndex = null;
-          }}>hide</button
-        >
+      <div>
+        <div class="border-b border-b-black px-2">
+          <span>{searchResults?.length || 0} related segments</span>
+          <div class="float-right">
+            <button
+              class="underline"
+              on:click={() => {
+                showingFilters = !showingFilters;
+              }}
+              >{#if showingFilters}
+                hide filters
+              {:else}
+                show filters
+              {/if}
+            </button>
+            <button
+              class=" hover:text-red-800"
+              on:click={() => {
+                showingSidebar = !showingSidebar;
+                focusedIndex = null;
+              }}>[-]</button
+            >
+          </div>
+        </div>
+        {#if showingFilters}
+          <div class="bg-orange-300 border-b border-b-black px-2 pb-1">
+            <label class="block py-1">
+              similarity threshold:
+              <input
+                class="bg-orange-300 border border-orange-900 px-1"
+                type="number"
+                bind:value={threshold}
+                min={0}
+                max={95}
+              />
+            </label>
+            <button
+              class="small-button"
+              on:click={() =>
+                searchSegment(segments?.[focusedIndex || 0], focusedIndex)}
+              >refresh</button
+            >
+          </div>
+        {/if}
       </div>
       <div class="overflow-y-auto p-2">
         {#each searchResults || [] as result}

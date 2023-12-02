@@ -1,8 +1,5 @@
 <script>
-  import { afterNavigate } from "$app/navigation";
-  import { page } from "$app/stores";
   import { cTooltip } from "$lib/tooltip";
-  import { onDestroy, tick } from "svelte";
   /** @type {string[]} */
   export let segments = [];
 
@@ -11,20 +8,9 @@
    */
   export let focusedIndex;
   /**
-   * @type {(arg0: string[], arg1:number) => void}
+   * @type {(arg0: string, arg1:number) => void}
    */
-  export let setSearchResults;
-  // @ts-ignore
-  const searchSegment = async (segment) => {
-    const searchResults =
-      //@ts-ignore
-      (await window.electronAPI.vectorQuery(segment))?.hits || [];
-    // ignore exact matches
-    // @ts-ignore
-    return searchResults.filter((result) => {
-      return result.document.content?.trim() !== segment?.trim();
-    });
-  };
+  export let searchSegment;
 </script>
 
 {#each segments as segment, index}
@@ -42,8 +28,7 @@
       {#if !segment.startsWith("//") && segment?.trim()?.length > 0}
         <button
           on:click={async () => {
-            const results = await searchSegment(segment);
-            setSearchResults(results, index);
+            searchSegment(segment, index);
           }}
           class="absolute top-0 left-full pl-3 hover:text-red-800"
           class:text-red-800={focusedIndex === index}
