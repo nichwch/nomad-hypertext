@@ -228,6 +228,9 @@ we copy it into a separate variable
                   `?search=${encodeURIComponent(result.document.content)}`}
                 >{result.document.parent?.split("/").pop()}</a
               >
+              <span class="text-red-800"
+                >[{Math.trunc(result.score * 100)}% match]</span
+              >
             </h1>
             <p>{result.document.content}</p>
           </div>
