@@ -43,6 +43,9 @@
                 on:click={() => dispatch("modalClose")}
                 >{result.document.parent?.split("/").pop()}</a
               >
+              <span class="text-red-800"
+                >[{Math.trunc(result.score * 100)}% match]</span
+              >
             </h1>
             <p>{result.document.content}</p>
           </div>
