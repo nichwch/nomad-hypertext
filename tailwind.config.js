@@ -6,6 +6,9 @@ export default {
       colors: {
         crimsonHighlight: "rgb(153 27 27 / 0.4)",
       },
+      backgroundImage: {
+        "texture-orange": "url('/texture_orange.svg')",
+      },
     },
   },
   plugins: [],
