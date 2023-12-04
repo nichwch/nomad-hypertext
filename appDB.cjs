@@ -216,7 +216,7 @@ const searchDBExact = async (property, term) => {
 };
 
 /** @param {string} query */
-const queryDB = async (query, similarity = 0.7, limit = 30) => {
+const queryDB = async (query, similarity = 0.7, limit = 1000) => {
   const queryEmbedding = await getEmbedding(query);
   const results = await searchVector(db, {
     vector: queryEmbedding,

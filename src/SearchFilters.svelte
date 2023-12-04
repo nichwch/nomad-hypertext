@@ -8,6 +8,8 @@
    * @type {(arg0: number) => void}
    */
   export let setThreshold;
+  export let sortCriteria;
+  export let setSortCriteria;
   $: {
     setThreshold(threshold);
     refreshResults();
@@ -23,7 +25,7 @@
       class="bg-orange-200 border border-orange-900 pl-1 text-red-800 mr-0 inline-block"
       type="number"
       bind:value={threshold}
-      min={0}
+      min={50}
       max={95}
     /><span
       class="text-red-800 px-1 mx-0 bg-orange-200 border border-orange-900 border-l-0 inline-block"
