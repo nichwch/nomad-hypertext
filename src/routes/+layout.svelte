@@ -107,7 +107,6 @@
   onDestroy(() => window.removeEventListener("keypress", commandKListener));
 
   let showingSidebar = true;
-  let showingFilters = false;
 </script>
 
 <div class=" bg-orange-200 h-screen flex flex-col">
