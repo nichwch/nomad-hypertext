@@ -29,7 +29,6 @@
     }
     frequencies = frequencies;
   }
-  $: console.log({ cutoffs, frequencies });
 </script>
 
 <div class="flex w-full h-4 border-b border-b-black">

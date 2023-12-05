@@ -22,9 +22,9 @@
   let searchResults = null;
   let showingSidebar = true;
   let showingFilters = true;
-  let threshold = 70;
+  let threshold = 80;
   let sortCriteria = MOST_SIMILAR;
-
+  let excludeFromSamePage = true;
   /** @typedef {{ score: number; }} dbEntry*/
   let sortFunctions = {
     [MOST_SIMILAR]: (/** @type dbEntry */ b, /** @type dbEntry */ a) =>
@@ -42,9 +42,16 @@
       [];
     // ignore exact matches
     // @ts-ignore
-    console.log("searching with threshold...", threshold);
+    console.log("searching with threshold...", threshold, excludeFromSamePage);
     const results = queryResult.filter((result) => {
-      return result.document.content?.trim() !== segment?.trim();
+      if (result.document.content?.trim() === segment?.trim()) return false;
+      if (
+        excludeFromSamePage &&
+        result.document.parent === "/" + $page.params.noteName
+      ) {
+        return false;
+      }
+      return true;
     });
     results.sort(sortFunctions[sortCriteria]);
     searchResults = results;
@@ -199,7 +206,7 @@ we copy it into a separate variable
     >
       <div>
         <div class="border-b border-b-black px-2">
-          <span>{searchResults?.length || 0} related segments</span>
+          <span>{searchResults?.length || 0} results</span>
           <div class="float-right">
             <button
               class="underline"
@@ -227,8 +234,10 @@ we copy it into a separate variable
             {refreshResults}
             {threshold}
             {sortCriteria}
+            {excludeFromSamePage}
             setThreshold={(n) => (threshold = n)}
             setSortCriteria={(n) => (sortCriteria = n)}
+            setExcludeFromSamePage={(n) => (excludeFromSamePage = n)}
           />
         {/if}
       </div>

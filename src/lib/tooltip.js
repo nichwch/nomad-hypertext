@@ -6,7 +6,6 @@ export const cTooltip = (node, { content, placement }) => {
     content,
     class: "c-tooltip",
     compute: async ({ node, tooltip, content }) => {
-      console.log(content);
       const { x, y } = await computePosition(node, tooltip, {
         placement,
         middleware: [shift()],

@@ -21,9 +21,18 @@
    * @type {(arg0: string) => void}
    */
   export let setSortCriteria;
+  /**
+   * @type {boolean}
+   */
+  export let excludeFromSamePage;
+  /**
+   * @type {(arg0: boolean) => void}
+   */
+  export let setExcludeFromSamePage;
   $: {
     setThreshold(threshold);
     setSortCriteria(sortCriteria);
+    setExcludeFromSamePage(excludeFromSamePage);
     refreshResults();
   }
 </script>
@@ -63,10 +72,18 @@
     <button
       class="small-button bg-green-400 hover:bg-green-500"
       on:click={() => {
-        threshold = 95;
+        threshold = 90;
       }}
       >90% (very strong)
     </button>
+  </div>
+  <div>
+    <label class="block"
+      >exclude results from same page: <input
+        bind:checked={excludeFromSamePage}
+        type="checkbox"
+      /></label
+    >
   </div>
   <label class="block mt-3">
     sort by:
