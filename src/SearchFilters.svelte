@@ -77,14 +77,12 @@
       >90% (very strong)
     </button>
   </div>
-  <div>
-    <label class="block"
-      >exclude results from same page: <input
-        bind:checked={excludeFromSamePage}
-        type="checkbox"
-      /></label
-    >
-  </div>
+  <label class="block mt-3"
+    >exclude results from same page: <input
+      bind:checked={excludeFromSamePage}
+      type="checkbox"
+    /></label
+  >
   <label class="block mt-3">
     sort by:
     <select bind:value={sortCriteria} class="bg-orange-200 border border-black">
