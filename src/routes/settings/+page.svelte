@@ -42,7 +42,7 @@
         <p class="mt-2">
           Your current notes folder is: <button
             on:click={openInFinder}
-            class="text-blue-800 underline">{notesDir}</button
+            class="link">{notesDir}</button
           >
         </p>
         <button class="mt-2 settings-button" on:click={setNoteDir}
