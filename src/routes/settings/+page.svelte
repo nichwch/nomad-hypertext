@@ -1,7 +1,13 @@
 <script>
   import { currentDir } from "../currentDirStore";
+  /**
+   * @type {string | null}
+   */
+  let notesDir = null;
   //@ts-ignore
-  let notesDir = window.electronAPI.getNoteDir();
+  window.electronAPI.getNoteDir().then((res) => {
+    notesDir = res;
+  });
   let showingModal = false;
   const setNoteDir = async () => {
     // call IPC to make electron show dialog
@@ -15,6 +21,8 @@
       window.electronAPI.setNoteDir(notesDir);
     }
   };
+  //@ts-ignore
+  const openInFinder = () => window.electronAPI.finderDir($currentDir);
 </script>
 
 <div class="flex-grow flex flex-col overflow-y-auto">
@@ -31,7 +39,12 @@
           If you change your notes folder, you will need to clear and recreate
           your index. See the following sections for more information.
         </p>
-        <p class="mt-2">Your current notes folder is: {notesDir}</p>
+        <p class="mt-2">
+          Your current notes folder is: <button
+            on:click={openInFinder}
+            class="text-blue-800 underline">{notesDir}</button
+          >
+        </p>
         <button class="mt-2 settings-button" on:click={setNoteDir}
           >change notes folder</button
         >
