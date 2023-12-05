@@ -8,8 +8,8 @@ export const cTooltip = (node, { content, placement }) => {
     compute: async ({ node, tooltip, content }) => {
       console.log(content);
       const { x, y } = await computePosition(node, tooltip, {
-        middleware: [shift()],
         placement,
+        middleware: [shift()],
       });
       tooltip.style.left = `${x}px`;
       tooltip.style.top = `${y}px`;
