@@ -25,7 +25,7 @@
 <div style:padding-left="{layersDeep}em">
   <button
     class="text-red-800 underline hover:text-red-500"
-    on:click={createFile}>[new file]</button
+    on:click={createFile}>[new note]</button
   >
   {#if files}
     {#each files as file}
