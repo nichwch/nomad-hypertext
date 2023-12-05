@@ -1,4 +1,4 @@
-import { computePosition } from "@floating-ui/dom";
+import { computePosition, shift } from "@floating-ui/dom";
 import { tooltip } from "@svelte-put/tooltip";
 
 export const cTooltip = (node, { content, placement }) => {
@@ -8,6 +8,7 @@ export const cTooltip = (node, { content, placement }) => {
     compute: async ({ node, tooltip, content }) => {
       console.log(content);
       const { x, y } = await computePosition(node, tooltip, {
+        middleware: [shift()],
         placement,
       });
       tooltip.style.left = `${x}px`;
