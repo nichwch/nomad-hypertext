@@ -86,7 +86,7 @@
       if (res) {
         files = res;
         files.forEach((/** @type FileNode */ child) => {
-          if (child.isDir) fetchFilesForFolderNode(child);
+          if (child.isDir) fetchFilesForFolderNode(child, descending);
         });
       }
     });
@@ -94,11 +94,6 @@
 
   //@ts-ignore
   const openInFinder = () => window.electronAPI.finderDir($currentDir);
-  const createFile = async () => {
-    //@ts-ignore
-    await window.electronAPI.newFile($currentDir);
-    refreshFiles();
-  };
 
   // some code for the modal
   let showingModal = false;
@@ -123,9 +118,6 @@
       >
         <div class="w-full border-b border-b-gray-800">
           <div class="px-2">
-            {#if $currentDir !== null}
-              <button on:click={createFile} class="underline">new note</button>
-            {/if}
             <button
               class:underline={descending}
               on:click={() => {
@@ -157,12 +149,16 @@
           </div>
         </div>
         <div class="p-2 overflow-y-auto">
-          <FolderEntry
-            {files}
-            {expandedFolders}
-            setExpandedFolders={(/** @type {Set<string>} */ newFolders) =>
-              (expandedFolders = newFolders)}
-          />
+          {#if notesDir}
+            <FolderEntry
+              {files}
+              path={notesDir}
+              {expandedFolders}
+              setExpandedFolders={(/** @type {Set<string>} */ newFolders) =>
+                (expandedFolders = newFolders)}
+              {refreshFiles}
+            />
+          {/if}
         </div>
       </div>
     {:else}

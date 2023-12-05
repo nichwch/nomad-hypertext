@@ -4,14 +4,29 @@
   /** @typedef {{name:string, path:string, createdTime:string,isDir:boolean, modifiedTime:string, children?:FileNode[]}} FileNode */
   /** @type {FileNode[]} */
   export let files;
+  /** @type {string}*/
+  export let path;
   /** @type Set<string> */
   export let expandedFolders;
   /**  @type {(str: Set<string>) => void} */
   export let setExpandedFolders;
   export let layersDeep = 0;
+  /**
+   * @type {() => void}
+   */
+  export let refreshFiles;
+  const createFile = async () => {
+    //@ts-ignore
+    await window.electronAPI.newFile(path);
+    refreshFiles();
+  };
 </script>
 
 <div style:padding-left="{layersDeep}em">
+  <button
+    class="text-red-800 underline hover:text-red-500"
+    on:click={createFile}>[new file]</button
+  >
   {#if files}
     {#each files as file}
       <div id="nav-{file.path}">
@@ -33,8 +48,10 @@
           {#if expandedFolders.has(file.path)}
             <svelte:self
               files={file.children}
+              path={file.path}
               {expandedFolders}
               layersDeep={layersDeep + 1}
+              {refreshFiles}
               {setExpandedFolders}
             />
           {/if}
