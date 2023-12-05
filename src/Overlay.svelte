@@ -34,7 +34,10 @@
           class:text-red-800={focusedIndex === index}
           class:opacity-100={focusedIndex === index}
         >
-          <div class="relative p-2" use:cTooltip={{ content: "show related" }}>
+          <div
+            class="relative p-2"
+            use:cTooltip={{ content: "show related", placement: "right" }}
+          >
             #
           </div>
         </button>

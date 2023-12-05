@@ -1,17 +1,29 @@
 <script>
+  import { SORT_OPTIONS } from "./routes/[...noteName]/sortConstants";
+
   /**
    * @type {() => void}
    */
   export let refreshResults;
-  export let threshold = 70;
+  /**
+   * @type {number}
+   */
+  export let threshold;
   /**
    * @type {(arg0: number) => void}
    */
   export let setThreshold;
+  /**
+   * @type {string}
+   */
   export let sortCriteria;
+  /**
+   * @type {(arg0: string) => void}
+   */
   export let setSortCriteria;
   $: {
     setThreshold(threshold);
+    setSortCriteria(sortCriteria);
     refreshResults();
   }
 </script>
@@ -56,5 +68,13 @@
       >90% (very strong)
     </button>
   </div>
+  <label class="block mt-3">
+    sort by:
+    <select bind:value={sortCriteria} class="bg-orange-200 border border-black">
+      {#each SORT_OPTIONS as sortOption}
+        <option value={sortOption}>{sortOption}</option>
+      {/each}
+    </select>
+  </label>
   <div />
 </div>

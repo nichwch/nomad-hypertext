@@ -5,6 +5,13 @@
   import { page } from "$app/stores";
   import { afterNavigate } from "$app/navigation";
   import SearchFilters from "../../SearchFilters.svelte";
+  import {
+    LEAST_RECENT,
+    LEAST_SIMILAR,
+    MOST_RECENT,
+    MOST_SIMILAR,
+  } from "./sortConstants";
+  import Histogram from "./Histogram.svelte";
   // @ts-ignore
   let notesDir = window.electronAPI.getNoteDir();
   /** @type {string|null}*/
@@ -16,6 +23,17 @@
   let showingSidebar = true;
   let showingFilters = true;
   let threshold = 70;
+  let sortCriteria = MOST_SIMILAR;
+
+  /** @typedef {{ score: number; }} dbEntry*/
+  let sortFunctions = {
+    [MOST_SIMILAR]: (/** @type dbEntry */ b, /** @type dbEntry */ a) =>
+      a.score - b.score,
+    [LEAST_SIMILAR]: (/** @type dbEntry */ b, /** @type dbEntry */ a) =>
+      b.score - a.score,
+    // [MOST_RECENT]: (a, b) =>  - b,
+    // [LEAST_RECENT]: (a, b) => a - b,
+  };
 
   const searchSegment = async (segment, index) => {
     const queryResult =
@@ -28,6 +46,7 @@
     const results = queryResult.filter((result) => {
       return result.document.content?.trim() !== segment?.trim();
     });
+    results.sort(sortFunctions[sortCriteria]);
     searchResults = results;
     showingSidebar = true;
     focusedIndex = index;
@@ -202,11 +221,14 @@ we copy it into a separate variable
             >
           </div>
         </div>
+        <Histogram searchResults={searchResults || []} {threshold} />
         {#if showingFilters}
           <SearchFilters
             {refreshResults}
             {threshold}
+            {sortCriteria}
             setThreshold={(n) => (threshold = n)}
+            setSortCriteria={(n) => (sortCriteria = n)}
           />
         {/if}
       </div>
@@ -227,6 +249,9 @@ we copy it into a separate variable
             <p>{result.document.content}</p>
           </div>
         {/each}
+        {#if searchResults && searchResults.length === 0}
+          No results found. Try relaxing your search criteria.
+        {/if}
       </div>
     </div>
   {/if}
