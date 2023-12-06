@@ -109,6 +109,7 @@ we copy it into a separate variable
     }
   }, 500);
   const scrollToAndSelectBlock = async () => {
+    if (!contents) return;
     const searchedText = $page.url.searchParams?.get("search");
     if (!searchedText) return;
     const indexOfText = contents
@@ -174,7 +175,9 @@ we copy it into a separate variable
   }
 
   const refreshResults = () => {
-    searchSegment(segments?.[focusedIndex || 0], focusedIndex);
+    if (segments && focusedIndex) {
+      searchSegment(segments[focusedIndex], focusedIndex);
+    }
   };
 </script>
 

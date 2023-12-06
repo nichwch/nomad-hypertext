@@ -1,6 +1,7 @@
 const { app } = require("electron");
 const log = require("electron-log");
 const getEmbedding = async (text) => {
+  console.log("text", text);
   const embedding = await getHFEmbedding(text);
   return embedding;
 };

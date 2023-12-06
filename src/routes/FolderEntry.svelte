@@ -1,5 +1,9 @@
 <script>
   import { page } from "$app/stores";
+  import {
+    menuCoordinates,
+    showingCTXMenu,
+  } from "./contextMenu/contextMenuStores";
 
   /** @typedef {{name:string, path:string, createdTime:string,isDir:boolean, modifiedTime:string, children?:FileNode[]}} FileNode */
   /** @type {FileNode[]} */
@@ -20,6 +24,13 @@
     await window.electronAPI.newFile(path);
     refreshFiles();
   };
+
+  const summonCTXMenu = (
+    /** @type {{ clientX: number; clientY: number; }} */ event
+  ) => {
+    $showingCTXMenu = true;
+    $menuCoordinates = [event.clientX, event.clientY];
+  };
 </script>
 
 <div style:padding-left="{layersDeep}em">
@@ -29,7 +40,12 @@
   >
   {#if files}
     {#each files as file}
-      <div id="nav-{file.path}">
+      <div
+        id="nav-{file.path}"
+        on:contextmenu={summonCTXMenu}
+        role="button"
+        tabindex={0}
+      >
         {#if file.isDir}
           <button
             class="block"

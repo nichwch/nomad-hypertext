@@ -7,6 +7,7 @@
   import FolderEntry from "./FolderEntry.svelte";
   import { page } from "$app/stores";
   import { afterNavigate } from "$app/navigation";
+  import ContextMenu from "./contextMenu/ContextMenu.svelte";
   /**
    * @type {string | null}
    */
@@ -187,6 +188,7 @@
       open in finder</button
     >
   </div>
+  <ContextMenu />
 </div>
 <SearchModal
   {showingModal}

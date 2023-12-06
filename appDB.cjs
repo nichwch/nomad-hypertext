@@ -210,7 +210,6 @@ const searchDBExact = async (property, term) => {
   const trueResults = results.hits.filter((result) => {
     return result.document[property] === term;
   });
-  log.log("true results");
   log.log(trueResults);
   return trueResults;
 };
