@@ -2,6 +2,7 @@
   import { page } from "$app/stores";
   import {
     menuCoordinates,
+    menuOptions,
     showingCTXMenu,
   } from "./contextMenu/contextMenuStores";
 
@@ -30,6 +31,10 @@
   ) => {
     $showingCTXMenu = true;
     $menuCoordinates = [event.clientX, event.clientY];
+    $menuOptions = [
+      ["rename", () => console.log("RENAME")],
+      ["delete", () => console.log("DELETE "), "text-red-500"],
+    ];
   };
 </script>
 

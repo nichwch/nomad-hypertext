@@ -26,8 +26,8 @@ async function createWindow() {
     webPreferences: {
       preload: preloadURL,
     },
-    width: 900,
-    height: 680,
+    width: 1300,
+    height: 850,
   });
   await initDB();
   log.log("mode", mode);
