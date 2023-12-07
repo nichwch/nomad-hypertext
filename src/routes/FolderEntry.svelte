@@ -25,15 +25,28 @@
     await window.electronAPI.newFile(path);
     refreshFiles();
   };
+  const createRenameFunction = (path) => {
+    // const newName = await userPrompt("Label text", "Placeholder text");
+    const newName = "";
+    console.log("renaming", path);
+    //@ts-ignore
+    return window.electronAPI.renameFile(path, newName);
+  };
+  const createDeleteFunction = (/** @type {string} */ path) => {
+    console.log("deleteing", path);
+    //@ts-ignore
+    return window.electronAPI.deleteFile(path);
+  };
 
   const summonCTXMenu = (
-    /** @type {{ clientX: number; clientY: number; }} */ event
+    /** @type {{ clientX: number; clientY: number; }} */ event,
+    /** @type {string} */ path
   ) => {
     $showingCTXMenu = true;
     $menuCoordinates = [event.clientX, event.clientY];
     $menuOptions = [
-      ["rename", () => console.log("RENAME")],
-      ["delete", () => console.log("DELETE "), "text-red-500"],
+      ["rename", createRenameFunction(path)],
+      ["delete", createDeleteFunction(path), "text-red-500"],
     ];
   };
 </script>
@@ -47,7 +60,7 @@
     {#each files as file}
       <div
         id="nav-{file.path}"
-        on:contextmenu={summonCTXMenu}
+        on:contextmenu={(evt) => summonCTXMenu(evt, file.path)}
         role="button"
         tabindex={0}
       >
