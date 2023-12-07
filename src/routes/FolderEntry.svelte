@@ -1,5 +1,6 @@
 <script>
   import { page } from "$app/stores";
+  import { promptWithDialogue } from "../prompt/promptStores";
   import {
     menuCoordinates,
     menuOptions,
@@ -26,16 +27,20 @@
     refreshFiles();
   };
   const createRenameFunction = (path) => {
-    // const newName = await userPrompt("Label text", "Placeholder text");
-    const newName = "";
-    console.log("renaming", path);
-    //@ts-ignore
-    return window.electronAPI.renameFile(path, newName);
+    return async () => {
+      // const newName = await userPrompt("Label text", "Placeholder text");
+      const newName = await promptWithDialogue("Enter a new file name:");
+      console.log("renaming", path, newName);
+      //@ts-ignore
+      return window.electronAPI.renameFile(path, newName);
+    };
   };
   const createDeleteFunction = (/** @type {string} */ path) => {
-    console.log("deleteing", path);
-    //@ts-ignore
-    return window.electronAPI.deleteFile(path);
+    return () => {
+      console.log("deleteing", path);
+      //@ts-ignore
+      return window.electronAPI.deleteFile(path);
+    };
   };
 
   const summonCTXMenu = (

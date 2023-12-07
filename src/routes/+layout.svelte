@@ -8,6 +8,7 @@
   import { page } from "$app/stores";
   import { afterNavigate } from "$app/navigation";
   import ContextMenu from "./contextMenu/ContextMenu.svelte";
+  import PromptComponent from "../prompt/PromptComponent.svelte";
   /**
    * @type {string | null}
    */
@@ -190,6 +191,7 @@
   </div>
   <ContextMenu />
 </div>
+<PromptComponent />
 <SearchModal
   {showingModal}
   on:modalClose={() => {
