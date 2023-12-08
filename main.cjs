@@ -8,6 +8,7 @@ const {
   clearDB,
   reindexFile,
   printAllDocuments,
+  deleteIndicesForFile,
 } = require("./appDB.cjs");
 const log = require("electron-log");
 const {
@@ -104,6 +105,32 @@ async function createWindow() {
       }
       return await fs.promises.writeFile(dateStringPath, "");
     }
+  });
+
+  ipcMain.handle("delete-file", async (event, path) => {
+    fs.unlinkSync(path);
+    await deleteIndicesForFile(path);
+  });
+
+  // recursively delete all files in a folder
+  ipcMain.handle("delete-dir", async (event, path) => {
+    // fetch all folders beneath folder recursively, so we can remove their indices
+    const allFiles = [];
+    const fetchFilesFromDirectory = (path) => {
+      const files = fs.readdirSync(path);
+      allFiles.push(files);
+      files.forEach((file) => {
+        const stats = fs.statSync(file);
+        if (stats.isDirectory()) fetchFilesFromDirectory(file);
+      });
+    };
+    await Promise.all(
+      allFiles.map((file) => {
+        deleteIndicesForFile(file);
+      })
+    );
+    // delete the directory recursively on the filesystem
+    fs.rmSync(path, { recursive: true, force: true });
   });
 
   ipcMain.handle("index-directory", async (event, path) => {

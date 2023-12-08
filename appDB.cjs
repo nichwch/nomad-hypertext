@@ -84,6 +84,13 @@ const accessAndIndexFile = async (filePath) => {
 /** Deletes all indices for a given note, then creates new indices for it
  * @returns {void}
  */
+
+const deleteIndicesForFile = async (filePath) => {
+  const rowsForFile = await searchDBExact("parent", filePath);
+  const idsToDelete = rowsForFile.map((row) => row.id);
+  await removeMultiple(db, idsToDelete);
+};
+
 const reindexFile = async (
   /** @type {string} */ filePath,
   /** @type {string[]} */ deletedContent,
@@ -264,6 +271,6 @@ module.exports = {
   reindexFile,
   queryDB,
   clearDB,
-
+  deleteIndicesForFile,
   printAllDocuments,
 };
