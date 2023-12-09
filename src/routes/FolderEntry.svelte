@@ -1,6 +1,9 @@
 <script>
   import { page } from "$app/stores";
-  import { promptWithDialogue } from "../prompt/promptStores";
+  import {
+    promptForConfirmation,
+    promptWithDialogue,
+  } from "../prompt/promptStores";
   import {
     menuCoordinates,
     menuOptions,
@@ -32,14 +35,20 @@
       const newName = await promptWithDialogue("Enter a new file name:");
       console.log("renaming", path, newName);
       //@ts-ignore
-      return window.electronAPI.renameFile(path, newName);
+      await window.electronAPI.renameFile(path, newName);
+      refreshFiles();
     };
   };
   const createDeleteFunction = (/** @type {string} */ path) => {
-    return () => {
-      console.log("deleteing", path);
+    return async () => {
+      const confirmed = await promptForConfirmation(
+        "Are you sure you want to delete this file?"
+      );
+      console.log("deleteing", path, confirmed);
+      if (confirmed === false) return;
       //@ts-ignore
-      return window.electronAPI.deleteFile(path);
+      await window.electronAPI.deleteFile(path);
+      refreshFiles();
     };
   };
 

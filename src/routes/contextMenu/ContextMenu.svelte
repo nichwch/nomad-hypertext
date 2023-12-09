@@ -34,7 +34,10 @@
     >
       {#each $menuOptions as menuOption}
         <button
-          on:click={menuOption[1]}
+          on:click={() => {
+            menuOption[1]();
+            $showingCTXMenu = false;
+          }}
           class="block px-1 hover:bg-orange-300 w-full text-left {menuOption?.[2] ||
             ''}">{menuOption[0]}</button
         >
