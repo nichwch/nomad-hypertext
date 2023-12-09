@@ -8,6 +8,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   newFile: (path) => ipcRenderer.invoke("new-file", path),
   newDirectory: (path) => ipcRenderer.invoke("new-directory", path),
   deleteFile: (path) => ipcRenderer.invoke("delete-file", path),
+  renameFile: (path, newName) =>
+    ipcRenderer.invoke("rename-file", path, newName),
   deleteDirectory: (path) => ipcRenderer.invoke("delete-directory", path),
   indexDirectory: (path) => {
     return ipcRenderer.invoke("index-directory", path);

@@ -90,6 +90,20 @@ const deleteIndicesForFile = async (filePath) => {
   await removeMultiple(db, idsToDelete);
 };
 
+const renameIndicesForFile = async (filePath, newPath) => {
+  const rowsForFile = await searchDBExact("parent", filePath);
+  const idsToDelete = rowsForFile.map((row) => row.id);
+
+  const newDocuments = rowsForFile.map((row) => ({
+    ...row.document,
+    // need to clone embeddings or they'll be garbage collected
+    embedding: [...row.document.embedding],
+    parent: newPath,
+  }));
+  await Promise.all(newDocuments.map((doc) => insert(db, doc)));
+  await removeMultiple(db, idsToDelete);
+};
+
 const reindexFile = async (
   /** @type {string} */ filePath,
   /** @type {string[]} */ deletedContent,
@@ -272,4 +286,5 @@ module.exports = {
   clearDB,
   deleteIndicesForFile,
   printAllDocuments,
+  renameIndicesForFile,
 };

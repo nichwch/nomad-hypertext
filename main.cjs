@@ -9,6 +9,7 @@ const {
   reindexFile,
   printAllDocuments,
   deleteIndicesForFile,
+  renameIndicesForFile,
 } = require("./appDB.cjs");
 const log = require("electron-log");
 const {
@@ -112,8 +113,8 @@ async function createWindow() {
   });
 
   ipcMain.handle("delete-file", async (event, path) => {
-    fs.unlinkSync(path);
     await deleteIndicesForFile(path);
+    fs.unlinkSync(path);
   });
 
   // recursively delete all files in a folder
@@ -140,6 +141,15 @@ async function createWindow() {
     );
     // delete the directory recursively on the filesystem
     fs.rmSync(path, { recursive: true, force: true });
+  });
+
+  ipcMain.handle("rename-file", async (event, path, newName) => {
+    const pathArr = path.split("/");
+    const extension = path.split(".")?.pop() || "txt";
+    pathArr.pop();
+    const newPath = pathArr.join("/") + "/" + newName + "." + extension;
+    await renameIndicesForFile(path, newPath);
+    fs.renameSync(path, newPath);
   });
 
   ipcMain.handle("index-directory", async (event, path) => {
