@@ -82,9 +82,8 @@ const accessAndIndexFile = async (filePath) => {
   await indexFile(filePath, file);
 };
 /** Deletes all indices for a given note, then creates new indices for it
- * @returns {void}
+ * @returns {Promise<void>}
  */
-
 const deleteIndicesForFile = async (filePath) => {
   const rowsForFile = await searchDBExact("parent", filePath);
   const idsToDelete = rowsForFile.map((row) => row.id);
@@ -211,13 +210,13 @@ const searchDBExact = async (property, term) => {
     exact: true,
     limit: 9999,
   });
-  log.log("blurry results");
-  log.log(results.hits.map((res) => res.document[property]));
+  // log.log("blurry results");
+  // log.log(results.hits.map((res) => res.document[property]));
   // orama sometimes doesn't return exact results!! even with exact
   const trueResults = results.hits.filter((result) => {
     return result.document[property] === term;
   });
-  log.log(trueResults);
+  log.log("true results", trueResults);
   return trueResults;
 };
 

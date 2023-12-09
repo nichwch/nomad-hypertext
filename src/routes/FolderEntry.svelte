@@ -29,7 +29,21 @@
     await window.electronAPI.newFile(path);
     refreshFiles();
   };
-  const createRenameFunction = (path) => {
+
+  const createDirectory = async () => {
+    const folderName = await promptWithDialogue(
+      "Enter name for your new folder:"
+    );
+    const newPath = path + "/" + folderName;
+    //@ts-ignore
+    await window.electronAPI.newDirectory(newPath);
+    refreshFiles();
+  };
+
+  const createRenameFunction = (
+    /** @type {string} */ path,
+    /** @type {boolean} */ isDir
+  ) => {
     return async () => {
       // const newName = await userPrompt("Label text", "Placeholder text");
       const newName = await promptWithDialogue("Enter a new file name:");
@@ -39,28 +53,36 @@
       refreshFiles();
     };
   };
-  const createDeleteFunction = (/** @type {string} */ path) => {
+  const createDeleteFunction = (
+    /** @type {string} */ path,
+    /** @type {boolean} */ isDir
+  ) => {
     return async () => {
       const confirmed = await promptForConfirmation(
         "Are you sure you want to delete this file?"
       );
       console.log("deleteing", path, confirmed);
       if (confirmed === false) return;
-      //@ts-ignore
-      await window.electronAPI.deleteFile(path);
+      isDir
+        ? //@ts-ignore
+          await window.electronAPI.deleteDirectory(path)
+        : //@ts-ignore
+          await window.electronAPI.deleteFile(path);
       refreshFiles();
     };
   };
 
   const summonCTXMenu = (
     /** @type {{ clientX: number; clientY: number; }} */ event,
-    /** @type {string} */ path
+    /** @type {string} */ path,
+    /** @type {boolean} */ isDir
   ) => {
     $showingCTXMenu = true;
     $menuCoordinates = [event.clientX, event.clientY];
+
     $menuOptions = [
-      ["rename", createRenameFunction(path)],
-      ["delete", createDeleteFunction(path), "text-red-500"],
+      ["rename", createRenameFunction(path, isDir)],
+      ["delete", createDeleteFunction(path, isDir), "text-red-500"],
     ];
   };
 </script>
@@ -70,29 +92,35 @@
     class="text-red-800 underline hover:text-red-500"
     on:click={createFile}>[new note]</button
   >
+  <button
+    class="text-red-800 underline hover:text-red-500"
+    on:click={createDirectory}>[new folder]</button
+  >
   {#if files}
     {#each files as file}
-      <div
-        id="nav-{file.path}"
-        on:contextmenu={(evt) => summonCTXMenu(evt, file.path)}
-        role="button"
-        tabindex={0}
-      >
+      <div id="nav-{file.path}" role="button" tabindex={0}>
         {#if file.isDir}
-          <button
-            class="block"
-            class:font-bold={expandedFolders.has(file.path)}
-            on:click={() => {
-              if (expandedFolders.has(file.path))
-                expandedFolders.delete(file.path);
-              else expandedFolders.add(file.path);
-              // trigger svelte update
-              setExpandedFolders(expandedFolders);
-            }}
+          <div
+            on:contextmenu={(evt) => summonCTXMenu(evt, file.path, file.isDir)}
+            role="button"
+            tabindex={0}
           >
-            {expandedFolders.has(file.path) ? "v" : ">"}
-            {file.name}
-          </button>
+            <button
+              class="block"
+              class:font-bold={expandedFolders.has(file.path)}
+              on:click={() => {
+                if (expandedFolders.has(file.path))
+                  expandedFolders.delete(file.path);
+                else expandedFolders.add(file.path);
+                // trigger svelte update
+                setExpandedFolders(expandedFolders);
+              }}
+            >
+              {expandedFolders.has(file.path) ? "v" : ">"}
+              {file.name}
+            </button>
+          </div>
+
           {#if expandedFolders.has(file.path)}
             <svelte:self
               files={file.children}
@@ -105,6 +133,9 @@
           {/if}
         {:else}
           <div
+            on:contextmenu={(evt) => summonCTXMenu(evt, file.path, file.isDir)}
+            role="button"
+            tabindex={0}
             class:bg-crimsonHighlight={$page.params.noteName ===
               file.path.substring(1)}
           >

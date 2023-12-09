@@ -107,23 +107,32 @@ async function createWindow() {
     }
   });
 
+  ipcMain.handle("new-directory", async (event, path) => {
+    fs.mkdirSync(path);
+  });
+
   ipcMain.handle("delete-file", async (event, path) => {
     fs.unlinkSync(path);
     await deleteIndicesForFile(path);
   });
 
   // recursively delete all files in a folder
-  ipcMain.handle("delete-dir", async (event, path) => {
+  ipcMain.handle("delete-directory", async (event, path) => {
     // fetch all folders beneath folder recursively, so we can remove their indices
     const allFiles = [];
     const fetchFilesFromDirectory = (path) => {
       const files = fs.readdirSync(path);
-      allFiles.push(files);
       files.forEach((file) => {
-        const stats = fs.statSync(file);
-        if (stats.isDirectory()) fetchFilesFromDirectory(file);
+        const filePath = path + "/" + file;
+        const stats = fs.statSync(path + "/" + file);
+        console.log(filePath, stats.isDirectory());
+        if (stats.isDirectory()) fetchFilesFromDirectory(filePath);
+        else allFiles.push(filePath);
       });
     };
+
+    fetchFilesFromDirectory(path);
+    console.log(allFiles);
     await Promise.all(
       allFiles.map((file) => {
         deleteIndicesForFile(file);

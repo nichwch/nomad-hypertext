@@ -9,7 +9,6 @@
   } from "./promptStores";
 
   const cancelOnEscape = (/** @type {KeyboardEvent} */ evt) => {
-    console.log(evt.key, evt.keyCode);
     if (evt.key === "Escape") $prompting = false;
   };
   document.addEventListener("keyup", cancelOnEscape);
