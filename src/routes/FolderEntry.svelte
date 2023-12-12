@@ -1,4 +1,5 @@
 <script>
+  import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   import {
     promptForConfirmation,
@@ -46,11 +47,25 @@
   ) => {
     return async () => {
       // const newName = await userPrompt("Label text", "Placeholder text");
-      const newName = await promptWithDialogue("Enter a new file name:");
-      console.log("renaming", path, newName);
-      //@ts-ignore
-      await window.electronAPI.renameFile(path, newName);
-      refreshFiles();
+      const newName = await promptWithDialogue(
+        `Enter a new ${isDir ? "folder" : "file"} name:`
+      );
+      const slashNoteName = "/" + $page.params.noteName;
+      if (isDir) {
+        //@ts-ignore
+        const newFolderPath = await window.electronAPI.renameDirectory(
+          path,
+          newName
+        );
+        refreshFiles();
+        if (slashNoteName.includes(path))
+          goto(slashNoteName.replace(path, newFolderPath));
+      } else {
+        //@ts-ignore
+        const renamedPath = await window.electronAPI.renameFile(path, newName);
+        refreshFiles();
+        if (slashNoteName === path) goto(renamedPath, { replaceState: true });
+      }
     };
   };
   const createDeleteFunction = (
@@ -59,9 +74,8 @@
   ) => {
     return async () => {
       const confirmed = await promptForConfirmation(
-        "Are you sure you want to delete this file?"
+        `Are you sure you want to delete this ${isDir ? "folder" : "file"}?`
       );
-      console.log("deleteing", path, confirmed);
       if (confirmed === false) return;
       isDir
         ? //@ts-ignore
@@ -69,6 +83,8 @@
         : //@ts-ignore
           await window.electronAPI.deleteFile(path);
       refreshFiles();
+      if ("/" + $page.params.noteName === path)
+        goto("/", { replaceState: true });
     };
   };
 

@@ -150,6 +150,36 @@ async function createWindow() {
     const newPath = pathArr.join("/") + "/" + newName + "." + extension;
     await renameIndicesForFile(path, newPath);
     fs.renameSync(path, newPath);
+    return newPath;
+  });
+  ipcMain.handle("rename-directory", async (event, path, newName) => {
+    // fetch all folders beneath folder recursively, so we can remove their indices
+    const allFiles = [];
+    const fetchFilesFromDirectory = (path) => {
+      const files = fs.readdirSync(path);
+      files.forEach((file) => {
+        const filePath = path + "/" + file;
+        const stats = fs.statSync(path + "/" + file);
+        console.log(filePath, stats.isDirectory());
+        if (stats.isDirectory()) fetchFilesFromDirectory(filePath);
+        else allFiles.push(filePath);
+      });
+    };
+
+    fetchFilesFromDirectory(path);
+    console.log(allFiles);
+    const pathArr = path.split("/");
+    pathArr.pop();
+    const newFolderPath = pathArr.join("/") + "/" + newName;
+    await Promise.all(
+      allFiles.map((file) => {
+        const newFilePath = file.replace(path, newFolderPath);
+        renameIndicesForFile(file, newFilePath);
+      })
+    );
+    // rename the directory on the filesystem
+    fs.renameSync(path, newFolderPath);
+    return newFolderPath;
   });
 
   ipcMain.handle("index-directory", async (event, path) => {
