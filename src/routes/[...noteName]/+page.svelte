@@ -3,7 +3,7 @@
   import { onDestroy, tick } from "svelte";
   import Overlay from "../../Overlay.svelte";
   import { page } from "$app/stores";
-  import { afterNavigate } from "$app/navigation";
+  import { afterNavigate, goto } from "$app/navigation";
   import SearchFilters from "../../SearchFilters.svelte";
   import {
     LEAST_RECENT,
@@ -162,16 +162,21 @@ we copy it into a separate variable
   });
   $: if (notesDir && contents === null) {
     //@ts-ignore
-    window.electronAPI.readFile(`/${$page.params.noteName}`).then(
-      /** @param {string|undefined} res */
-      (res) => {
-        if (res) {
-          contents = res;
-          lastFlushedContents = res;
-          scrollToAndSelectBlock();
+    window.electronAPI
+      .readFile(`/${$page.params.noteName}`)
+      .then(
+        /** @param {string|undefined} res */
+        (res) => {
+          if (res) {
+            contents = res;
+            lastFlushedContents = res;
+            scrollToAndSelectBlock();
+          }
         }
-      }
-    );
+      )
+      .catch(() => {
+        goto("/error");
+      });
   }
 
   const refreshResults = () => {
