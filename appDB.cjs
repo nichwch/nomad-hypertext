@@ -143,7 +143,9 @@ const indexFile = async (filePath, fileContents) => {
   // we already have the IDs to delete
   log.log("deleting following rows", rowsForFile, idsForFile);
   removeMultiple(db, idsForFile);
-  const segments = fileContents?.split("\n") || "";
+  const segments = (await import("./src/lib/splitFunction")).splitText(
+    fileContents
+  );
   log.log("indexing following contents...", segments, fileContents);
   const promises = [];
   for (let segment of segments) {

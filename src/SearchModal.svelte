@@ -47,7 +47,7 @@
                 >[{Math.trunc(result.score * 100)}% match]</span
               >
             </h1>
-            <p>{result.document.content}</p>
+            <p class="whitespace-pre-wrap">{result.document.content}</p>
           </div>
         {/each}
       {/if}

@@ -12,6 +12,7 @@
     MOST_SIMILAR,
   } from "./sortConstants";
   import Histogram from "./Histogram.svelte";
+  import { splitText } from "$lib/splitFunction";
   // @ts-ignore
   let notesDir = window.electronAPI.getNoteDir();
   /** @type {string|null}*/
@@ -66,7 +67,7 @@
   let lastFlushedContents;
   let currentlyUpdating = false;
 
-  $: segments = contents?.split("\n") || [];
+  $: segments = splitText(contents) || [];
   const updateInterval = window.setInterval(async () => {
     /*
 contents will change as this is running because the user is still typing, so 
@@ -112,8 +113,7 @@ we copy it into a separate variable
     if (!contents) return;
     const searchedText = $page.url.searchParams?.get("search");
     if (!searchedText) return;
-    const indexOfText = contents
-      ?.split("\n")
+    const indexOfText = splitText(contents)
       // need to trim because db entries are trimmed
       .map((row) => {
         return row.trim();
@@ -263,7 +263,7 @@ we copy it into a separate variable
                 >[{Math.trunc(result.score * 100)}% match]</span
               >
             </h1>
-            <p>{result.document.content}</p>
+            <p class="whitespace-pre-wrap">{result.document.content}</p>
           </div>
         {/each}
         {#if searchResults && searchResults.length === 0}
