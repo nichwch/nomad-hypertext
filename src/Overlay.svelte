@@ -1,4 +1,5 @@
 <script>
+  import { GROUP_DELIM } from "$lib/splitFunction";
   import { cTooltip } from "$lib/tooltip";
   /** @type {string[]} */
   export let segments = [];
@@ -25,7 +26,7 @@
     >
       <span id="editor-block-{index}">{segment}</span>
 
-      {#if !segment.startsWith("//") && segment?.trim()?.length > 0}
+      {#if !segment.startsWith("//") && segment?.trim()?.length > 0 && segment?.trim() !== GROUP_DELIM}
         <button
           on:click={async () => {
             searchSegment(segment, index);
