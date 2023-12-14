@@ -16,12 +16,17 @@
 
 {#each segments as segment, index}
   {#if segment.length > 0}
+    {@const hasNewlines = segment.trim().length > 0 && segment.includes("\n")}
     <div
       class={focusedIndex === index || segment.startsWith("//")
-        ? "relative block  whitespace-pre-wrap "
+        ? "relative block  whitespace-pre-wrap  "
         : "relative block whitespace-pre-wrap hover:text-red-800"}
       class:text-red-800={focusedIndex === index}
       class:text-green-800={segment.startsWith("//")}
+      class:border-l={hasNewlines}
+      class:border-l-black={hasNewlines}
+      class:pl-5={hasNewlines}
+      class:-ml-5={hasNewlines}
       role="presentation"
     >
       <span id="editor-block-{index}">{segment}</span>
