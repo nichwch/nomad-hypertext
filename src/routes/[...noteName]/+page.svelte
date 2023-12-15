@@ -27,21 +27,21 @@
   let threshold = 80;
   let sortCriteria = MOST_SIMILAR;
   let excludeFromSamePage = true;
-  /** @typedef {{ score: number; editTime: number; }} dbEntry*/
+  /** @typedef {{ score: number; document:{editTime: number} }} dbEntry*/
   let sortFunctions = {
     [MOST_SIMILAR]: (/** @type dbEntry */ b, /** @type dbEntry */ a) =>
       a.score - b.score,
     [LEAST_SIMILAR]: (/** @type dbEntry */ b, /** @type dbEntry */ a) =>
       b.score - a.score,
     [MOST_RECENT]: (/** @type dbEntry */ a, /** @type dbEntry */ b) => {
-      a.editTime = a.editTime ? a.editTime : 0;
-      b.editTime = b.editTime ? b.editTime : 0;
-      return a.editTime - b.editTime;
+      const aEditTime = a.document.editTime ? a.document.editTime : 0;
+      const bEditTime = b.document.editTime ? b.document.editTime : 0;
+      return bEditTime - aEditTime;
     },
     [LEAST_RECENT]: (/** @type dbEntry */ a, /** @type dbEntry */ b) => {
-      a.editTime = a.editTime ? a.editTime : 0;
-      b.editTime = b.editTime ? b.editTime : 0;
-      return b.editTime - a.editTime;
+      const aEditTime = a.document.editTime ? a.document.editTime : 0;
+      const bEditTime = b.document.editTime ? b.document.editTime : 0;
+      return aEditTime - bEditTime;
     },
   };
 
@@ -189,7 +189,7 @@ we copy it into a separate variable
   }
 
   const refreshResults = () => {
-    if (segments && focusedIndex) {
+    if (segments && focusedIndex !== null) {
       searchSegment(segments[focusedIndex], focusedIndex);
     }
   };
