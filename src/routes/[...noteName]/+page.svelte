@@ -13,6 +13,7 @@
   } from "./sortConstants";
   import Histogram from "./Histogram.svelte";
   import { splitText } from "$lib/splitFunction";
+  import SearchResultDisplay from "../../SearchResultDisplay.svelte";
   // @ts-ignore
   let notesDir = window.electronAPI.getNoteDir();
   /** @type {string|null}*/
@@ -26,14 +27,22 @@
   let threshold = 80;
   let sortCriteria = MOST_SIMILAR;
   let excludeFromSamePage = true;
-  /** @typedef {{ score: number; }} dbEntry*/
+  /** @typedef {{ score: number; editTime: number; }} dbEntry*/
   let sortFunctions = {
     [MOST_SIMILAR]: (/** @type dbEntry */ b, /** @type dbEntry */ a) =>
       a.score - b.score,
     [LEAST_SIMILAR]: (/** @type dbEntry */ b, /** @type dbEntry */ a) =>
       b.score - a.score,
-    // [MOST_RECENT]: (a, b) =>  - b,
-    // [LEAST_RECENT]: (a, b) => a - b,
+    [MOST_RECENT]: (/** @type dbEntry */ a, /** @type dbEntry */ b) => {
+      a.editTime = a.editTime ? a.editTime : 0;
+      b.editTime = b.editTime ? b.editTime : 0;
+      return a.editTime - b.editTime;
+    },
+    [LEAST_RECENT]: (/** @type dbEntry */ a, /** @type dbEntry */ b) => {
+      a.editTime = a.editTime ? a.editTime : 0;
+      b.editTime = b.editTime ? b.editTime : 0;
+      return b.editTime - a.editTime;
+    },
   };
 
   const searchSegment = async (segment, index) => {
@@ -250,22 +259,13 @@ we copy it into a separate variable
         {/if}
       </div>
       <div class="overflow-y-auto p-2">
-        {#each searchResults || [] as result}
-          <div class=" border-b border-b-gray-600 py-10" id={result.id}>
-            <h1 class="text-sm">
-              From: <a
-                class="underline"
-                href={result.document.parent +
-                  `?search=${encodeURIComponent(result.document.content)}`}
-                >{result.document.parent?.split("/").pop()}</a
-              >
-              <span class="text-red-800"
-                >[{Math.trunc(result.score * 100)}% match]</span
-              >
-            </h1>
-            <p class="whitespace-pre-wrap">{result.document.content}</p>
-          </div>
-        {/each}
+        {#key searchResults}
+          {#each searchResults || [] as result}
+            <div class=" border-b border-b-gray-600 py-10">
+              <SearchResultDisplay {result} />
+            </div>
+          {/each}
+        {/key}
         {#if searchResults && searchResults.length === 0}
           No results found. Try relaxing your search criteria.
         {/if}

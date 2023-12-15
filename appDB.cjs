@@ -18,6 +18,7 @@ const {
 } = require("./settings.cjs");
 
 const userDataPath = app.getPath("userData");
+console.log("USER DATA PATH", userDataPath);
 const dbPath = `${userDataPath}/.dbfile.msp`;
 let db;
 let restoreFromFile, persistToFile;
@@ -39,6 +40,8 @@ const initDB = async () => {
         tags: "string[]",
         embedding: "vector[384]",
         content: "string",
+        // unix timestamp
+        editDate: "number",
       },
       id: "oramadb",
     });
@@ -70,6 +73,7 @@ const processSegment = async (segment, fileName) => {
       tags,
       embedding,
       content: segment,
+      editTime: new Date().getTime(),
     };
     await insert(db, entry);
     log.log(`inserted segment ${thisSegment} successfully`);

@@ -1,5 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
+  import SearchResultDisplay from "./SearchResultDisplay.svelte";
 
   export let showingModal = false;
   /** @type {string|null}*/
@@ -35,19 +36,7 @@
       {#if searchQuery && searchQuery.length > 0}
         {#each searchResults as result}
           <div class="p-2 border-b border-b-gray-600">
-            <h1 class="text-sm">
-              From: <a
-                class="underline"
-                href={result.document.parent +
-                  `?search=${encodeURIComponent(result.document.content)}`}
-                on:click={() => dispatch("modalClose")}
-                >{result.document.parent?.split("/").pop()}</a
-              >
-              <span class="text-red-800"
-                >[{Math.trunc(result.score * 100)}% match]</span
-              >
-            </h1>
-            <p class="whitespace-pre-wrap">{result.document.content}</p>
+            <SearchResultDisplay {result} />
           </div>
         {/each}
       {/if}

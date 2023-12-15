@@ -33,6 +33,7 @@
     setThreshold(threshold);
     setSortCriteria(sortCriteria);
     setExcludeFromSamePage(excludeFromSamePage);
+    console.log("refreshing results");
     refreshResults();
   }
 </script>
