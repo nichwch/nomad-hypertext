@@ -6,7 +6,7 @@
 </script>
 
 <h1 class="text-sm">
-  Asdfasdf: <a
+  From: <a
     class="underline"
     href={result.document.parent +
       `?search=${encodeURIComponent(result.document.content)}`}
