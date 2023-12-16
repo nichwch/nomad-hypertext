@@ -9,6 +9,7 @@
   import { afterNavigate } from "$app/navigation";
   import ContextMenu from "./contextMenu/ContextMenu.svelte";
   import PromptComponent from "../prompt/PromptComponent.svelte";
+  import { isElementInViewport } from "$lib";
   /**
    * @type {string | null}
    */
@@ -58,11 +59,14 @@
     await tick();
     // scroll the sidebar entry into view
     const el = document.getElementById(`nav-/${$page.params.noteName}`);
-    el?.scrollIntoView({ behavior: "smooth" });
+    const isVisible = isElementInViewport(el);
+    console.log({ isVisible });
+    if (!isVisible) el?.scrollIntoView({ behavior: "smooth" });
   };
 
   afterNavigate(() => {
     if (notesDir) expandFoldersForCurrentNote();
+    showingModal = false;
   });
 
   // recursively fetch child notes
