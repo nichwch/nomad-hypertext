@@ -22,9 +22,11 @@ console.log("USER DATA PATH", userDataPath);
 const dbPath = `${userDataPath}/.dbfile.msp`;
 let db;
 let restoreFromFile, persistToFile;
+let GROUP_DELIM;
 const initDB = async () => {
   //@ts-ignore
   let _ = await import("@orama/plugin-data-persistence/server");
+  GROUP_DELIM = (await import("./src/lib/splitFunction.js")).GROUP_DELIM;
   restoreFromFile = _.restoreFromFile;
 
   persistToFile = _.persistToFile;
@@ -56,6 +58,7 @@ const initDB = async () => {
 const processSegment = async (segment, fileName) => {
   segment = segment.trim();
   if (segment.length === 0) return;
+  if (segment === GROUP_DELIM) return;
   segmentCount++;
   const thisSegment = segmentCount;
   log.log("processing segment", segmentCount);
