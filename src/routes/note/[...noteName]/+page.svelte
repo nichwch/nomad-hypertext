@@ -1,10 +1,10 @@
 <script>
   import { diffParagraphs } from "$lib";
-  import { onDestroy, tick } from "svelte";
-  import Overlay from "../../Overlay.svelte";
+  import { afterUpdate, onDestroy, tick } from "svelte";
+  import Overlay from "../../../Overlay.svelte";
   import { page } from "$app/stores";
   import { afterNavigate, goto } from "$app/navigation";
-  import SearchFilters from "../../SearchFilters.svelte";
+  import SearchFilters from "../../../SearchFilters.svelte";
   import {
     LEAST_RECENT,
     LEAST_SIMILAR,
@@ -13,9 +13,17 @@
   } from "./sortConstants";
   import Histogram from "./Histogram.svelte";
   import { splitText } from "$lib/splitFunction";
-  import SearchResultDisplay from "../../SearchResultDisplay.svelte";
-  // @ts-ignore
-  let notesDir = window.electronAPI.getNoteDir();
+  import SearchResultDisplay from "../../../SearchResultDisplay.svelte";
+  /**
+   * @type {string|null}
+   */
+  let notesDir = null;
+  afterUpdate(() => {
+    //@ts-ignore
+    window.electronAPI.getNoteDir().then((res) => {
+      notesDir = res;
+    });
+  });
   /** @type {string|null}*/
   let contents = null;
   /**
@@ -45,7 +53,10 @@
     },
   };
 
-  const searchSegment = async (segment, index) => {
+  const searchSegment = async (
+    /** @type {string} */ segment,
+    /** @type {number | null} */ index
+  ) => {
     const queryResult =
       //@ts-ignore
       (await window.electronAPI.vectorQuery(segment, threshold / 100))?.hits ||
@@ -53,16 +64,20 @@
     // ignore exact matches
     // @ts-ignore
     console.log("searching with threshold...", threshold, excludeFromSamePage);
-    const results = queryResult.filter((result) => {
-      if (result.document.content?.trim() === segment?.trim()) return false;
-      if (
-        excludeFromSamePage &&
-        result.document.parent === "/" + $page.params.noteName
-      ) {
-        return false;
+    const results = queryResult.filter(
+      (
+        /** @type {{ document: { content: string; parent: string; }; }} */ result
+      ) => {
+        if (result.document.content?.trim() === segment?.trim()) return false;
+        if (
+          excludeFromSamePage &&
+          result.document.parent === "/" + $page.params.noteName
+        ) {
+          return false;
+        }
+        return true;
       }
-      return true;
-    });
+    );
     results.sort(sortFunctions[sortCriteria]);
     searchResults = results;
     showingSidebar = true;
@@ -184,7 +199,7 @@ we copy it into a separate variable
         }
       )
       .catch(() => {
-        goto("/error");
+        goto("pagenotfound");
       });
   }
 

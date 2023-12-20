@@ -1,12 +1,16 @@
 <script>
+  import { afterUpdate } from "svelte";
   import { currentDir } from "../currentDirStore";
   /**
    * @type {string | null}
    */
   let notesDir = null;
-  //@ts-ignore
-  window.electronAPI.getNoteDir().then((res) => {
-    notesDir = res;
+
+  afterUpdate(() => {
+    //@ts-ignore
+    window.electronAPI.getNoteDir().then((res) => {
+      notesDir = res;
+    });
   });
   let showingModal = false;
   const setNoteDir = async () => {
@@ -97,7 +101,7 @@
       </div>
       <div class="mt-5">
         <h1 class="text-2xl">
-          <a class="link" href="/about">About Nomad Hypertext</a>
+          <a class="link" href="about">About Nomad Hypertext</a>
         </h1>
       </div>
     </div>

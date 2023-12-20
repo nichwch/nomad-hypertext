@@ -1,5 +1,5 @@
 <script>
-  import { onDestroy, tick } from "svelte";
+  import { afterUpdate, onDestroy, tick } from "svelte";
   import SearchModal from "../SearchModal.svelte";
   import "../global.css";
 
@@ -14,12 +14,12 @@
    * @type {string | null}
    */
   let notesDir = null;
-  //@ts-ignore
-  window.electronAPI.getNoteDir().then((res) => {
-    if (res) {
+  afterUpdate(() => {
+    //@ts-ignore
+    window.electronAPI.getNoteDir().then((res) => {
       notesDir = res;
       $currentDir = notesDir;
-    }
+    });
   });
   console.log({ notesDir, $currentDir });
   /** @typedef {{name:string, path:string, createdTime:string,isDir:boolean, modifiedTime:string, children?:FileNode[]}} FileNode */
@@ -143,7 +143,7 @@
               old first</button
             >
             <div class="float-right">
-              <a href="/settings" class="underline">settings</a>
+              <a href="appsettings" class="underline">settings</a>
               <button
                 class="hover:text-red-800"
                 on:click={() => {
@@ -176,7 +176,9 @@
         >
       </div>
     {/if}
-    <slot />
+    {#key $page.params.toString()}
+      <slot />
+    {/key}
   </div>
 
   <div class="w-full py-1 px-2 border-t border-t-gray-700">

@@ -1,6 +1,7 @@
 <script>
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
+  import { DOUBLE_SLASH_IN_PROD } from "$lib";
   import {
     promptForConfirmation,
     promptWithDialogue,
@@ -59,12 +60,19 @@
         );
         refreshFiles();
         if (slashNoteName.includes(path))
-          goto(slashNoteName.replace(path, newFolderPath));
+          goto(
+            DOUBLE_SLASH_IN_PROD +
+              "note" +
+              slashNoteName.replace(path, newFolderPath)
+          );
       } else {
         //@ts-ignore
         const renamedPath = await window.electronAPI.renameFile(path, newName);
         refreshFiles();
-        if (slashNoteName === path) goto(renamedPath, { replaceState: true });
+        if (slashNoteName === path)
+          goto(DOUBLE_SLASH_IN_PROD + "note" + renamedPath, {
+            replaceState: true,
+          });
       }
     };
   };
@@ -84,7 +92,7 @@
           await window.electronAPI.deleteFile(path);
       refreshFiles();
       if ("/" + $page.params.noteName === path)
-        goto("/", { replaceState: true });
+        goto("", { replaceState: true });
     };
   };
 
@@ -155,7 +163,7 @@
             class:bg-crimsonHighlight={$page.params.noteName ===
               file.path.substring(1)}
           >
-            <a href={file.path}>
+            <a href={DOUBLE_SLASH_IN_PROD + "note" + file.path}>
               <span> {file.name}</span>
             </a>
           </div>

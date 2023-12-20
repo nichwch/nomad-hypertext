@@ -12,7 +12,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "vite build && electron-forge make",
+    "make": "vite build && electron-forge make --arch arm64",
     "view-logs": "tail -f ~/Library/Logs/nomad-hypertext/main.log"
   },
   "devDependencies": {
@@ -22,6 +22,7 @@
     "@electron-forge/maker-squirrel": "^6.4.2",
     "@electron-forge/maker-zip": "^6.4.2",
     "@electron-forge/plugin-auto-unpack-natives": "^6.4.2",
+    "@ptkdev/sveltekit-electron-adapter": "^0.3.0",
     "@svelte-put/tooltip": "^1.0.1",
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",

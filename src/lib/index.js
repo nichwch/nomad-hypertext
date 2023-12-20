@@ -48,3 +48,6 @@ export function isElementInViewport(el) {
         document.documentElement.clientWidth) /* or $(window).width() */
   );
 }
+
+export const DOUBLE_SLASH_IN_PROD =
+  process.env.NODE_ENV === "development" ? "/" : "";

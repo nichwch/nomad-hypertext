@@ -22,6 +22,7 @@ let mainWindow;
 log.initialize({ preload: true });
 log.errorHandler.startCatching();
 const preloadURL = path.join(__dirname, "preload.js");
+log.log("PRELOAD URL", preloadURL, __dirname);
 
 async function createWindow() {
   mainWindow = new BrowserWindow({
@@ -36,7 +37,7 @@ async function createWindow() {
   const url =
     mode !== "development"
       ? // in production, use the statically build version of our application
-        `file://${path.join(__dirname, "build")}`
+        `file://${path.join(__dirname, "build/index.html")}`
       : // in dev, target the host and port of the local rollup web server
         "http://localhost:5173";
   mainWindow.loadURL(url);
