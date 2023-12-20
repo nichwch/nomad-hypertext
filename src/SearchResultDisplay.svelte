@@ -1,6 +1,4 @@
 <script>
-  import { DOUBLE_SLASH_IN_PROD } from "$lib";
-
   /**
    * @type {{document:any, score:number}}
    */
@@ -10,8 +8,7 @@
 <h1 class="text-sm">
   From: <a
     class="underline"
-    href={DOUBLE_SLASH_IN_PROD +
-      "note" +
+    href={"note#" +
       result.document.parent +
       `?search=${encodeURIComponent(result.document.content)}`}
     >{result.document.parent?.split("/").pop()}</a

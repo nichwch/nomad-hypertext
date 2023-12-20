@@ -111,7 +111,7 @@
   };
   window.addEventListener("keydown", commandKListener);
   onDestroy(() => window.removeEventListener("keypress", commandKListener));
-
+  $: console.log("page store:", $page.url);
   let showingSidebar = true;
 </script>
 

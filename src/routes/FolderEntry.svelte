@@ -1,7 +1,6 @@
 <script>
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { DOUBLE_SLASH_IN_PROD } from "$lib";
   import {
     promptForConfirmation,
     promptWithDialogue,
@@ -60,17 +59,13 @@
         );
         refreshFiles();
         if (slashNoteName.includes(path))
-          goto(
-            DOUBLE_SLASH_IN_PROD +
-              "note" +
-              slashNoteName.replace(path, newFolderPath)
-          );
+          goto("note#" + slashNoteName.replace(path, newFolderPath));
       } else {
         //@ts-ignore
         const renamedPath = await window.electronAPI.renameFile(path, newName);
         refreshFiles();
         if (slashNoteName === path)
-          goto(DOUBLE_SLASH_IN_PROD + "note" + renamedPath, {
+          goto("note#" + renamedPath, {
             replaceState: true,
           });
       }
@@ -163,7 +158,7 @@
             class:bg-crimsonHighlight={$page.params.noteName ===
               file.path.substring(1)}
           >
-            <a href={DOUBLE_SLASH_IN_PROD + "note" + file.path}>
+            <a href={"note#" + file.path}>
               <span> {file.name}</span>
             </a>
           </div>

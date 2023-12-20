@@ -1,10 +1,10 @@
 <script>
   import { diffParagraphs } from "$lib";
   import { afterUpdate, onDestroy, tick } from "svelte";
-  import Overlay from "../../../Overlay.svelte";
+  import Overlay from "../../Overlay.svelte";
   import { page } from "$app/stores";
   import { afterNavigate, goto } from "$app/navigation";
-  import SearchFilters from "../../../SearchFilters.svelte";
+  import SearchFilters from "../../SearchFilters.svelte";
   import {
     LEAST_RECENT,
     LEAST_SIMILAR,
@@ -13,7 +13,7 @@
   } from "./sortConstants";
   import Histogram from "./Histogram.svelte";
   import { splitText } from "$lib/splitFunction";
-  import SearchResultDisplay from "../../../SearchResultDisplay.svelte";
+  import SearchResultDisplay from "../../SearchResultDisplay.svelte";
   /**
    * @type {string|null}
    */
@@ -35,6 +35,8 @@
   let threshold = 80;
   let sortCriteria = MOST_SIMILAR;
   let excludeFromSamePage = true;
+  $: currentFilePath = decodeURIComponent($page.url.hash?.replace("#/", ""));
+  $: console.log({ currentFilePath });
   /** @typedef {{ score: number; document:{editTime: number} }} dbEntry*/
   let sortFunctions = {
     [MOST_SIMILAR]: (/** @type dbEntry */ b, /** @type dbEntry */ a) =>
@@ -71,7 +73,7 @@
         if (result.document.content?.trim() === segment?.trim()) return false;
         if (
           excludeFromSamePage &&
-          result.document.parent === "/" + $page.params.noteName
+          result.document.parent === "/" + currentFilePath
         ) {
           return false;
         }
@@ -117,17 +119,10 @@ we copy it into a separate variable
       //@ts-ignore
       await Promise.all([
         // @ts-ignore
-        window.electronAPI.writeFile(
-          `/${$page.params.noteName}`,
-          contentsAtStart
-        ),
+        window.electronAPI.writeFile(`/${currentFilePath}`, contentsAtStart),
 
         // @ts-ignore
-        window.electronAPI.reindexFile(
-          `/${$page.params.noteName}`,
-          deleted,
-          created
-        ),
+        window.electronAPI.reindexFile(`/${currentFilePath}`, deleted, created),
       ]);
       lastFlushedContents = contentsAtStart;
       currentlyUpdating = false;
@@ -187,7 +182,7 @@ we copy it into a separate variable
   $: if (notesDir && contents === null) {
     //@ts-ignore
     window.electronAPI
-      .readFile(`/${$page.params.noteName}`)
+      .readFile(`/${currentFilePath}`)
       .then(
         /** @param {string|undefined} res */
         (res) => {

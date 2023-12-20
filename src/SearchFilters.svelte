@@ -1,5 +1,5 @@
 <script>
-  import { SORT_OPTIONS } from "./routes/note/[...noteName]/sortConstants";
+  import { SORT_OPTIONS } from "./routes/note/sortConstants";
 
   /**
    * @type {() => void}
