@@ -30,7 +30,7 @@
    * @type {any[] | null}
    */
   let searchResults = null;
-  let showingSidebar = true;
+  let showingSidebar = false;
   let showingFilters = true;
   let threshold = 80;
   let sortCriteria = MOST_SIMILAR;

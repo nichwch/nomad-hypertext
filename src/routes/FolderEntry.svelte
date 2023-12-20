@@ -25,6 +25,7 @@
    * @type {() => void}
    */
   export let refreshFiles;
+  $: currentFilePath = decodeURIComponent($page.url.hash?.replace("#/", ""));
   const createFile = async () => {
     //@ts-ignore
     await window.electronAPI.newFile(path);
@@ -50,7 +51,7 @@
       const newName = await promptWithDialogue(
         `Enter a new ${isDir ? "folder" : "file"} name:`
       );
-      const slashNoteName = "/" + $page.params.noteName;
+      const slashNoteName = "/" + currentFilePath;
       if (isDir) {
         //@ts-ignore
         const newFolderPath = await window.electronAPI.renameDirectory(
@@ -86,8 +87,7 @@
         : //@ts-ignore
           await window.electronAPI.deleteFile(path);
       refreshFiles();
-      if ("/" + $page.params.noteName === path)
-        goto("", { replaceState: true });
+      if ("/" + currentFilePath === path) goto("", { replaceState: true });
     };
   };
 
@@ -155,7 +155,7 @@
             on:contextmenu={(evt) => summonCTXMenu(evt, file.path, file.isDir)}
             role="button"
             tabindex={0}
-            class:bg-crimsonHighlight={$page.params.noteName ===
+            class:bg-crimsonHighlight={currentFilePath ===
               file.path.substring(1)}
           >
             <a href={"note#" + file.path}>

@@ -14,6 +14,7 @@
    * @type {string | null}
    */
   let notesDir = null;
+  $: currentFilePath = decodeURIComponent($page.url.hash?.replace("#/", ""));
   afterUpdate(() => {
     //@ts-ignore
     window.electronAPI.getNoteDir().then((res) => {
@@ -51,14 +52,14 @@
   };
 
   const expandFoldersForCurrentNote = async () => {
-    const parentFolders = getAllParentFolders($page.params.noteName);
+    const parentFolders = getAllParentFolders(currentFilePath);
     parentFolders.forEach((folder) => expandedFolders.add(folder));
     // update svelte state
     console.log({ expandedFolders });
     expandedFolders = expandedFolders;
     await tick();
     // scroll the sidebar entry into view
-    const el = document.getElementById(`nav-/${$page.params.noteName}`);
+    const el = document.getElementById(`nav-/${currentFilePath}`);
     const isVisible = isElementInViewport(el);
     console.log({ isVisible });
     if (!isVisible) el?.scrollIntoView({ behavior: "smooth" });
@@ -176,9 +177,7 @@
         >
       </div>
     {/if}
-    {#key $page.params.toString()}
-      <slot />
-    {/key}
+    <slot />
   </div>
 
   <div class="w-full py-1 px-2 border-t border-t-gray-700">
