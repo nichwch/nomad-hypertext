@@ -8,10 +8,10 @@
 <h1 class="text-sm">
   From: <a
     class="underline"
-    href={"note#" +
-      result.document.parent +
-      `?search=${encodeURIComponent(result.document.content)}`}
-    >{result.document.parent?.split("/").pop()}</a
+    href={"note" +
+      `?search=${encodeURIComponent(result.document.content)}` +
+      "#" +
+      result.document.parent}>{result.document.parent?.split("/").pop()}</a
   >
   {#if result.document.editTime}
     <div class="italic">
