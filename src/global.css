@@ -19,7 +19,7 @@ body {
   }
 
   .link {
-    @apply text-blue-800 hover:text-blue-900 visited:text-purple-800 underline;
+    @apply text-blue-800 hover:text-blue-900 visited:text-purple-800 underline  cursor-pointer;
   }
 }
 

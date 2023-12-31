@@ -120,7 +120,7 @@
   <div class="flex flex-row flex-grow h-[1px]">
     {#if showingSidebar}
       <div
-        class="flex flex-col overflow-y-auto border-r border-r-black w-96 basis-96"
+        class="flex flex-col overflow-y-auto border-r border-r-black w-96 basis-72 flex-shrink-0"
       >
         <div class="w-full border-b border-b-gray-800">
           <div class="px-2">

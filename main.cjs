@@ -211,6 +211,10 @@ async function createWindow() {
   ipcMain.handle("debug-print-all", (event) => {
     printAllDocuments();
   });
+
+  ipcMain.handle("open-personal-site", (event, url) => {
+    shell.openExternal("https://nicholaschen.io");
+  });
 }
 
 app.on("ready", createWindow);

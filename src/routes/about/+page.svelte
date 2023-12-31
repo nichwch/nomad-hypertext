@@ -1,9 +1,7 @@
 <script>
-  import DraggableCard from "../../DraggableCard.svelte";
 </script>
 
-<div class="p-10">
-  <!-- <h1 class="text-5xl">nomad <span class="text-red-800">hypertext</span></h1> -->
+<div class="p-10 overflow-y-scroll">
   <div class="text-xs font-extrabold">
     <pre>
  __    _  _______  __   __  _______  ______     __   __  __   __  _______  _______  ______    _______  _______  __   __  _______ 
@@ -16,28 +14,46 @@
   
 </pre>
   </div>
-  <h1 class="text-5xl mt-3 text-red-800">超文本</h1>
-
-  <DraggableCard posX={30} posY={30}>
-    <div>Made by Nicholas Chen</div>
-  </DraggableCard>
-  <DraggableCard posX={80} posY={80}>
+  <h1 class="text-5xl mt-3 text-red-800">
+    超文本 * 超文本 * 超文本 * 超文本 * 超文本
+  </h1>
+  <img
+    class="  w-4/5 border border-black mt-10"
+    src="nomadhypertext.png"
+    alt="cool robot riding horse"
+  />
+  <div class="mt-2 p-2 border border-black bg-orange-300 w-4/5">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
+    <h1
+      class="link mb-3 inline-block"
+      role="link"
+      on:click={() => {
+        //@ts-ignore
+        window.electronAPI.openPersonalSite();
+      }}
+    >
+      Made by Nicholas Chen
+    </h1>
     <div>
-      <h1>Thanks to:</h1>
-      <p>The Recurse Center, for reigniting my love of programming.</p>
+      <h1 class="italic">Thanks to:</h1>
       <p>
-        Gordon Brander, for inspiring me with his essay, "Links are all you
-        need"
+        <span class="font-semibold">The Recurse Center</span>, for reigniting my
+        love of programming.
       </p>
       <p>
-        Linus Lee, for inspiring me with his essay, "Hyperlink maximalism", and
-        his incredible prototype, Notation
+        <span class="font-semibold">Gordon Brander</span>, for inspiring me with
+        his essay, "Links are all you need"
       </p>
-      <p>Leo Shimonaka, for Unix-pilling me</p>
+      <p>
+        <span class="font-semibold">Linus Lee</span>, for inspiring me with his
+        essay, "Hyperlink maximalism", and his prototype, Notation
+      </p>
+      <p>
+        <span class="font-semibold">Leo Shimonaka</span>, for Unix-pilling me
+      </p>
       <p>Everyone who used exegesis and supported me over the years.</p>
     </div>
-  </DraggableCard>
-  <DraggableCard posX={200} posY={200}>
     <div>Made by Nicholas Chen</div>
-  </DraggableCard>
+  </div>
 </div>

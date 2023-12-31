@@ -26,4 +26,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getNoteDir: () => ipcRenderer.invoke("get-note-dir"),
   setNoteDir: (path) => ipcRenderer.invoke("set-note-dir", path),
   debugPrintAll: (path) => ipcRenderer.invoke("debug-print-all", path),
+  openPersonalSite: (url) => ipcRenderer.invoke("open-personal-site", url),
 });
