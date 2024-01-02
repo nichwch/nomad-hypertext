@@ -54,6 +54,5 @@
       </p>
       <p>Everyone who used exegesis and supported me over the years.</p>
     </div>
-    <div>Made by Nicholas Chen</div>
   </div>
 </div>
