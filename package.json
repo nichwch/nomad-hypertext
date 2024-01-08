@@ -12,7 +12,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "vite build && electron-forge make --arch arm64",
+    "make": "vite build && electron-forge make --arch arm64,x64",
     "view-logs": "tail -f ~/Library/Logs/nomad-hypertext/main.log"
   },
   "devDependencies": {
@@ -43,6 +43,7 @@
     "@sveltejs/adapter-static": "^2.0.3",
     "@xenova/transformers": "^2.5.4",
     "commander": "^11.0.0",
+    "dotenv": "^16.3.1",
     "electron-log": "^5.0.0-beta.29",
     "electron-squirrel-startup": "^1.0.0",
     "glob": "^10.3.4",

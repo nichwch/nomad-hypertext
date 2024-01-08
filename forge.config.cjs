@@ -1,10 +1,18 @@
 const path = require("path");
 const fs = require("node:fs");
 const glob = require("glob");
+require("dotenv").config();
+
 module.exports = {
   packagerConfig: {
     // asar: true,
     osxSign: {}, // object must exist even if empty
+    osxNotarize: {
+      tool: "notarytool",
+      appleId: process.env.APPLE_ID,
+      appleIdPassword: process.env.APPLE_PASSWORD,
+      teamId: process.env.APPLE_TEAM_ID,
+    },
   },
   rebuildConfig: {},
   makers: [
