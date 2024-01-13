@@ -78,7 +78,9 @@
   ) => {
     return async () => {
       const confirmed = await promptForConfirmation(
-        `Are you sure you want to delete this ${isDir ? "folder" : "file"}?`
+        `Are you sure you want to delete ${path.split("/").pop()}? ${
+          isDir ? "This will delete all sub folders and files as well." : ""
+        }`
       );
       if (confirmed === false) return;
       isDir
