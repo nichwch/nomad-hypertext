@@ -99,9 +99,6 @@
     });
   };
 
-  //@ts-ignore
-  const openInFinder = () => window.electronAPI.finderDir($currentDir);
-
   // some code for the modal
   let showingModal = false;
   const commandKListener = (
@@ -186,12 +183,6 @@
       on:click={() => {
         showingModal = true;
       }}>search (⌘ k)</button
-    >
-    <button
-      on:click={openInFinder}
-      class="small-button text-blue-500 bg-blue-200 hover:bg-blue-300"
-    >
-      open in finder</button
     >
   </div>
   <ContextMenu />
