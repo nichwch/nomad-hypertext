@@ -1,7 +1,9 @@
 
 # NOMAD HYPERTEXT
 
-![nomadhypertextlogo](https://github.com/nichwch/nomad-hypertext/assets/7423703/4a32c09f-6e01-4fca-9542-4a27118d6194)
+<p align='center'>
+<img src="https://github.com/nichwch/yurt/assets/7423703/ffdcd733-d4dd-4558-9b54-ea41387efabb" alt="drawing" width="500"/>
+</p>
 
 Nomad Hypertext is a writing app built around semantic search. 
 
