@@ -1,8 +1,8 @@
-<p align='center'>
-<img src="https://github.com/nichwch/yurt/assets/7423703/ffdcd733-d4dd-4558-9b54-ea41387efabb" alt="drawing" width="500"/>
-</p>
 
 # NOMAD HYPERTEXT
+
+![nomadhypertextlogo](https://github.com/nichwch/nomad-hypertext/assets/7423703/4a32c09f-6e01-4fca-9542-4a27118d6194)
+
 Nomad Hypertext is a writing app built around semantic search. 
 
 As your write, it indexes what you write in a local vector database, using a local AI model to generate embeddings. Later, you can click on paragraphs to see related content. 
@@ -16,6 +16,10 @@ If you'd like to publish a blog with semantic hyperlinks, check out Nomad Hypert
 ## Acknowledgements
 
 Nomad Hypertext was heavily inspired by Linus Lee's [notation.app](https://notation.app/) and its corresponding essay, [Hyperlink Maximalism](https://thesephist.com/posts/hyperlink/). Gordon Brander's essay [All you need is Links](https://subconscious.substack.com/p/all-you-need-is-links) also provided a lot of inspiration.
+
+<p align='center'>
+<img src="https://github.com/nichwch/yurt/assets/7423703/ffdcd733-d4dd-4558-9b54-ea41387efabb" alt="drawing" width="500"/>
+</p>
 
 
 <a href='http://www.recurse.com' title='Made with love at the Recurse Center'><img src='https://cloud.githubusercontent.com/assets/2883345/11322972/9e553260-910b-11e5-8de9-a5bf00c352ef.png' height='59px'/></a>
