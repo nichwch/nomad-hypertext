@@ -1,8 +1,7 @@
 <p align='center'>
 <img src="https://github.com/nichwch/nomad-hypertext/assets/7423703/501d295c-b5c5-41bc-8fdc-307731439dcc" alt="drawing" width="500"/>
-# NOMAD HYPERTEXT
 </p>
-
+<h1 align='center'>NOMAD HYPERTEXT</h1>
 
 Nomad Hypertext is a writing app built around semantic search. 
 
