@@ -5,6 +5,9 @@ const {
   searchVector,
   search,
   removeMultiple,
+  getByID,
+  updateMultiple,
+  update,
 } = require("@orama/orama");
 const getEmbedding = require("./appEmbeddings.cjs");
 const fs = require("fs");
@@ -94,21 +97,35 @@ const accessAndIndexFile = async (filePath) => {
 const deleteIndicesForFile = async (filePath) => {
   const rowsForFile = await searchDBExact("parent", filePath);
   const idsToDelete = rowsForFile.map((row) => row.id);
-  await removeMultiple(db, idsToDelete);
+  await removeMultiple(db, idsToDelete, undefined, undefined, true);
 };
 
 const renameIndicesForFile = async (filePath, newPath) => {
   const rowsForFile = await searchDBExact("parent", filePath);
   const idsToDelete = rowsForFile.map((row) => row.id);
+  /*
+We cannot reuse the embedding because OramaDB does not return it, for whatever reason
+I have tried repeatedly to try and get the previous embedding to avoid the overhead 
+of reembedding content that has not changed. This is the only way for now.
+*/
+  const cloneDocWithNewEmbedding = async (row) => {
+    const embedding = await getEmbedding(row.document.content);
+    const document = { ...row.document, embedding, parent: newPath };
+    return document;
+  };
 
-  const newDocuments = rowsForFile.map((row) => ({
-    ...row.document,
-    // need to clone embeddings or they'll be garbage collected
-    embedding: [...row.document.embedding],
-    parent: newPath,
-  }));
-  await Promise.all(newDocuments.map((doc) => insert(db, doc)));
-  await removeMultiple(db, idsToDelete);
+  const newDocs = await Promise.all(
+    rowsForFile.map((row) => cloneDocWithNewEmbedding(row))
+  );
+
+  await updateMultiple(
+    db,
+    idsToDelete,
+    newDocs,
+    idsToDelete.length,
+    undefined,
+    true
+  );
 };
 
 const reindexFile = async (
@@ -129,7 +146,7 @@ const reindexFile = async (
   console.log("creating...", newContent);
   const idsToDelete = rowsToDelete.map((hit) => hit.id);
   console.log("idsToDelete", idsToDelete);
-  await removeMultiple(db, idsToDelete);
+  await removeMultiple(db, idsToDelete, undefined, undefined, true);
   log.log("indexing following contents...", newContent);
   const promises = [];
   for (let segment of newContent) {
@@ -149,7 +166,7 @@ const indexFile = async (filePath, fileContents) => {
   // this does not need to happen synchronously before new insertions!
   // we already have the IDs to delete
   log.log("deleting following rows", rowsForFile, idsForFile);
-  removeMultiple(db, idsForFile);
+  removeMultiple(db, idsForFile, undefined, undefined, true);
   const segments = (await import("./src/lib/splitFunction.js")).splitText(
     fileContents
   );
