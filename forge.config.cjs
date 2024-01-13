@@ -13,6 +13,7 @@ module.exports = {
       appleIdPassword: process.env.APPLE_PASSWORD,
       teamId: process.env.APPLE_TEAM_ID,
     },
+    icon: "nomadhypertextlogo",
   },
   rebuildConfig: {},
   makers: [
