@@ -1,9 +1,8 @@
-# NOMAD HYPERTEXT
-
 <p align='center'>
 <img src="https://github.com/nichwch/yurt/assets/7423703/ffdcd733-d4dd-4558-9b54-ea41387efabb" alt="drawing" width="500"/>
 </p>
 
+# NOMAD HYPERTEXT
 Nomad Hypertext is a writing app built around semantic search. 
 
 As your write, it indexes what you write in a local vector database, using a local AI model to generate embeddings. Later, you can click on paragraphs to see related content. 
