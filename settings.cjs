@@ -4,6 +4,7 @@ const userDataPath = app.getPath("userData");
 const LAST_FETCHED_DATE_FILE = `${userDataPath}/.lastFetchedDate.txt`;
 const NOTE_DIR_FILE = `${userDataPath}/.noteDir.txt`;
 
+console.log(userDataPath);
 const SET_SETTINGS_FILE = (file, date) => {
   fs.writeFileSync(file, date);
 };

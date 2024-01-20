@@ -6,7 +6,7 @@
   import { currentDir } from "./currentDirStore";
   import FolderEntry from "./FolderEntry.svelte";
   import { page } from "$app/stores";
-  import { afterNavigate } from "$app/navigation";
+  import { afterNavigate, goto } from "$app/navigation";
   import ContextMenu from "./contextMenu/ContextMenu.svelte";
   import PromptComponent from "../prompt/PromptComponent.svelte";
   import { isElementInViewport } from "$lib";
@@ -18,6 +18,10 @@
   afterUpdate(() => {
     //@ts-ignore
     window.electronAPI.getNoteDir().then((res) => {
+      if (res === null || res === undefined) {
+        goto("/help");
+        return;
+      }
       notesDir = res;
       $currentDir = notesDir;
     });
