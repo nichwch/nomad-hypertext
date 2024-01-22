@@ -19,7 +19,7 @@
     //@ts-ignore
     window.electronAPI.getNoteDir().then((res) => {
       if (res === null || res === undefined || res.trim().length === 0) {
-        goto("/help");
+        goto("help");
         return;
       }
       notesDir = res;

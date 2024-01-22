@@ -10,7 +10,14 @@ const config = {
       // fallback: "index.html",
     }),
     prerender: {
-      entries: ["/", "/note", "/about", "/pagenotfound", "/appsettings"],
+      entries: [
+        "/",
+        "/note",
+        "/about",
+        "/pagenotfound",
+        "/appsettings",
+        "/help",
+      ],
     },
   },
 };
