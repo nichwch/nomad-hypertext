@@ -205,8 +205,9 @@ async function createWindow() {
   ipcMain.handle("get-note-dir", (event) => {
     return GET_SETTINGS_FILE(NOTE_DIR_FILE);
   });
-  ipcMain.handle("set-note-dir", (event, path) => {
+  ipcMain.handle("set-note-dir", async (event, path) => {
     SET_SETTINGS_FILE(NOTE_DIR_FILE, path);
+    await initDB();
   });
   ipcMain.handle("get-app-dir", (event) => {
     return GET_APP_DIR();

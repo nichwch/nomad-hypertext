@@ -18,15 +18,21 @@ const {
   GET_SETTINGS_FILE,
   LAST_FETCHED_DATE_FILE,
   SET_SETTINGS_FILE,
+  NOTE_DIR_FILE,
 } = require("./settings.cjs");
 
 const userDataPath = app.getPath("userData");
 console.log("USER DATA PATH", userDataPath);
-const dbPath = `${userDataPath}/.dbfile.msp`;
+
+let notesDir = GET_SETTINGS_FILE(NOTE_DIR_FILE);
+let dbPath = `${notesDir}/.dbfile.msp`;
 let db;
 let restoreFromFile, persistToFile;
 let GROUP_DELIM;
+
 const initDB = async () => {
+  notesDir = GET_SETTINGS_FILE(NOTE_DIR_FILE);
+  dbPath = `${notesDir}/.dbfile.msp`;
   //@ts-ignore
   let _ = await import("@orama/plugin-data-persistence/server");
   GROUP_DELIM = (await import("./src/lib/splitFunction.js")).GROUP_DELIM;
@@ -34,6 +40,7 @@ const initDB = async () => {
 
   persistToFile = _.persistToFile;
   log.info("initializing database...");
+  log.log("dbPath", dbPath);
   try {
     db = await restoreFromFile("binary", dbPath);
     log.log("db restored from file");
