@@ -38,6 +38,12 @@
         Welcome to Nomad Hypertext! To get started, pick a folder to store your
         notes in.
       </p>
+      <p>
+        If you want to pick a folder with existing notes, you will have to index
+        them aftewards. Text and markdown files are supported. You can do this
+        by going to settings and clicking 'reindex notes' after picking your
+        notes folder.
+      </p>
 
       <button class="mt-2 settings-button" on:click={setNoteDir}
         >change notes folder</button
