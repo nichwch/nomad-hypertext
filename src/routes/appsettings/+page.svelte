@@ -50,8 +50,21 @@
           of your notes folder can be searched, notes outside cannot.
         </p>
         <p class="mt-2">
-          If you change your notes folder, you will need to clear and recreate
-          your index. See the following sections for more information.
+          The index file is located at the root of your notes folder in a file
+          called <button
+            on:click={() => openInFinder(`${$currentDir}/.dbfile.msp`)}
+            class="link"
+          >
+            .dbfile.msp.
+          </button> You can read this file from other apps using OramaDB, but be
+          careful to not let the index go out of sync with your notes. If this happens,
+          you can use the following options to delete the index and recreate it from
+          scratch.
+        </p>
+        <p class="mt-2">
+          If you switch notes folder, a new index will be created for your new
+          notes folder. You can switch between multiple notes folders; each will
+          have its own independent index.
         </p>
         <p class="mt-2">
           Your current notes folder is: <button
@@ -62,19 +75,6 @@
         <button class="mt-2 settings-button" on:click={setNoteDir}
           >change notes folder</button
         >
-      </div>
-      <div class="mt-5">
-        <h1 class="text-2xl">Your app data</h1>
-        <p class="mt-2">
-          Your app data is where you DB index is stored. We don't recommend
-          messing with this unless you know what you're doing.
-        </p>
-        <p class="mt-2">
-          Your app data is at: <button
-            on:click={() => openInFinder(appDataDir)}
-            class="link">{appDataDir}</button
-          >
-        </p>
       </div>
 
       <div class="mt-5">
@@ -109,9 +109,9 @@
         <p>
           This will clear the index used for semantic search. Note: this will
           NOT delete your files, it will only delete the index that is used for
-          semantic search. If you change your note folder, or you change the
-          name of folders or files in your notes folder, you may have to clear
-          your note index and reindex it to make sure the links are accurate.
+          semantic search. If you change the name of folders or files in your
+          notes folder outside of the app, you may have to clear your note index
+          and reindex it to make sure the links are accurate.
         </p>
         <button
           class="mt-2 settings-button"
