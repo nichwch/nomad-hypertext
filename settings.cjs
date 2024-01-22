@@ -21,10 +21,14 @@ const GET_SETTINGS_FILE = (file) => {
   }
 };
 
+const GET_APP_DIR = () => {
+  return userDataPath;
+};
+
 module.exports = {
   SET_SETTINGS_FILE,
   GET_SETTINGS_FILE,
-
+  GET_APP_DIR,
   LAST_FETCHED_DATE_FILE,
   NOTE_DIR_FILE,
 };

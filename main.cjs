@@ -16,6 +16,7 @@ const {
   GET_SETTINGS_FILE,
   NOTE_DIR_FILE,
   SET_SETTINGS_FILE,
+  GET_APP_DIR,
 } = require("./settings.cjs");
 const mode = process.env.NODE_ENV;
 let mainWindow;
@@ -207,10 +208,12 @@ async function createWindow() {
   ipcMain.handle("set-note-dir", (event, path) => {
     SET_SETTINGS_FILE(NOTE_DIR_FILE, path);
   });
-
-  ipcMain.handle("debug-print-all", (event) => {
-    printAllDocuments();
-  });
+  ipcMain.handle("get-app-dir", (event) => {
+    return GET_APP_DIR();
+  }),
+    ipcMain.handle("debug-print-all", (event) => {
+      printAllDocuments();
+    });
 
   ipcMain.handle("open-personal-site", (event, url) => {
     shell.openExternal("https://nicholaschen.io");

@@ -24,6 +24,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   clearDB: (query) => ipcRenderer.invoke("clear-db", query),
   finderDir: (path) => ipcRenderer.invoke("finder-dir", path),
   getNoteDir: () => ipcRenderer.invoke("get-note-dir"),
+  getAppDir: () => ipcRenderer.invoke("get-app-dir"),
   setNoteDir: (path) => ipcRenderer.invoke("set-note-dir", path),
   debugPrintAll: (path) => ipcRenderer.invoke("debug-print-all", path),
   openPersonalSite: (url) => ipcRenderer.invoke("open-personal-site", url),

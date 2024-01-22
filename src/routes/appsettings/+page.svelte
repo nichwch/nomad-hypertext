@@ -1,10 +1,20 @@
 <script>
-  import { afterUpdate } from "svelte";
+  import { afterUpdate, onMount } from "svelte";
   import { currentDir } from "../currentDirStore";
   /**
    * @type {string | null}
    */
   let notesDir = null;
+  /**
+   * @type {string | null}
+   */
+  let appDataDir = null;
+  onMount(() => {
+    //@ts-ignore
+    window.electronAPI.getAppDir().then((res) => {
+      appDataDir = res;
+    });
+  });
 
   afterUpdate(() => {
     //@ts-ignore
@@ -26,7 +36,7 @@
     }
   };
   //@ts-ignore
-  const openInFinder = () => window.electronAPI.finderDir($currentDir);
+  const openInFinder = (dir) => window.electronAPI.finderDir(dir);
 </script>
 
 <div class="flex-grow flex flex-col overflow-y-auto">
@@ -45,13 +55,26 @@
         </p>
         <p class="mt-2">
           Your current notes folder is: <button
-            on:click={openInFinder}
+            on:click={() => openInFinder($currentDir)}
             class="link">{notesDir}</button
           >
         </p>
         <button class="mt-2 settings-button" on:click={setNoteDir}
           >change notes folder</button
         >
+      </div>
+      <div class="mt-5">
+        <h1 class="text-2xl">Your app data</h1>
+        <p class="mt-2">
+          Your app data is where you DB index is stored. We don't recommend
+          messing with this unless you know what you're doing.
+        </p>
+        <p class="mt-2">
+          Your app data is at: <button
+            on:click={() => openInFinder(appDataDir)}
+            class="link">{appDataDir}</button
+          >
+        </p>
       </div>
 
       <div class="mt-5">
