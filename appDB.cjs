@@ -33,6 +33,14 @@ let GROUP_DELIM;
 const initDB = async () => {
   notesDir = GET_SETTINGS_FILE(NOTE_DIR_FILE);
   dbPath = `${notesDir}/.dbfile.msp`;
+  // if there is no note folder, do not initialize
+  // initDB will be called when a note folder is selected
+  if (
+    notesDir === null ||
+    notesDir === undefined ||
+    notesDir.trim().length === 0
+  )
+    return;
   //@ts-ignore
   let _ = await import("@orama/plugin-data-persistence/server");
   GROUP_DELIM = (await import("./src/lib/splitFunction.js")).GROUP_DELIM;
@@ -41,6 +49,7 @@ const initDB = async () => {
   persistToFile = _.persistToFile;
   log.info("initializing database...");
   log.log("dbPath", dbPath);
+  log.log("notesDir", notesDir);
   try {
     db = await restoreFromFile("binary", dbPath);
     log.log("db restored from file");

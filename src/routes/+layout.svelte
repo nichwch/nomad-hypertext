@@ -18,7 +18,7 @@
   afterUpdate(() => {
     //@ts-ignore
     window.electronAPI.getNoteDir().then((res) => {
-      if (res === null || res === undefined) {
+      if (res === null || res === undefined || res.trim().length === 0) {
         goto("/help");
         return;
       }

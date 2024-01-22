@@ -1,6 +1,7 @@
 <script>
   import { afterUpdate } from "svelte";
   import { currentDir } from "../currentDirStore";
+  import { goto } from "$app/navigation";
 
   /** @type {import('./$types').PageData} */
   export let data;
@@ -24,7 +25,8 @@
       notesDir = res;
       $currentDir = notesDir;
       //@ts-ignore
-      window.electronAPI.setNoteDir(notesDir);
+      await window.electronAPI.setNoteDir(notesDir);
+      goto("/");
     }
   };
 </script>
@@ -38,15 +40,15 @@
         Welcome to Nomad Hypertext! To get started, pick a folder to store your
         notes in.
       </p>
-      <p>
+      <p class="mt-3">
         If you want to pick a folder with existing notes, you will have to index
-        them aftewards. Text and markdown files are supported. You can do this
-        by going to settings and clicking 'reindex notes' after picking your
-        notes folder.
+        them aftewards (only text and markdown files are supported). You can do
+        this by going to settings and clicking 'reindex notes' after picking
+        your notes folder.
       </p>
 
-      <button class="mt-2 settings-button" on:click={setNoteDir}
-        >change notes folder</button
+      <button class="mt-3 settings-button" on:click={setNoteDir}
+        >select notes folder</button
       >
     </div>
   </div>
