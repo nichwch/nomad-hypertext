@@ -10,6 +10,10 @@ As your write, it indexes what you write in a local vector database, using a loc
 
 <img width="1432" alt="Screenshot 2024-01-13 at 2 50 00 PM" src="https://github.com/nichwch/nomad-hypertext/assets/7423703/66fb81fb-763f-4ccb-afa7-a66f6627a09a">
 
+# How it works
+
+Nomad Hypertext uses [OramaSearch](https://oramasearch.com/) for vector search, and Supabase's [gte-small model](https://huggingface.co/Supabase/gte-small) to generate embeddings. Both of these run in memory, on device, which means Nomad Hypertext does not need an internet connection to function.
+
 # Get Nomad Hypertext
 
 Nomad Hypertext is available for MacOS. You can download Nomad Hypertext in the [releases](https://github.com/nichwch/nomad-hypertext/releases) section. Download the arm64 version if you have an Apple Silicon mac, or the x64 version if you have an Intel mac. 
