@@ -10,6 +10,16 @@ As your write, it indexes what you write in a local vector database, using a loc
 
 <img width="1432" alt="Screenshot 2024-01-13 at 2 50 00 PM" src="https://github.com/nichwch/nomad-hypertext/assets/7423703/66fb81fb-763f-4ccb-afa7-a66f6627a09a">
 
+# How to use Nomad Hypertext
+
+Just write your thoughts down! There are no tags or manual backlinks to worry about, semantic search will naturally connect related ideas on its own.
+
+If you want to exclude something from semantic search, you can add two slashes (//) in front so the indexer will ignore it.
+
+If you want to group multiple paragraphs together into a single block, add a ~ before and after the paragraphs you'd like to group. This is handy for grouping together song lyrics.
+
+<img width="629" alt="tutorial" src="https://github.com/nichwch/nomad-hypertext/assets/7423703/64068de2-5028-4c48-9183-49b024778f10">
+
 # How it works
 
 Nomad Hypertext uses [OramaSearch](https://oramasearch.com/) for vector search, and Supabase's [gte-small model](https://huggingface.co/Supabase/gte-small) to generate embeddings. Both of these run in memory, on device, which means Nomad Hypertext does not need an internet connection to function.
