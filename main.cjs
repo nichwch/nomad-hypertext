@@ -81,6 +81,8 @@ async function createWindow() {
       };
     });
     const sortedFiles = filesWithMetadata.sort((a, b) => {
+      if (a.isDir && !b.isDir) return -1;
+      else if (!a.isDir && b.isDir) return 1;
       if (descending) return b.createdTime.getTime() - a.createdTime.getTime();
       return a.createdTime.getTime() - b.createdTime.getTime();
     });
