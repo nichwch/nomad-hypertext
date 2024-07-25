@@ -31,7 +31,7 @@
    */
   let searchResults = null;
   let showingSidebar = false;
-  let showingFilters = true;
+  let showingFilters = false;
   let threshold = 80;
   let sortCriteria = MOST_SIMILAR;
   let excludeFromSamePage = true;

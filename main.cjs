@@ -70,10 +70,12 @@ async function createWindow() {
       const filePath = `${path}/${fileName}`;
       const stats = fs.statSync(filePath);
       const isDir = stats.isDirectory();
+      const fileNameWithoutExtension = fileName.split(".")[0];
+      const dateTitle = new Date(fileNameWithoutExtension);
       return {
         name: fileName,
         path: filePath,
-        createdTime: stats.birthtime,
+        createdTime: isNaN(dateTitle) ? stats.birthtime : dateTitle,
         modifiedTime: stats.mtime,
         isDir,
       };
