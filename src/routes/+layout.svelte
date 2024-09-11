@@ -2,6 +2,7 @@
   import { afterUpdate, onDestroy, tick } from "svelte";
   import SearchModal from "../SearchModal.svelte";
   import "../global.css";
+  import { writable } from "svelte/store";
 
   import { currentDir } from "./currentDirStore";
   import FolderEntry from "./FolderEntry.svelte";
@@ -10,6 +11,7 @@
   import ContextMenu from "./contextMenu/ContextMenu.svelte";
   import PromptComponent from "../prompt/PromptComponent.svelte";
   import { isElementInViewport } from "$lib";
+  import { isTextHidden } from "../stores";
   /**
    * @type {string | null}
    */
@@ -115,6 +117,21 @@
   onDestroy(() => window.removeEventListener("keypress", commandKListener));
   $: console.log("page store:", $page.url);
   let showingSidebar = true;
+
+  // Add a new keyboard shortcut listener
+  const keyboardShortcutListener = (/** @type {KeyboardEvent} */ event) => {
+    if (event.metaKey && event.key === "k") showingModal = !showingModal;
+    else if (event.key === "Escape") showingModal = false;
+    else if (event.metaKey && event.key === "i") {
+      event.preventDefault();
+      $isTextHidden = !$isTextHidden;
+    }
+  };
+  window.addEventListener("keydown", keyboardShortcutListener);
+  onDestroy(() =>
+    window.removeEventListener("keydown", keyboardShortcutListener)
+  );
+  $: console.log("is text hidden layout", $isTextHidden);
 </script>
 
 <div class=" bg-orange-200 h-screen flex flex-col">
@@ -186,7 +203,15 @@
       class="small-button"
       on:click={() => {
         showingModal = true;
-      }}>search (⌘ k)</button
+      }}>search (⌘ K)</button
+    >
+    <button
+      class="small-button ml-2 {$isTextHidden
+        ? 'bg-crimsonHighlightOpaque'
+        : 'bg-crimsonHighlight'} hover:bg-crimsonHighlightOpaque transition-colors"
+      on:click={() => {
+        isTextHidden.update((v) => !v);
+      }}>stealth (⌘ I)</button
     >
   </div>
   <ContextMenu />
