@@ -1,6 +1,7 @@
 <script>
   import { GROUP_DELIM } from "$lib/splitFunction";
   import { cTooltip } from "$lib/tooltip";
+  import { isTextHidden } from "./stores.js";
   /** @type {string[]} */
   export let segments = [];
 
@@ -24,7 +25,12 @@
       class:text-green-800={segment.startsWith("//")}
       role="presentation"
     >
-      <span id="editor-block-{index}">{segment}</span>
+      <span
+        id="editor-block-{index}"
+        class={$isTextHidden
+          ? "bg-crimsonHighlightOpaque text-crimsonHighlightOpaque"
+          : ""}>{segment}</span
+      >
 
       {#if !segment.startsWith("//") && segment?.trim()?.length > 0 && segment?.trim() !== GROUP_DELIM}
         <button

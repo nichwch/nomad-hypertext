@@ -2,7 +2,6 @@
   import { afterUpdate, onDestroy, tick } from "svelte";
   import SearchModal from "../SearchModal.svelte";
   import "../global.css";
-  import { writable } from "svelte/store";
 
   import { currentDir } from "./currentDirStore";
   import FolderEntry from "./FolderEntry.svelte";
@@ -131,7 +130,6 @@
   onDestroy(() =>
     window.removeEventListener("keydown", keyboardShortcutListener)
   );
-  $: console.log("is text hidden layout", $isTextHidden);
 </script>
 
 <div class=" bg-orange-200 h-screen flex flex-col">
