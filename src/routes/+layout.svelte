@@ -106,18 +106,8 @@
 
   // some code for the modal
   let showingModal = false;
-  const commandKListener = (
-    /** @type {{ metaKey: any; key: string; }} */ event
-  ) => {
-    if (event.metaKey && event.key === "k") showingModal = !showingModal;
-    else if (event.key === "Escape") showingModal = false;
-  };
-  window.addEventListener("keydown", commandKListener);
-  onDestroy(() => window.removeEventListener("keypress", commandKListener));
-  $: console.log("page store:", $page.url);
   let showingSidebar = true;
 
-  // Add a new keyboard shortcut listener
   const keyboardShortcutListener = (/** @type {KeyboardEvent} */ event) => {
     if (event.metaKey && event.key === "k") showingModal = !showingModal;
     else if (event.key === "Escape") showingModal = false;
